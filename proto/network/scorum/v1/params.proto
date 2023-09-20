@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package network.scorum.v1;
+
+import "gogoproto/gogo.proto";
+
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/scorum/cosmos-network/x/scorum/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+
+  repeated string supervisors = 1;
+
+  cosmos.base.v1beta1.IntProto gas_limit = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.IntProto gas_unconditioned_amount = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.DecProto gas_adjust_coefficient = 4 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.IntProto registration_sp_delegation_amount = 5 [(gogoproto.nullable) = false, (gogoproto.customname) = "RegistrationSPDelegationAmount"];
+  uint32 sp_withdrawal_total_periods = 6;
+  uint32 sp_withdrawal_period_duration_seconds = 7;
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package network.aviatrix.v1;
+
+import "gogoproto/gogo.proto";
+import "network/aviatrix/v1/params.proto";
+
+option go_package = "github.com/scorum/cosmos-network/x/aviatrix/types";
+
+// GenesisState defines the nft module's genesis state.
+message GenesisState {
+  Params params = 2 [(gogoproto.nullable) = false];
+}

@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package network.scorum.v1;
+
+option go_package = "github.com/scorum/cosmos-network/x/scorum/types";
+
+import "gogoproto/gogo.proto";
+
+import "cosmos/msg/v1/msg.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc RegisterAccount(MsgRegisterAccount) returns (MsgRegisterAccountResponse);
+
+  rpc ConvertSCR2SP(MsgConvertSCR2SP) returns (MsgConvertSCR2SPResponse);
+
+  rpc WithdrawSP(MsgWithdrawSP) returns (MsgWithdrawSPResponse);
+  rpc StopSPWithdrawal(MsgStopSPWithdrawal) returns (MsgStopSPWithdrawalResponse);
+
+  rpc Burn(MsgBurn) returns (MsgBurnResponse);
+}
+
+message MsgRegisterAccount {
+  option (cosmos.msg.v1.signer) = "supervisor";
+
+  string supervisor = 1;
+  string address = 2;
+}
+message MsgRegisterAccountResponse {}
+
+message MsgConvertSCR2SP {
+  option (cosmos.msg.v1.signer) = "owner";
+
+  string owner = 1;
+  cosmos.base.v1beta1.IntProto amount = 2 [(gogoproto.nullable) = false];
+}
+message MsgConvertSCR2SPResponse {}
+
+message MsgWithdrawSP {
+  option (cosmos.msg.v1.signer) = "owner";
+
+  string owner = 1;
+  string recipient = 2;
+  cosmos.base.v1beta1.IntProto amount = 3 [(gogoproto.nullable) = false];
+}
+message MsgWithdrawSPResponse {
+  string withdrawal_id = 1;
+}
+
+message MsgStopSPWithdrawal {
+  option (cosmos.msg.v1.signer) = "owner";
+
+  string owner = 1;
+  string id = 2;
+}
+message MsgStopSPWithdrawalResponse {}
+
+message MsgBurn {
+  option (cosmos.msg.v1.signer) = "supervisor";
+
+  string supervisor = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+message MsgBurnResponse {}

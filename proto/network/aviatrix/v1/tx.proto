@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package network.aviatrix.v1;
+
+import "cosmos/msg/v1/msg.proto";
+
+option go_package = "github.com/scorum/cosmos-network/x/aviatrix/types";
+
+// Msg defines the Msg service.
+service Msg {
+  rpc CreatePlane(MsgCreatePlane) returns (MsgCreatePlaneResponse);
+  rpc UpdatePlaneName(MsgUpdatePlaneName) returns (MsgUpdatePlaneNameResponse);
+  rpc UpdatePlaneColor(MsgUpdatePlaneColor) returns (MsgUpdatePlaneColorResponse);
+  rpc UpdatePlaneExperience(MsgUpdatePlaneExperience) returns (MsgUpdatePlaneExperienceResponse);
+  rpc AdjustPlaneExperience(MsgAdjustPlaneExperience) returns (MsgAdjustPlaneExperienceResponse);
+}
+
+message PlaneMeta {
+  string name = 1;
+  string color = 2;
+  uint64 experience = 3;
+}
+
+message Plane {
+  string id = 1;
+  string owner = 2;
+  PlaneMeta meta = 3;
+}
+
+message MsgCreatePlane {
+  option (cosmos.msg.v1.signer) = "supervisor";
+
+  string    id        = 1;
+  string    supervisor = 2;
+  string    owner     = 3;
+  PlaneMeta meta      = 4;
+}
+message MsgCreatePlaneResponse {}
+
+message MsgUpdatePlaneName {
+  option (cosmos.msg.v1.signer) = "supervisor";
+
+  string supervisor = 1;
+  string id    = 2;
+  string name  = 3;
+}
+message MsgUpdatePlaneNameResponse {}
+
+message MsgUpdatePlaneColor {
+  option (cosmos.msg.v1.signer) = "supervisor";
+
+  string supervisor = 1;
+  string id    = 2;
+  string color  = 3;
+}
+message MsgUpdatePlaneColorResponse {}
+
+message MsgUpdatePlaneExperience {
+  option (cosmos.msg.v1.signer) = "supervisor";
+
+  string supervisor = 1;
+  string id = 2;
+  uint64 amount = 3;
+}
+message MsgUpdatePlaneExperienceResponse {}
+
+message MsgAdjustPlaneExperience {
+  option (cosmos.msg.v1.signer) = "supervisor";
+
+  string supervisor = 1;
+  string id = 2;
+  int64 amount = 3;
+}
+message MsgAdjustPlaneExperienceResponse {}

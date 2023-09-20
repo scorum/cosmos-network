@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package network.scorum.v1;
+
+import "gogoproto/gogo.proto";
+
+import "network/scorum/v1/params.proto";
+import "network/scorum/v1/types.proto";
+
+option go_package = "github.com/scorum/cosmos-network/x/scorum/types";
+
+// GenesisState defines the scorum module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated SPWithdrawal sp_withdrawals = 2 [(gogoproto.nullable) = false];
+  repeated string restore_gas_addresses = 3;
+}
+

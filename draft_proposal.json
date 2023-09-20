@@ -1,0 +1,10 @@
+{
+ "title":"Mint burned on old blockchain coins",
+ "description":"Emission in the modern blockchain!",
+ "recipient":"scorum1z2ptzs6a2f8dfp4et22x36a53x0w6cma6pplca",
+ "amount": {
+  "denom":"scr",
+  "amount":"10000000"
+ },
+ "deposit":"10000000sp"
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package network.aviatrix.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/scorum/cosmos-network/x/aviatrix/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+}

@@ -1,0 +1,8 @@
+vue/node_modules
+vue/dist
+.idea/
+.vscode/
+.DS_Store
+build/
+test/
+vendor/
