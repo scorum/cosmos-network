@@ -13,7 +13,7 @@ if [[ ${#PASSWORD} -lt 8 ]]; then
 fi
 
 if [[ -z "${CHAIN_ID}" ]]; then
-  CHAIN_ID="testnet-1"
+  CHAIN_ID="devnet-1"
 fi
 
 if [[ -z "${ACCOUNTS}" ]]; then

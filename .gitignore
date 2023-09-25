@@ -6,3 +6,4 @@ vue/dist
 build/
 test/
 vendor/
+output/
