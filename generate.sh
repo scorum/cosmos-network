@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Script generates genesis.json with TESTNET validators
+# Script generates genesis.json with DEVNET validators
 # The ouput of the script is
 # - genesis.json - the genesis file itself
 # - accounts.txt - validator accounts: name, address, public key, mnemonic
