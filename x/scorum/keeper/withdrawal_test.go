@@ -133,8 +133,8 @@ func TestKeeper_ListAllWithdrawals(t *testing.T) {
 func TestKeeper_WithdrawSP(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
-	addr1, addr2, addr3 := sample.AccAddress(), sample.AccAddress(), sample.AccAddress()
-	id1, id2, id3 := uuid.New().String(), uuid.New().String(), uuid.New().String()
+	addr1, addr2, addr3, addr4 := sample.AccAddress(), sample.AccAddress(), sample.AccAddress(), sample.AccAddress()
+	id1, id2, id3, id4 := uuid.New().String(), uuid.New().String(), uuid.New().String(), uuid.New().String()
 
 	set.bankKeeper.InitGenesis(ctx.Context, &banktypes.GenesisState{
 		Params: banktypes.DefaultParams(),
@@ -142,6 +142,7 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 			{addr1.String(), sdk.NewCoins(sdk.NewInt64Coin(scorumtypes.SPDenom, 10))},
 			{addr2.String(), sdk.NewCoins(sdk.NewInt64Coin(scorumtypes.SPDenom, 110))},
 			{addr3.String(), sdk.NewCoins(sdk.NewInt64Coin(scorumtypes.SPDenom, 1100))},
+			{addr4.String(), sdk.NewCoins(sdk.NewInt64Coin(scorumtypes.SPDenom, 1000))},
 		},
 	})
 
@@ -189,11 +190,23 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 		IsActive:                false,
 		CreatedAt:               0,
 	})
+	set.keeper.SetSPWithdrawal(ctx.Context, scorumtypes.SPWithdrawal{
+		Id:                      id4,
+		From:                    addr4.String(),
+		To:                      addr4.String(),
+		Total:                   sdk.IntProto{Int: sdk.NewInt(10)},
+		PeriodDurationInSeconds: 5,
+		TotalPeriods:            3,
+		ProcessedPeriod:         0,
+		IsActive:                true,
+		CreatedAt:               0,
+	})
 
 	set.keeper.WithdrawSP(ctx.Context, 3)
 	require.Equal(t, "10sp", set.bankKeeper.GetBalance(ctx.Context, addr1, scorumtypes.SPDenom).String())
 	require.Equal(t, "110sp", set.bankKeeper.GetBalance(ctx.Context, addr2, scorumtypes.SPDenom).String())
 	require.Equal(t, "1100sp", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SPDenom).String())
+	require.Equal(t, "1000sp", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SPDenom).String())
 
 	set.keeper.WithdrawSP(ctx.Context, 5)
 	require.Equal(t, "0sp", set.bankKeeper.GetBalance(ctx.Context, addr1, scorumtypes.SPDenom).String())
@@ -202,6 +215,8 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 	require.Equal(t, "50scr", set.bankKeeper.GetBalance(ctx.Context, addr2, scorumtypes.SCRDenom).String())
 	require.Equal(t, "1050sp", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SPDenom).String())
 	require.Equal(t, "50scr", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SCRDenom).String())
+	require.Equal(t, "996sp", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SPDenom).String())
+	require.Equal(t, "4scr", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SCRDenom).String())
 
 	set.keeper.WithdrawSP(ctx.Context, 6)
 	require.Equal(t, "0sp", set.bankKeeper.GetBalance(ctx.Context, addr1, scorumtypes.SPDenom).String())
@@ -210,6 +225,8 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 	require.Equal(t, "50scr", set.bankKeeper.GetBalance(ctx.Context, addr2, scorumtypes.SCRDenom).String())
 	require.Equal(t, "1050sp", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SPDenom).String())
 	require.Equal(t, "50scr", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SCRDenom).String())
+	require.Equal(t, "996sp", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SPDenom).String())
+	require.Equal(t, "4scr", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SCRDenom).String())
 
 	set.keeper.WithdrawSP(ctx.Context, 12)
 	require.Equal(t, "0sp", set.bankKeeper.GetBalance(ctx.Context, addr1, scorumtypes.SPDenom).String())
@@ -218,6 +235,8 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 	require.Equal(t, "100scr", set.bankKeeper.GetBalance(ctx.Context, addr2, scorumtypes.SCRDenom).String())
 	require.Equal(t, "1000sp", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SPDenom).String())
 	require.Equal(t, "100scr", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SCRDenom).String())
+	require.Equal(t, "992sp", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SPDenom).String())
+	require.Equal(t, "8scr", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SCRDenom).String())
 
 	set.keeper.WithdrawSP(ctx.Context, 20)
 	require.Equal(t, "0sp", set.bankKeeper.GetBalance(ctx.Context, addr1, scorumtypes.SPDenom).String())
@@ -226,6 +245,8 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 	require.Equal(t, "110scr", set.bankKeeper.GetBalance(ctx.Context, addr2, scorumtypes.SCRDenom).String())
 	require.Equal(t, "900sp", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SPDenom).String())
 	require.Equal(t, "200scr", set.bankKeeper.GetBalance(ctx.Context, addr3, scorumtypes.SCRDenom).String())
+	require.Equal(t, "990sp", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SPDenom).String())
+	require.Equal(t, "10scr", set.bankKeeper.GetBalance(ctx.Context, addr4, scorumtypes.SCRDenom).String())
 
 	set.keeper.WithdrawSP(ctx.Context, 20)
 	require.Equal(t, "0sp", set.bankKeeper.GetBalance(ctx.Context, addr1, scorumtypes.SPDenom).String())
