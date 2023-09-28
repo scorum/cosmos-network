@@ -16,11 +16,16 @@ func (w SPWithdrawal) PeriodTime(period uint32) uint64 {
 	return w.CreatedAt + uint64(period)*uint64(w.PeriodDurationInSeconds)
 }
 
-func (w SPWithdrawal) ToWithdraw(t uint64) sdkmath.Int {
-	periodAmount := sdk.NewDecFromInt(w.Total.Int).QuoInt64(int64(w.TotalPeriods)).Ceil().RoundInt()
+func (w SPWithdrawal) WithdrownByPeriod(p uint32) sdkmath.Int {
+	periodAmount := w.Total.Int.QuoRaw(int64(w.TotalPeriods))
+	mod := w.Total.Int.ModRaw(int64(w.TotalPeriods))
 
-	withdrew := periodAmount.MulRaw(int64(w.ProcessedPeriod))
-	toWithdraw := periodAmount.MulRaw(int64(w.CurrentPeriod(t))).Sub(withdrew)
+	return periodAmount.MulRaw(int64(p)).Add(sdk.MinInt(mod, sdk.NewInt(int64(p))))
+}
+
+func (w SPWithdrawal) ToWithdraw(t uint64) sdkmath.Int {
+	withdrew := w.WithdrownByPeriod(w.ProcessedPeriod)
+	toWithdraw := w.WithdrownByPeriod(w.CurrentPeriod(t)).Sub(withdrew)
 
 	if toWithdraw.Add(withdrew).GT(w.Total.Int) {
 		toWithdraw = w.Total.Int.Sub(withdrew)

@@ -117,6 +117,12 @@ func (k Keeper) deleteWithdrawalFromIndex(ctx sdk.Context, t uint64, key []byte)
 		out = append(out, v)
 	}
 
+	if len(out) == 0 {
+		store.Delete(uint64ToBytes(t))
+
+		return
+	}
+
 	bz, err := json.Marshal(out)
 	if err != nil {
 		panic(fmt.Errorf("failed to marshal withdrawals for index key %d: %w", t, err))
@@ -149,16 +155,20 @@ func (k Keeper) listWithdrawalsByNextWithdrawalTime(ctx sdk.Context, t uint64) [
 }
 
 func (k Keeper) WithdrawSP(ctx sdk.Context, timestamp uint64) {
+	registrationAmount := k.GetParams(ctx).RegistrationSPDelegationAmount.Int
+
 	for _, w := range k.listWithdrawalsByNextWithdrawalTime(ctx, timestamp) {
-		balance := k.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(w.From), types.SPDenom)
+		balance := k.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(w.From), types.SPDenom).Amount.Sub(registrationAmount)
+
 		toWithdraw := w.ToWithdraw(timestamp)
-		if balance.Amount.LT(toWithdraw) {
-			toWithdraw = balance.Amount
+		if balance.LT(toWithdraw) {
+			toWithdraw = balance
 		}
 
+		from := sdk.MustAccAddressFromBech32(w.From)
 		recipient := sdk.MustAccAddressFromBech32(w.To)
-		if !toWithdraw.IsZero() {
-			if err := k.Burn(ctx, recipient, sdk.NewCoin(types.SPDenom, toWithdraw)); err != nil {
+		if toWithdraw.IsPositive() {
+			if err := k.Burn(ctx, from, sdk.NewCoin(types.SPDenom, toWithdraw)); err != nil {
 				panic(fmt.Errorf("failed to burn(%s %s): %w", w.Id, toWithdraw, err))
 			}
 			if err := k.Mint(ctx, recipient, sdk.NewCoin(types.SCRDenom, toWithdraw)); err != nil {
@@ -168,14 +178,14 @@ func (k Keeper) WithdrawSP(ctx sdk.Context, timestamp uint64) {
 			w.ProcessedPeriod = w.CurrentPeriod(timestamp)
 		}
 
-		w.IsActive = balance.Amount.GT(toWithdraw) && w.PeriodTime(w.ProcessedPeriod+1) > 0
+		w.IsActive = balance.GT(toWithdraw) && w.PeriodTime(w.ProcessedPeriod+1) > 0
 		k.SetSPWithdrawal(ctx, w)
 	}
 }
 
 func uint64ToBytes(v uint64) []byte {
 	out := make([]byte, 8)
-	binary.LittleEndian.PutUint64(out, v)
+	binary.BigEndian.PutUint64(out, v)
 
 	return out
 }

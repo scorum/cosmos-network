@@ -60,8 +60,11 @@ func (m msgServer) getReservedSP(ctx sdk.Context, owner sdk.AccAddress) sdkmath.
 	total := m.Keeper.GetParams(ctx).RegistrationSPDelegationAmount.Int
 
 	for _, w := range m.Keeper.ListWithdrawals(ctx, owner) {
-		withdrew := w.Total.Int.QuoRaw(int64(w.TotalPeriods)).MulRaw(int64(w.ProcessedPeriod))
-		total = total.Add(w.Total.Int.Sub(withdrew))
+		if !w.IsActive {
+			continue
+		}
+
+		total = total.Add(w.Total.Int.Sub(w.WithdrownByPeriod(w.ProcessedPeriod)))
 	}
 
 	return total
