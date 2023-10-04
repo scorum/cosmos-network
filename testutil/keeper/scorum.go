@@ -5,6 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/scorum/cosmos-network/x/scorum/keeper"
 	"github.com/scorum/cosmos-network/x/scorum/types"
@@ -32,6 +33,7 @@ func ScorumKeeper(
 		paramsSubspace,
 		AccountKeeper(t, ctx),
 		BankKeeper(t, ctx),
+		authtypes.FeeCollectorName,
 	)
 
 	// Initialize params

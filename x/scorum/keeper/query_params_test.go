@@ -22,6 +22,13 @@ func TestQuery_GetParams(t *testing.T) {
 		sdk.NewInt(5),
 		1, 1,
 	)
+	params.ValidatorsReward = types.ValidatorsRewardParams{
+		PoolAddress: "",
+		BlockReward: sdk.Coin{
+			Denom:  "",
+			Amount: sdk.ZeroInt(),
+		},
+	}
 
 	set.keeper.SetParams(ctx.Context, params)
 	srv := keeper.NewQueryServer(set.keeper)

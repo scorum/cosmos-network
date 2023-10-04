@@ -46,8 +46,8 @@ func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultN
 		distrGenState := distrtypes.DefaultGenesisState()
 		distrGenState.Params = distrtypes.Params{
 			CommunityTax:        types.ZeroDec(),
-			BaseProposerReward:  types.ZeroDec(),
-			BonusProposerReward: types.ZeroDec(),
+			BaseProposerReward:  distrGenState.Params.BaseProposerReward,
+			BonusProposerReward: distrGenState.Params.BonusProposerReward,
 			WithdrawAddrEnabled: true,
 		}
 		distrGenStateBz, err := cdc.MarshalJSON(distrGenState)

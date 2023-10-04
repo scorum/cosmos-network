@@ -19,6 +19,8 @@ var (
 	KeyRegistrationSPDelegationAmount    = []byte("RegistrationSPDelegationAmount")
 	KeySPWithdrawalTotalPeriods          = []byte("SPWithdrawalTotalPeriods")
 	KeySPWithdrawalPeriodDurationSeconds = []byte("SPWithdrawalPeriodDurationSeconds")
+	KeyValidatorsRewardPoolAddress       = []byte("ValidatorsRewardPoolAddress")
+	KeyValidatorsRewardPoolBlockReward   = []byte("ValidatorsRewardPoolBlockReward")
 )
 
 // ParamKeyTable the param key table for launch module
@@ -49,14 +51,22 @@ func NewParams(
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
-	return NewParams(
-		nil,
-		sdk.NewInt(1000000),
-		sdk.NewInt(15000),
-		sdk.NewDec(1),
-		sdk.NewInt(5),
-		52, 7*24*60*60, // 52 weeks
-	)
+	return Params{
+		Supervisors:                       nil,
+		GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000000)},
+		GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(15000)},
+		GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
+		RegistrationSPDelegationAmount:    sdk.IntProto{Int: sdk.NewInt(5)},
+		SpWithdrawalTotalPeriods:          52,
+		SpWithdrawalPeriodDurationSeconds: 7 * 24 * 60 * 60, // 52 weeks
+		ValidatorsReward: ValidatorsRewardParams{
+			PoolAddress: "",
+			BlockReward: sdk.Coin{
+				Denom:  "sp",
+				Amount: sdk.ZeroInt(),
+			},
+		},
+	}
 }
 
 // ParamSetPairs get the params.ParamSet
@@ -69,6 +79,8 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyRegistrationSPDelegationAmount, &p.RegistrationSPDelegationAmount, validateRegistrationSPDelegationAmount),
 		paramtypes.NewParamSetPair(KeySPWithdrawalTotalPeriods, &p.SpWithdrawalTotalPeriods, validateSPWithdrawalTotalPeriods),
 		paramtypes.NewParamSetPair(KeySPWithdrawalPeriodDurationSeconds, &p.SpWithdrawalPeriodDurationSeconds, validateSPWithdrawalPeriodDurationSeconds),
+		paramtypes.NewParamSetPair(KeyValidatorsRewardPoolAddress, &p.ValidatorsReward.PoolAddress, validateValidatorsRewardPoolAddress),
+		paramtypes.NewParamSetPair(KeyValidatorsRewardPoolBlockReward, &p.ValidatorsReward.BlockReward, validateValidatorsRewardBlockReward),
 	}
 }
 
@@ -96,6 +108,14 @@ func (p Params) Validate() error {
 
 	if err := validateSPWithdrawalPeriodDurationSeconds(p.SpWithdrawalPeriodDurationSeconds); err != nil {
 		return fmt.Errorf("invalid spWithdrawalPeriodDurationSeconds: %w", err)
+	}
+
+	if err := validateValidatorsRewardPoolAddress(p.ValidatorsReward.PoolAddress); err != nil {
+		return fmt.Errorf("invalid validatorsReward.poolAddress: %w", err)
+	}
+
+	if err := validateValidatorsRewardBlockReward(p.ValidatorsReward.BlockReward); err != nil {
+		return fmt.Errorf("invalid validatorsReward.blockReward: %w", err)
 	}
 
 	return nil
@@ -185,7 +205,7 @@ func validateSPWithdrawalTotalPeriods(i interface{}) error {
 	}
 
 	if v == 0 {
-		return fmt.Errorf("can not zero")
+		return fmt.Errorf("can not be zero")
 	}
 
 	return nil
@@ -198,7 +218,41 @@ func validateSPWithdrawalPeriodDurationSeconds(i interface{}) error {
 	}
 
 	if v == 0 {
-		return fmt.Errorf("can not zero")
+		return fmt.Errorf("can not be zero")
+	}
+
+	return nil
+}
+
+func validateValidatorsRewardPoolAddress(i interface{}) error {
+	v, ok := i.(string)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	if v == "" {
+		return nil
+	}
+
+	if _, err := sdk.AccAddressFromBech32(v); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func validateValidatorsRewardBlockReward(i interface{}) error {
+	v, ok := i.(sdk.Coin)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	if !v.IsValid() {
+		return nil
+	}
+
+	if v.IsNegative() {
+		return fmt.Errorf("can not be negative")
 	}
 
 	return nil
