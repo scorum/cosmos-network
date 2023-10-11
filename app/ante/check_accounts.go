@@ -2,11 +2,13 @@ package ante
 
 import (
 	"reflect"
+	"strings"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	scorumtypes "github.com/scorum/cosmos-network/x/scorum/types"
+	"golang.org/x/exp/slices"
 )
 
 // CheckAddressesDecorator checks if all addresses are registered
@@ -35,7 +37,7 @@ func (d CheckAddressesDecorator) AnteHandle(
 	next sdk.AnteHandler,
 ) (newCtx sdk.Context, err error) {
 	for _, msg := range tx.GetMsgs() {
-		if _, ok := d.ignore[reflect.TypeOf(msg)]; ok {
+		if _, ok := d.ignore[reflect.TypeOf(msg)]; ok || slices.Contains(strings.Split(sdk.MsgTypeURL(msg), "."), "ibc") {
 			continue
 		}
 
