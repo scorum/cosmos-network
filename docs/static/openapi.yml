@@ -3469,6 +3469,8 @@ definitions:
         items:
           type: string
         type: array
+      validators_reward:
+        $ref: '#/definitions/network.scorum.v1.ValidatorsRewardParams'
     type: object
   network.scorum.v1.QueryParamsResponse:
     description: QueryParamsResponse is response type for the Query/Params RPC method.
@@ -3508,6 +3510,13 @@ definitions:
       total_periods:
         format: int64
         type: integer
+    type: object
+  network.scorum.v1.ValidatorsRewardParams:
+    properties:
+      block_reward:
+        $ref: '#/definitions/cosmos.base.v1beta1.Coin'
+      pool_address:
+        type: string
     type: object
   tendermint.abci.Event:
     description: |-

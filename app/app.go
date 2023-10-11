@@ -496,6 +496,7 @@ func New(
 		app.GetSubspace(scorumtypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
+		authtypes.FeeCollectorName,
 	)
 	scorumModule := scorum.NewAppModule(appCodec, app.ScorumKeeper, app.BankKeeper)
 
@@ -605,6 +606,7 @@ func New(
 		// upgrades should be run first
 		upgradetypes.ModuleName,
 		capabilitytypes.ModuleName,
+		scorumtypes.ModuleName,
 		minttypes.ModuleName,
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
@@ -623,7 +625,6 @@ func New(
 		group.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
-		scorumtypes.ModuleName,
 		nft.ModuleName,
 		ibcnfttransfertypes.ModuleName,
 		aviatrixtypes.ModuleName,

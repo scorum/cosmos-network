@@ -20,4 +20,10 @@ message Params {
   cosmos.base.v1beta1.IntProto registration_sp_delegation_amount = 5 [(gogoproto.nullable) = false, (gogoproto.customname) = "RegistrationSPDelegationAmount"];
   uint32 sp_withdrawal_total_periods = 6;
   uint32 sp_withdrawal_period_duration_seconds = 7;
+  ValidatorsRewardParams validators_reward = 8 [(gogoproto.nullable) = false];
+}
+
+message ValidatorsRewardParams {
+  string pool_address = 1;
+  cosmos.base.v1beta1.Coin block_reward = 2 [(gogoproto.nullable) = false];
 }

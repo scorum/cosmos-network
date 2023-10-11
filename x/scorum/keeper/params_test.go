@@ -20,6 +20,13 @@ func TestGetParams(t *testing.T) {
 		sdk.NewInt(5),
 		1, 2,
 	)
+	params.ValidatorsReward = types.ValidatorsRewardParams{
+		PoolAddress: "",
+		BlockReward: sdk.Coin{
+			Denom:  "",
+			Amount: sdk.ZeroInt(),
+		},
+	}
 
 	set.keeper.SetParams(ctx.Context, params)
 
