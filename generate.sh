@@ -54,7 +54,7 @@ function gentx() {
     scorumd add-genesis-account ${addr} 1000000000000scr,1000000000000sp --home=${homed}
     scorumd add-genesis-supervisor ${addr} --home=${homed}
     echo $PASSWORD | scorumd gentx ${account} 100000000000sp --website "https://scorum.com" --home=${homed} --chain-id=${CHAIN_ID} --keyring-backend=file --keyring-dir ${keyring}/${account}
-    cp -a ${homed}/config/gentx/ ${gentx}/
+    mkdir -p ${gentx} && cp -a ${homed}/config/gentx/* ${gentx}/
 
     mkdir -p "${keys}/${account}"
     cp ${homed}/config/priv_validator_key.json ${keys}/${account}/priv_validator_key.json
