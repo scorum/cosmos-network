@@ -98,6 +98,8 @@ genesis
 sed -i -e 's/"stake"/"sp"/g' ${homed}/config/genesis.json
 # set inflation fields to 0, because there will be another reward mechanism
 sed -i 's/"\(inflation[^"]*\)": "[0-9.]\+",/"\1": "0",/g' ${homed}/config/genesis.json
+# set min_commission_rate to 1
+sed -i 's/"min_commission_rate": "[0-9.]\+"/"min_commission_rate": "1"/' ${homed}/config/genesis.json
 
 cp ${homed}/config/genesis.json genesis.json
 

@@ -536,7 +536,7 @@
         "max_entries": 7,
         "historical_entries": 10000,
         "bond_denom": "sp",
-        "min_commission_rate": "1.000000000000000000"
+        "min_commission_rate": "1"
       },
       "last_total_power": "0",
       "last_validator_powers": [],
