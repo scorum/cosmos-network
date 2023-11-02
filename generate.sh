@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Script generates genesis.json with DEVNET validators
-# The ouput of the script is
+# Script generates genesis.json with DEVNET validators and supervisors
+# The output of the script is
 # - genesis.json - the genesis file itself
-# - accounts.txt - validator accounts: name, address, public key, mnemonic
+# - accounts.txt - validator and supervisor accounts: name, address, public key, mnemonic
 # - keyring - keyring directory
 
 set -e
@@ -16,12 +16,17 @@ if [[ -z "${CHAIN_ID}" ]]; then
   CHAIN_ID="devnet-1"
 fi
 
-if [[ -z "${ACCOUNTS}" ]]; then
-  ACCOUNTS="validator1 validator2 validator3 validator4"
+if [[ -z "${VALIDATORS}" ]]; then
+  VALIDATORS="validator1"
+fi
+
+if [[ -z "${SUPERVISORS}" ]]; then
+  SUPERVISORS="orion pulsar aurora meteor nebula quasar supernova eclipse comet galaxy"
 fi
 
 echo "CHAIN_ID is set to $CHAIN_ID"
-echo "ACCOUNTS is set to $ACCOUNTS"
+echo "VALIDATORS is set to $VALIDATORS"
+echo "SUPERVISORS is set to $SUPERVISORS"
 
 out=output
 keys=keys
@@ -39,14 +44,14 @@ function join_by { local IFS="$1"; shift; echo "$*"; }
 scorumd config output json --home=${homed}
 
 function addKeys() {
-  for account in ${ACCOUNTS}
+  for account in ${VALIDATORS} ${SUPERVISORS}
   do
     echo $PASSWORD$'\n'$PASSWORD | scorumd keys add ${account} --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account} >> accounts.txt 2>&1
   done
 }
 
 function gentx() {
-  for account in ${ACCOUNTS}
+  for account in ${VALIDATORS}
   do
     addr=$(echo $PASSWORD | scorumd keys show ${account} -a --home=${homed} --keyring-backend=file --keyring-dir ${keyring}/${account})
     rm -rf ${homed}
@@ -63,12 +68,12 @@ function gentx() {
 
 function genesis() {
    rm -rf ${homed}
-   moniker=`echo $ACCOUNTS | awk '{print $1}'`
+   moniker=`echo $VALIDATORS | awk '{print $1}'`
 
    # add genesis accounts
    scorumd init "${moniker}" --staking-bond-denom sp --chain-id=${CHAIN_ID} --home=${homed}
 
-   for account in ${ACCOUNTS}
+   for account in ${VALIDATORS} ${SUPERVISORS}
    do
      addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
 
@@ -93,6 +98,8 @@ genesis
 sed -i -e 's/"stake"/"sp"/g' ${homed}/config/genesis.json
 # set inflation fields to 0, because there will be another reward mechanism
 sed -i 's/"\(inflation[^"]*\)": "[0-9.]\+",/"\1": "0",/g' ${homed}/config/genesis.json
+# set min_commission_rate to 1
+sed -i 's/"min_commission_rate": "[0-9.]\+"/"min_commission_rate": "1"/' ${homed}/config/genesis.json
 
 cp ${homed}/config/genesis.json genesis.json
 
