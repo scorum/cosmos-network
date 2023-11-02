@@ -58,7 +58,13 @@ function gentx() {
     scorumd init ${account} --staking-bond-denom sp --chain-id=${CHAIN_ID} --home=${homed}
     scorumd add-genesis-account ${addr} 1000000000000scr,1000000000000sp --home=${homed}
     scorumd add-genesis-supervisor ${addr} --home=${homed}
-    echo $PASSWORD | scorumd gentx ${account} 100000000000sp --website "https://scorum.com" --home=${homed} --chain-id=${CHAIN_ID} --keyring-backend=file --keyring-dir ${keyring}/${account}
+
+    echo $PASSWORD | scorumd gentx ${account} 100000000000sp \
+      --website "https://scorum.com" --home=${homed} \
+      --chain-id=${CHAIN_ID} --keyring-backend=file \
+      --keyring-dir ${keyring}/${account} \
+      --commission-max-change-rate "1" --commission-max-rate "1" --commission-rate "1"
+
     mkdir -p ${gentx} && cp -a ${homed}/config/gentx/* ${gentx}/
 
     mkdir -p "${keys}/${account}"
