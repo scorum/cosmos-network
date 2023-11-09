@@ -3,7 +3,6 @@ package keeper
 import (
 	errorsmod "cosmossdk.io/errors"
 	codec "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/nft"
@@ -11,10 +10,6 @@ import (
 
 	"github.com/scorum/cosmos-network/x/aviatrix/types"
 )
-
-func (k Keeper) planeNameIndex(ctx sdk.Context) sdk.KVStore {
-	return prefix.NewStore(ctx.KVStore(k.storeKey), planeNameIdxPrefix)
-}
 
 func (k Keeper) GetPlane(ctx sdk.Context, id string) (*types.Plane, error) {
 	nft, ok := k.nftKeeper.GetNFT(ctx, types.NftClassID, id)
@@ -35,21 +30,6 @@ func (k Keeper) GetPlane(ctx sdk.Context, id string) (*types.Plane, error) {
 }
 
 func (k Keeper) UpdatePlane(ctx sdk.Context, id string, meta *types.PlaneMeta) error {
-	plane, err := k.GetPlane(ctx, id)
-	if err != nil {
-		return errorsmod.Wrap(sdkerrors.ErrNotFound, "plane doesn't exist")
-	}
-
-	if plane.Meta.Name != meta.Name {
-		idx := k.planeNameIndex(ctx)
-		if idx.Has([]byte(meta.Name)) {
-			return errorsmod.Wrap(sdkerrors.ErrConflict, "name is busy")
-		}
-
-		idx.Delete([]byte(plane.Meta.Name))
-		idx.Set([]byte(meta.Name), []byte(plane.Id))
-	}
-
 	data, err := codec.NewAnyWithValue(meta)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "failed to marshal meta: %s", err)

@@ -29,8 +29,6 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type PlaneMeta struct {
-	Name       string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Color      string `protobuf:"bytes,2,opt,name=color,proto3" json:"color,omitempty"`
 	Experience uint64 `protobuf:"varint,3,opt,name=experience,proto3" json:"experience,omitempty"`
 }
 
@@ -66,20 +64,6 @@ func (m *PlaneMeta) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_PlaneMeta proto.InternalMessageInfo
-
-func (m *PlaneMeta) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *PlaneMeta) GetColor() string {
-	if m != nil {
-		return m.Color
-	}
-	return ""
-}
 
 func (m *PlaneMeta) GetExperience() uint64 {
 	if m != nil {
@@ -252,198 +236,6 @@ func (m *MsgCreatePlaneResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCreatePlaneResponse proto.InternalMessageInfo
 
-type MsgUpdatePlaneName struct {
-	Supervisor string `protobuf:"bytes,1,opt,name=supervisor,proto3" json:"supervisor,omitempty"`
-	Id         string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Name       string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-}
-
-func (m *MsgUpdatePlaneName) Reset()         { *m = MsgUpdatePlaneName{} }
-func (m *MsgUpdatePlaneName) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdatePlaneName) ProtoMessage()    {}
-func (*MsgUpdatePlaneName) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{4}
-}
-func (m *MsgUpdatePlaneName) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgUpdatePlaneName) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgUpdatePlaneName.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgUpdatePlaneName) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdatePlaneName.Merge(m, src)
-}
-func (m *MsgUpdatePlaneName) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgUpdatePlaneName) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdatePlaneName.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgUpdatePlaneName proto.InternalMessageInfo
-
-func (m *MsgUpdatePlaneName) GetSupervisor() string {
-	if m != nil {
-		return m.Supervisor
-	}
-	return ""
-}
-
-func (m *MsgUpdatePlaneName) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
-}
-
-func (m *MsgUpdatePlaneName) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-type MsgUpdatePlaneNameResponse struct {
-}
-
-func (m *MsgUpdatePlaneNameResponse) Reset()         { *m = MsgUpdatePlaneNameResponse{} }
-func (m *MsgUpdatePlaneNameResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdatePlaneNameResponse) ProtoMessage()    {}
-func (*MsgUpdatePlaneNameResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{5}
-}
-func (m *MsgUpdatePlaneNameResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgUpdatePlaneNameResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgUpdatePlaneNameResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgUpdatePlaneNameResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdatePlaneNameResponse.Merge(m, src)
-}
-func (m *MsgUpdatePlaneNameResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgUpdatePlaneNameResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdatePlaneNameResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgUpdatePlaneNameResponse proto.InternalMessageInfo
-
-type MsgUpdatePlaneColor struct {
-	Supervisor string `protobuf:"bytes,1,opt,name=supervisor,proto3" json:"supervisor,omitempty"`
-	Id         string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Color      string `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
-}
-
-func (m *MsgUpdatePlaneColor) Reset()         { *m = MsgUpdatePlaneColor{} }
-func (m *MsgUpdatePlaneColor) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdatePlaneColor) ProtoMessage()    {}
-func (*MsgUpdatePlaneColor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{6}
-}
-func (m *MsgUpdatePlaneColor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgUpdatePlaneColor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgUpdatePlaneColor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgUpdatePlaneColor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdatePlaneColor.Merge(m, src)
-}
-func (m *MsgUpdatePlaneColor) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgUpdatePlaneColor) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdatePlaneColor.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgUpdatePlaneColor proto.InternalMessageInfo
-
-func (m *MsgUpdatePlaneColor) GetSupervisor() string {
-	if m != nil {
-		return m.Supervisor
-	}
-	return ""
-}
-
-func (m *MsgUpdatePlaneColor) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
-}
-
-func (m *MsgUpdatePlaneColor) GetColor() string {
-	if m != nil {
-		return m.Color
-	}
-	return ""
-}
-
-type MsgUpdatePlaneColorResponse struct {
-}
-
-func (m *MsgUpdatePlaneColorResponse) Reset()         { *m = MsgUpdatePlaneColorResponse{} }
-func (m *MsgUpdatePlaneColorResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdatePlaneColorResponse) ProtoMessage()    {}
-func (*MsgUpdatePlaneColorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{7}
-}
-func (m *MsgUpdatePlaneColorResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgUpdatePlaneColorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgUpdatePlaneColorResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgUpdatePlaneColorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdatePlaneColorResponse.Merge(m, src)
-}
-func (m *MsgUpdatePlaneColorResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgUpdatePlaneColorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdatePlaneColorResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgUpdatePlaneColorResponse proto.InternalMessageInfo
-
 type MsgUpdatePlaneExperience struct {
 	Supervisor string `protobuf:"bytes,1,opt,name=supervisor,proto3" json:"supervisor,omitempty"`
 	Id         string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -454,7 +246,7 @@ func (m *MsgUpdatePlaneExperience) Reset()         { *m = MsgUpdatePlaneExperien
 func (m *MsgUpdatePlaneExperience) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdatePlaneExperience) ProtoMessage()    {}
 func (*MsgUpdatePlaneExperience) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{8}
+	return fileDescriptor_bfdcccde74665549, []int{4}
 }
 func (m *MsgUpdatePlaneExperience) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -511,7 +303,7 @@ func (m *MsgUpdatePlaneExperienceResponse) Reset()         { *m = MsgUpdatePlane
 func (m *MsgUpdatePlaneExperienceResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdatePlaneExperienceResponse) ProtoMessage()    {}
 func (*MsgUpdatePlaneExperienceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{9}
+	return fileDescriptor_bfdcccde74665549, []int{5}
 }
 func (m *MsgUpdatePlaneExperienceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -550,7 +342,7 @@ func (m *MsgAdjustPlaneExperience) Reset()         { *m = MsgAdjustPlaneExperien
 func (m *MsgAdjustPlaneExperience) String() string { return proto.CompactTextString(m) }
 func (*MsgAdjustPlaneExperience) ProtoMessage()    {}
 func (*MsgAdjustPlaneExperience) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{10}
+	return fileDescriptor_bfdcccde74665549, []int{6}
 }
 func (m *MsgAdjustPlaneExperience) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -607,7 +399,7 @@ func (m *MsgAdjustPlaneExperienceResponse) Reset()         { *m = MsgAdjustPlane
 func (m *MsgAdjustPlaneExperienceResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgAdjustPlaneExperienceResponse) ProtoMessage()    {}
 func (*MsgAdjustPlaneExperienceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfdcccde74665549, []int{11}
+	return fileDescriptor_bfdcccde74665549, []int{7}
 }
 func (m *MsgAdjustPlaneExperienceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -641,10 +433,6 @@ func init() {
 	proto.RegisterType((*Plane)(nil), "network.aviatrix.v1.Plane")
 	proto.RegisterType((*MsgCreatePlane)(nil), "network.aviatrix.v1.MsgCreatePlane")
 	proto.RegisterType((*MsgCreatePlaneResponse)(nil), "network.aviatrix.v1.MsgCreatePlaneResponse")
-	proto.RegisterType((*MsgUpdatePlaneName)(nil), "network.aviatrix.v1.MsgUpdatePlaneName")
-	proto.RegisterType((*MsgUpdatePlaneNameResponse)(nil), "network.aviatrix.v1.MsgUpdatePlaneNameResponse")
-	proto.RegisterType((*MsgUpdatePlaneColor)(nil), "network.aviatrix.v1.MsgUpdatePlaneColor")
-	proto.RegisterType((*MsgUpdatePlaneColorResponse)(nil), "network.aviatrix.v1.MsgUpdatePlaneColorResponse")
 	proto.RegisterType((*MsgUpdatePlaneExperience)(nil), "network.aviatrix.v1.MsgUpdatePlaneExperience")
 	proto.RegisterType((*MsgUpdatePlaneExperienceResponse)(nil), "network.aviatrix.v1.MsgUpdatePlaneExperienceResponse")
 	proto.RegisterType((*MsgAdjustPlaneExperience)(nil), "network.aviatrix.v1.MsgAdjustPlaneExperience")
@@ -654,41 +442,34 @@ func init() {
 func init() { proto.RegisterFile("network/aviatrix/v1/tx.proto", fileDescriptor_bfdcccde74665549) }
 
 var fileDescriptor_bfdcccde74665549 = []byte{
-	// 529 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x95, 0xb1, 0x6e, 0xd3, 0x40,
-	0x1c, 0xc6, 0xe3, 0xd8, 0xad, 0xd4, 0x7f, 0xa5, 0x16, 0x5d, 0xa1, 0x58, 0xa6, 0x9c, 0x22, 0x33,
-	0x10, 0x81, 0x6a, 0x93, 0x20, 0x16, 0x36, 0xa8, 0x98, 0x50, 0x10, 0x8a, 0xd4, 0x85, 0x05, 0x5d,
-	0x9d, 0x93, 0x31, 0x8d, 0x7d, 0x96, 0xef, 0x9c, 0x86, 0x81, 0x85, 0x27, 0x60, 0xe7, 0x25, 0x78,
-	0x05, 0x36, 0xc6, 0x8e, 0x8c, 0x28, 0x19, 0x78, 0x0d, 0x14, 0x27, 0xbe, 0xd8, 0xf1, 0x19, 0x1c,
-	0xa9, 0x5b, 0xee, 0xfe, 0x5f, 0xbe, 0xef, 0x77, 0xb9, 0x2f, 0x3a, 0x38, 0x89, 0xa8, 0xb8, 0x62,
-	0xc9, 0xa5, 0x4b, 0x26, 0x01, 0x11, 0x49, 0x30, 0x75, 0x27, 0x3d, 0x57, 0x4c, 0x9d, 0x38, 0x61,
-	0x82, 0xa1, 0xa3, 0xd5, 0xd4, 0xc9, 0xa7, 0xce, 0xa4, 0x67, 0xdd, 0xf5, 0x18, 0x0f, 0x19, 0x77,
-	0x43, 0xee, 0x2f, 0xc4, 0x21, 0xf7, 0x97, 0x6a, 0xfb, 0x1c, 0xf6, 0xde, 0x8e, 0x49, 0x44, 0x07,
-	0x54, 0x10, 0x84, 0xc0, 0x88, 0x48, 0x48, 0x4d, 0xad, 0xa3, 0x75, 0xf7, 0x86, 0xd9, 0x67, 0x74,
-	0x1b, 0x76, 0x3c, 0x36, 0x66, 0x89, 0xd9, 0xce, 0x36, 0x97, 0x0b, 0x84, 0x01, 0xe8, 0x34, 0xa6,
-	0x49, 0x40, 0x23, 0x8f, 0x9a, 0x7a, 0x47, 0xeb, 0x1a, 0xc3, 0xc2, 0x8e, 0x4d, 0x60, 0x27, 0xb3,
-	0x45, 0x07, 0xd0, 0x0e, 0x46, 0x2b, 0xc3, 0x76, 0x30, 0x5a, 0xd8, 0xb1, 0xab, 0x88, 0x4a, 0xbb,
-	0x6c, 0x81, 0xfa, 0x60, 0x84, 0x54, 0x90, 0xcc, 0x68, 0xbf, 0x8f, 0x1d, 0xc5, 0x11, 0x1c, 0x89,
-	0x39, 0xcc, 0xb4, 0xf6, 0x37, 0x0d, 0x0e, 0x06, 0xdc, 0x3f, 0x4b, 0x28, 0x11, 0x54, 0x1d, 0x86,
-	0x01, 0x78, 0x1a, 0xd3, 0x64, 0x12, 0x70, 0x79, 0x80, 0xc2, 0xce, 0x1a, 0x46, 0x57, 0xc1, 0x18,
-	0xcd, 0x61, 0x9e, 0x1f, 0x7e, 0xf9, 0xf3, 0xfd, 0x51, 0xc1, 0xda, 0x36, 0xe1, 0xb8, 0x0c, 0x37,
-	0xa4, 0x3c, 0x66, 0x11, 0xa7, 0x76, 0x00, 0x68, 0xc0, 0xfd, 0xf3, 0x78, 0x94, 0x4f, 0xde, 0x2c,
-	0x7e, 0xe6, 0x32, 0xaa, 0x56, 0x41, 0x5d, 0x1e, 0xad, 0x2d, 0x8f, 0x96, 0x5f, 0x95, 0xbe, 0xbe,
-	0xaa, 0x2a, 0xc4, 0x09, 0x58, 0xd5, 0x28, 0x09, 0x32, 0x86, 0xa3, 0xf2, 0xf4, 0x2c, 0xbf, 0xda,
-	0xad, 0x48, 0x64, 0x41, 0xf4, 0x42, 0x41, 0xaa, 0x2c, 0xf7, 0xe1, 0x9e, 0x22, 0x4d, 0xc2, 0x70,
-	0x30, 0xcb, 0xe3, 0x57, 0xb2, 0x4c, 0x5b, 0x13, 0x1d, 0xc3, 0x2e, 0x09, 0x59, 0x1a, 0x89, 0x55,
-	0x31, 0x57, 0xab, 0x2a, 0x93, 0x0d, 0x9d, 0xba, 0xd0, 0x0d, 0xb0, 0x17, 0xa3, 0x8f, 0x29, 0x17,
-	0x37, 0x0b, 0xa6, 0xff, 0x0f, 0x4c, 0x19, 0x9a, 0x83, 0xf5, 0x7f, 0x18, 0xa0, 0x0f, 0xb8, 0x8f,
-	0xde, 0xc3, 0x7e, 0xf1, 0x3f, 0xf0, 0x40, 0xd9, 0xd7, 0x72, 0x17, 0xad, 0xc7, 0x0d, 0x44, 0x79,
-	0x10, 0xba, 0x84, 0xc3, 0xcd, 0xb6, 0x3e, 0xac, 0xfb, 0xfe, 0x86, 0xd0, 0x72, 0x1b, 0x0a, 0x65,
-	0x58, 0x04, 0xb7, 0x2a, 0x8d, 0xec, 0x36, 0x30, 0xc9, 0x94, 0xd6, 0x93, 0xa6, 0x4a, 0x99, 0xf7,
-	0x19, 0xee, 0xa8, 0x4b, 0x77, 0xda, 0xc0, 0x6a, 0x2d, 0xb7, 0x9e, 0x6d, 0x25, 0x2f, 0xc6, 0xab,
-	0xab, 0x55, 0x1b, 0xaf, 0x94, 0xd7, 0xc7, 0xff, 0xb3, 0x43, 0x2f, 0x5f, 0xff, 0x9c, 0x61, 0xed,
-	0x7a, 0x86, 0xb5, 0xdf, 0x33, 0xac, 0x7d, 0x9d, 0xe3, 0xd6, 0xf5, 0x1c, 0xb7, 0x7e, 0xcd, 0x71,
-	0xeb, 0x5d, 0xcf, 0x0f, 0xc4, 0x87, 0xf4, 0xc2, 0xf1, 0x58, 0xe8, 0x72, 0x8f, 0x25, 0x69, 0xe8,
-	0x2e, 0x9f, 0x90, 0xd3, 0xfc, 0xf1, 0x99, 0xae, 0x9f, 0x1f, 0xf1, 0x29, 0xa6, 0xfc, 0x62, 0x37,
-	0x7b, 0x51, 0x9e, 0xfe, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x8d, 0xc1, 0x6b, 0x6c, 0x9f, 0x06, 0x00,
-	0x00,
+	// 428 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x94, 0xc1, 0xaa, 0xd3, 0x40,
+	0x14, 0x86, 0x3b, 0x49, 0xef, 0x85, 0x7b, 0x0a, 0x15, 0xa2, 0xd6, 0x50, 0x64, 0x28, 0x71, 0x53,
+	0x2c, 0x4d, 0x68, 0xc5, 0x8d, 0x3b, 0x15, 0x57, 0x12, 0x90, 0x80, 0x1b, 0x37, 0x32, 0x4d, 0x86,
+	0x18, 0x35, 0x99, 0x30, 0x33, 0x49, 0xe3, 0xc2, 0x8d, 0x4f, 0xe0, 0xde, 0x97, 0xf0, 0x31, 0x5c,
+	0x76, 0xe9, 0x52, 0x5a, 0xc1, 0xd7, 0x10, 0x93, 0xa6, 0x4d, 0xdb, 0x89, 0x56, 0xb8, 0xcb, 0x39,
+	0xe7, 0xe7, 0xfc, 0xdf, 0x9c, 0x03, 0x3f, 0xdc, 0x4d, 0xa8, 0x5c, 0x32, 0xfe, 0xce, 0x21, 0x79,
+	0x44, 0x24, 0x8f, 0x0a, 0x27, 0x9f, 0x39, 0xb2, 0xb0, 0x53, 0xce, 0x24, 0x33, 0x6e, 0x6e, 0xbb,
+	0x76, 0xdd, 0xb5, 0xf3, 0xd9, 0xf0, 0x8e, 0xcf, 0x44, 0xcc, 0x84, 0x13, 0x8b, 0xf0, 0x8f, 0x38,
+	0x16, 0x61, 0xa5, 0xb6, 0x26, 0x70, 0xf5, 0xe2, 0x3d, 0x49, 0xa8, 0x4b, 0x25, 0x31, 0x30, 0x00,
+	0x2d, 0x52, 0xca, 0x23, 0x9a, 0xf8, 0xd4, 0xd4, 0x47, 0x68, 0xdc, 0xf5, 0x1a, 0x15, 0x8b, 0xc0,
+	0x45, 0x29, 0x36, 0xfa, 0xa0, 0x45, 0x81, 0x89, 0x46, 0x68, 0x7c, 0xe5, 0x69, 0x51, 0x60, 0xdc,
+	0x82, 0x0b, 0xb6, 0x4c, 0x28, 0x37, 0xb5, 0xb2, 0x54, 0x3d, 0x8c, 0x39, 0x74, 0x63, 0x2a, 0x49,
+	0x39, 0xa8, 0x37, 0xc7, 0xb6, 0x02, 0xcc, 0xde, 0x99, 0x7b, 0xa5, 0xd6, 0xfa, 0x82, 0xa0, 0xef,
+	0x8a, 0xf0, 0x29, 0xa7, 0x44, 0x52, 0xb5, 0x19, 0x06, 0x10, 0x59, 0x4a, 0x79, 0x1e, 0x09, 0x56,
+	0x3b, 0x36, 0x2a, 0x7b, 0x18, 0x5d, 0x05, 0xd3, 0x3d, 0x1f, 0xe6, 0xd1, 0x8d, 0x4f, 0xbf, 0xbe,
+	0xde, 0x6f, 0x8c, 0xb6, 0x4c, 0x18, 0x1c, 0xc2, 0x79, 0x54, 0xa4, 0x2c, 0x11, 0xd4, 0x12, 0x60,
+	0xba, 0x22, 0x7c, 0x99, 0x06, 0x75, 0xe7, 0xd9, 0x6e, 0x6d, 0x47, 0xc0, 0xe8, 0x04, 0xb8, 0xfa,
+	0xa0, 0xb6, 0xfb, 0xe0, 0x00, 0x2e, 0x49, 0xcc, 0xb2, 0x44, 0x6e, 0x4f, 0xb0, 0x7d, 0x9d, 0xe2,
+	0x58, 0x30, 0x6a, 0x33, 0x3d, 0x02, 0x7b, 0x1c, 0xbc, 0xcd, 0x84, 0xbc, 0x5e, 0x30, 0xfd, 0x5f,
+	0x60, 0x4a, 0xd3, 0x1a, 0x6c, 0xfe, 0x53, 0x03, 0xdd, 0x15, 0xa1, 0xf1, 0x1a, 0x7a, 0xcd, 0x6b,
+	0xdf, 0x53, 0x5e, 0xe6, 0x70, 0xeb, 0xc3, 0xc9, 0x19, 0xa2, 0xda, 0xc8, 0xf8, 0x08, 0xb7, 0xd5,
+	0x77, 0x99, 0xb6, 0x4d, 0x51, 0xca, 0x87, 0x0f, 0xff, 0x4b, 0xde, 0xb4, 0x57, 0x6f, 0xbf, 0xd5,
+	0x5e, 0x29, 0x6f, 0xb7, 0xff, 0xeb, 0x9a, 0x9f, 0x3c, 0xff, 0xb6, 0xc6, 0x68, 0xb5, 0xc6, 0xe8,
+	0xc7, 0x1a, 0xa3, 0xcf, 0x1b, 0xdc, 0x59, 0x6d, 0x70, 0xe7, 0xfb, 0x06, 0x77, 0x5e, 0xcd, 0xc2,
+	0x48, 0xbe, 0xc9, 0x16, 0xb6, 0xcf, 0x62, 0x47, 0xf8, 0x8c, 0x67, 0xb1, 0x53, 0xa5, 0xc4, 0xb4,
+	0xce, 0x97, 0x62, 0x9f, 0x30, 0xf2, 0x43, 0x4a, 0xc5, 0xe2, 0xb2, 0x0c, 0x8d, 0x07, 0xbf, 0x03,
+	0x00, 0x00, 0xff, 0xff, 0x43, 0xb4, 0x2a, 0x4f, 0x82, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -704,8 +485,6 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
 	CreatePlane(ctx context.Context, in *MsgCreatePlane, opts ...grpc.CallOption) (*MsgCreatePlaneResponse, error)
-	UpdatePlaneName(ctx context.Context, in *MsgUpdatePlaneName, opts ...grpc.CallOption) (*MsgUpdatePlaneNameResponse, error)
-	UpdatePlaneColor(ctx context.Context, in *MsgUpdatePlaneColor, opts ...grpc.CallOption) (*MsgUpdatePlaneColorResponse, error)
 	UpdatePlaneExperience(ctx context.Context, in *MsgUpdatePlaneExperience, opts ...grpc.CallOption) (*MsgUpdatePlaneExperienceResponse, error)
 	AdjustPlaneExperience(ctx context.Context, in *MsgAdjustPlaneExperience, opts ...grpc.CallOption) (*MsgAdjustPlaneExperienceResponse, error)
 }
@@ -721,24 +500,6 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 func (c *msgClient) CreatePlane(ctx context.Context, in *MsgCreatePlane, opts ...grpc.CallOption) (*MsgCreatePlaneResponse, error) {
 	out := new(MsgCreatePlaneResponse)
 	err := c.cc.Invoke(ctx, "/network.aviatrix.v1.Msg/CreatePlane", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) UpdatePlaneName(ctx context.Context, in *MsgUpdatePlaneName, opts ...grpc.CallOption) (*MsgUpdatePlaneNameResponse, error) {
-	out := new(MsgUpdatePlaneNameResponse)
-	err := c.cc.Invoke(ctx, "/network.aviatrix.v1.Msg/UpdatePlaneName", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *msgClient) UpdatePlaneColor(ctx context.Context, in *MsgUpdatePlaneColor, opts ...grpc.CallOption) (*MsgUpdatePlaneColorResponse, error) {
-	out := new(MsgUpdatePlaneColorResponse)
-	err := c.cc.Invoke(ctx, "/network.aviatrix.v1.Msg/UpdatePlaneColor", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -766,8 +527,6 @@ func (c *msgClient) AdjustPlaneExperience(ctx context.Context, in *MsgAdjustPlan
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	CreatePlane(context.Context, *MsgCreatePlane) (*MsgCreatePlaneResponse, error)
-	UpdatePlaneName(context.Context, *MsgUpdatePlaneName) (*MsgUpdatePlaneNameResponse, error)
-	UpdatePlaneColor(context.Context, *MsgUpdatePlaneColor) (*MsgUpdatePlaneColorResponse, error)
 	UpdatePlaneExperience(context.Context, *MsgUpdatePlaneExperience) (*MsgUpdatePlaneExperienceResponse, error)
 	AdjustPlaneExperience(context.Context, *MsgAdjustPlaneExperience) (*MsgAdjustPlaneExperienceResponse, error)
 }
@@ -778,12 +537,6 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) CreatePlane(ctx context.Context, req *MsgCreatePlane) (*MsgCreatePlaneResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePlane not implemented")
-}
-func (*UnimplementedMsgServer) UpdatePlaneName(ctx context.Context, req *MsgUpdatePlaneName) (*MsgUpdatePlaneNameResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdatePlaneName not implemented")
-}
-func (*UnimplementedMsgServer) UpdatePlaneColor(ctx context.Context, req *MsgUpdatePlaneColor) (*MsgUpdatePlaneColorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdatePlaneColor not implemented")
 }
 func (*UnimplementedMsgServer) UpdatePlaneExperience(ctx context.Context, req *MsgUpdatePlaneExperience) (*MsgUpdatePlaneExperienceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePlaneExperience not implemented")
@@ -810,42 +563,6 @@ func _Msg_CreatePlane_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).CreatePlane(ctx, req.(*MsgCreatePlane))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_UpdatePlaneName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdatePlaneName)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UpdatePlaneName(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/network.aviatrix.v1.Msg/UpdatePlaneName",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdatePlaneName(ctx, req.(*MsgUpdatePlaneName))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Msg_UpdatePlaneColor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdatePlaneColor)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UpdatePlaneColor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/network.aviatrix.v1.Msg/UpdatePlaneColor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdatePlaneColor(ctx, req.(*MsgUpdatePlaneColor))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -895,14 +612,6 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_CreatePlane_Handler,
 		},
 		{
-			MethodName: "UpdatePlaneName",
-			Handler:    _Msg_UpdatePlaneName_Handler,
-		},
-		{
-			MethodName: "UpdatePlaneColor",
-			Handler:    _Msg_UpdatePlaneColor_Handler,
-		},
-		{
 			MethodName: "UpdatePlaneExperience",
 			Handler:    _Msg_UpdatePlaneExperience_Handler,
 		},
@@ -939,20 +648,6 @@ func (m *PlaneMeta) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTx(dAtA, i, uint64(m.Experience))
 		i--
 		dAtA[i] = 0x18
-	}
-	if len(m.Color) > 0 {
-		i -= len(m.Color)
-		copy(dAtA[i:], m.Color)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Color)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -1078,140 +773,6 @@ func (m *MsgCreatePlaneResponse) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *MsgCreatePlaneResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgUpdatePlaneName) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgUpdatePlaneName) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgUpdatePlaneName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Id)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Supervisor) > 0 {
-		i -= len(m.Supervisor)
-		copy(dAtA[i:], m.Supervisor)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Supervisor)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgUpdatePlaneNameResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgUpdatePlaneNameResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgUpdatePlaneNameResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgUpdatePlaneColor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgUpdatePlaneColor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgUpdatePlaneColor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Color) > 0 {
-		i -= len(m.Color)
-		copy(dAtA[i:], m.Color)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Color)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Id)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Supervisor) > 0 {
-		i -= len(m.Supervisor)
-		copy(dAtA[i:], m.Supervisor)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Supervisor)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgUpdatePlaneColorResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgUpdatePlaneColorResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgUpdatePlaneColorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1366,14 +927,6 @@ func (m *PlaneMeta) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Color)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
 	if m.Experience != 0 {
 		n += 1 + sovTx(uint64(m.Experience))
 	}
@@ -1427,66 +980,6 @@ func (m *MsgCreatePlane) Size() (n int) {
 }
 
 func (m *MsgCreatePlaneResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *MsgUpdatePlaneName) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Supervisor)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgUpdatePlaneNameResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *MsgUpdatePlaneColor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Supervisor)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Color)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgUpdatePlaneColorResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1588,70 +1081,6 @@ func (m *PlaneMeta) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: PlaneMeta: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Color", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Color = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Experience", wireType)
@@ -2051,398 +1480,6 @@ func (m *MsgCreatePlaneResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgCreatePlaneResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgUpdatePlaneName) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdatePlaneName: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdatePlaneName: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Supervisor", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Supervisor = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgUpdatePlaneNameResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdatePlaneNameResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdatePlaneNameResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgUpdatePlaneColor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdatePlaneColor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdatePlaneColor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Supervisor", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Supervisor = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Color", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Color = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgUpdatePlaneColorResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdatePlaneColorResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdatePlaneColorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

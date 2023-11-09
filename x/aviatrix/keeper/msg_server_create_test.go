@@ -28,8 +28,6 @@ func TestMsgServer_CreatePlane(t *testing.T) {
 			Supervisor: addr.String(),
 			Owner:      addr.String(),
 			Meta: &types.PlaneMeta{
-				Name:       "name",
-				Color:      "white",
 				Experience: 100,
 			},
 		})
@@ -46,8 +44,6 @@ func TestMsgServer_CreatePlane(t *testing.T) {
 			Supervisor: set.supervisor.String(),
 			Owner:      set.supervisor.String(),
 			Meta: &types.PlaneMeta{
-				Name:       "name",
-				Color:      "white",
 				Experience: 100,
 			},
 		})
@@ -60,8 +56,6 @@ func TestMsgServer_CreatePlane(t *testing.T) {
 			Id:    id.String(),
 			Owner: set.supervisor.String(),
 			Meta: &types.PlaneMeta{
-				Name:       "name",
-				Color:      "white",
 				Experience: 100,
 			},
 		}, act)
@@ -77,8 +71,6 @@ func TestMsgServer_CreatePlane(t *testing.T) {
 			Supervisor: set.supervisor.String(),
 			Owner:      addr.String(),
 			Meta: &types.PlaneMeta{
-				Name:       "name2",
-				Color:      "white",
 				Experience: 100,
 			},
 		})
@@ -91,8 +83,6 @@ func TestMsgServer_CreatePlane(t *testing.T) {
 			Id:    id.String(),
 			Owner: addr.String(),
 			Meta: &types.PlaneMeta{
-				Name:       "name2",
-				Color:      "white",
 				Experience: 100,
 			},
 		}, act)

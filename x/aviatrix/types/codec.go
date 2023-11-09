@@ -10,8 +10,6 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCreatePlane{}, "aviatrix/CreatePlane", nil)
-	cdc.RegisterConcrete(&MsgUpdatePlaneName{}, "aviatrix/UpdatePlaneName", nil)
-	cdc.RegisterConcrete(&MsgUpdatePlaneColor{}, "aviatrix/UpdatePlaneColor", nil)
 	cdc.RegisterConcrete(&MsgUpdatePlaneExperience{}, "aviatrix/UpdatePlaneExperience", nil)
 	cdc.RegisterConcrete(&MsgAdjustPlaneExperience{}, "aviatrix/AdjustPlaneExperience", nil)
 	cdc.RegisterConcrete(&PlaneMeta{}, "aviatrix/PlaneMeta", nil)
@@ -20,8 +18,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreatePlane{},
-		&MsgUpdatePlaneName{},
-		&MsgUpdatePlaneColor{},
 		&MsgUpdatePlaneExperience{},
 		&MsgAdjustPlaneExperience{},
 	)
