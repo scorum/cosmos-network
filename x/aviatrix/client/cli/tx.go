@@ -17,8 +17,6 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(
 		CmdCreatePlane(),
-		CmdUpdatePlaneName(),
-		CmdUpdatePlaneColor(),
 		CmdUpdatePlaneExperience(),
 		CmdAdjustPlaneExperience(),
 	)

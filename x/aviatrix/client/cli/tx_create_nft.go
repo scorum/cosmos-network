@@ -1,6 +1,9 @@
 package cli
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -11,9 +14,9 @@ import (
 
 func CmdCreatePlane() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-plane [id] [owner] [name] [color]",
+		Use:   "create-plane [id] [owner] [experience]",
 		Short: "Broadcast message CreatePlane",
-		Args:  cobra.ExactArgs(4),
+		Args:  cobra.RangeArgs(2, 3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -22,15 +25,20 @@ func CmdCreatePlane() *cobra.Command {
 
 			argId := args[0]
 			argOwner := args[1]
-			argName := args[2]
-			argColor := args[3]
+			var argExperience uint64
+
+			if len(args) == 3 {
+				argExperience, err = strconv.ParseUint(args[2], 10, 64)
+				if err != nil {
+					return fmt.Errorf("invalid experience: %w", err)
+				}
+			}
 
 			msg := types.NewMsgCreatePlane(
 				clientCtx.GetFromAddress().String(),
 				argId,
 				argOwner,
-				argName,
-				argColor,
+				argExperience,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

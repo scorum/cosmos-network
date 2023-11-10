@@ -37,11 +37,8 @@ func (k msgServer) CreatePlane(goCtx context.Context, msg *types.MsgCreatePlane)
 
 	_, exists := k.nftKeeper.GetNFT(ctx, types.NftClassID, msg.Id)
 	if exists {
-		return nil, errorsmod.Wrap(sdkerrors.ErrConflict, "plane id is busy")
-	}
-
-	if k.planeNameIndex(ctx).Has([]byte(msg.Meta.Name)) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrConflict, "plane name is busy")
+		ctx.Logger().With("owner", msg.Owner, "id", msg.Id).Info("attempt to create plane with existing id")
+		return &types.MsgCreatePlaneResponse{}, nil
 	}
 
 	if err := k.nftKeeper.Mint(ctx, nft.NFT{
@@ -51,8 +48,6 @@ func (k msgServer) CreatePlane(goCtx context.Context, msg *types.MsgCreatePlane)
 	}, sdk.MustAccAddressFromBech32(msg.Owner)); err != nil {
 		return nil, fmt.Errorf("failed to mint nft: %w", err)
 	}
-
-	k.planeNameIndex(ctx).Set([]byte(msg.Meta.Name), []byte(msg.Id))
 
 	return &types.MsgCreatePlaneResponse{}, nil
 }

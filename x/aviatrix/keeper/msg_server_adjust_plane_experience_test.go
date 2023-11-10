@@ -103,8 +103,6 @@ func TestMsgServer_AdjustPlaneExperience(t *testing.T) {
 				Supervisor: supervisorAddr.String(),
 				Owner:      addr.String(),
 				Meta: &types.PlaneMeta{
-					Name:       "name",
-					Color:      "white",
 					Experience: 10,
 				},
 			})
@@ -126,8 +124,6 @@ func TestMsgServer_AdjustPlaneExperience(t *testing.T) {
 				Id:    id,
 				Owner: addr.String(),
 				Meta: &types.PlaneMeta{
-					Name:       "name",
-					Color:      "white",
 					Experience: tc.resultExperience,
 				},
 			}, act)

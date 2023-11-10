@@ -11,15 +11,13 @@ const TypeMsgCreatePlane = "create_plane"
 
 var _ sdk.Msg = &MsgCreatePlane{}
 
-func NewMsgCreatePlane(supervisor, id, owner, name string, color string) *MsgCreatePlane {
+func NewMsgCreatePlane(supervisor, id, owner string, experience uint64) *MsgCreatePlane {
 	return &MsgCreatePlane{
 		Id:         id,
 		Supervisor: supervisor,
 		Owner:      owner,
 		Meta: &PlaneMeta{
-			Name:       name,
-			Color:      color,
-			Experience: 0,
+			Experience: experience,
 		},
 	}
 }
@@ -66,17 +64,5 @@ func (msg *MsgCreatePlane) ValidateBasic() error {
 }
 
 func (msg *PlaneMeta) ValidateBasic() error {
-	if msg.Name == "" {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "empty name")
-	}
-
-	if len(msg.Name) > 32 {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "name is too long")
-	}
-
-	if msg.Color == "" {
-		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "empty color")
-	}
-
 	return nil
 }

@@ -23,8 +23,6 @@ type (
 	}
 )
 
-var planeNameIdxPrefix = []byte("plane_name_idx")
-
 func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey storetypes.StoreKey,

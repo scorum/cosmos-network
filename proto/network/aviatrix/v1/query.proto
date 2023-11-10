@@ -16,12 +16,6 @@ service Query {
   rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/aviatrix/params";
   }
-
-  // PlaneByName queries the nft with provided name.
-  rpc PlaneByName (QueryPlaneByNameRequest) returns (QueryPlaneByNameResponse) {
-    option (google.api.http).get = "/aviatrix/planeByName";
-  }
-
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -33,10 +27,3 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryPlaneByNameRequest {
-  string name = 1;
-}
-
-message QueryPlaneByNameResponse {
-  cosmos.nft.v1beta1.NFT nft = 1;
-}
