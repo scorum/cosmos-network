@@ -1,93 +1,114 @@
+//go:build simulation
+
 package app_test
 
 import (
+	"encoding/json"
+	"fmt"
+	"math/rand"
 	"os"
 	"testing"
-	"time"
 
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/simapp/helpers"
+	"github.com/cosmos/cosmos-sdk/store"
 	simulationtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	tmtypes "github.com/tendermint/tendermint/types"
-
 	"github.com/scorum/cosmos-network/app"
+	"github.com/stretchr/testify/require"
+	"github.com/tendermint/tendermint/libs/log"
+	dbm "github.com/tendermint/tm-db"
 )
 
 func init() {
 	simapp.GetSimulatorFlags()
 }
 
-var defaultConsensusParams = &abci.ConsensusParams{
-	Block: &abci.BlockParams{
-		MaxBytes: 200000,
-		MaxGas:   2000000,
-	},
-	Evidence: &tmproto.EvidenceParams{
-		MaxAgeNumBlocks: 302400,
-		MaxAgeDuration:  504 * time.Hour, // 3 weeks is the max duration
-		MaxBytes:        10000,
-	},
-	Validator: &tmproto.ValidatorParams{
-		PubKeyTypes: []string{
-			tmtypes.ABCIPubKeyTypeEd25519,
-		},
-	},
+// interBlockCacheOpt returns a BaseApp option function that sets the persistent
+// inter-block write-through cache.
+func interBlockCacheOpt() func(*baseapp.BaseApp) {
+	return baseapp.SetInterBlockCache(store.NewCommitKVStoreCacheManager())
 }
 
-// BenchmarkSimulation run the chain simulation
-// Running using starport command:
-// `ignite chain simulate -v --numBlocks 200 --blockSize 50`
-// Running as go benchmark test:
-// `go test -benchmem -run=^$ -bench ^BenchmarkSimulation ./app -NumBlocks=200 -BlockSize 50 -Commit=true -Verbose=true -Enabled=true`
-func BenchmarkSimulation(b *testing.B) {
-	simapp.FlagEnabledValue = true
-	simapp.FlagCommitValue = true
+func TestAppStateDeterminism(t *testing.T) {
+	config := simapp.NewConfigFromFlags()
+	config.InitialBlockHeight = 1
+	config.ExportParamsPath = ""
+	config.OnOperation = false
+	config.AllInvariants = true
+	config.NumBlocks = 250
+	config.BlockSize = 100
+	config.Commit = true
+	config.ChainID = helpers.SimAppChainID
 
-	config, db, dir, logger, _, err := simapp.SetupSimulation("goleveldb-app-sim", "Simulation")
-	require.NoError(b, err, "simulation setup failed")
+	numSeeds := 5
+	numTimesToRunPerSeed := 3
+	appHashList := make([]json.RawMessage, numTimesToRunPerSeed)
 
-	b.Cleanup(func() {
-		db.Close()
-		err = os.RemoveAll(dir)
-		require.NoError(b, err)
-	})
+	for i := 0; i < numSeeds; i++ {
+		config.Seed = rand.Int63()
 
-	encoding := app.MakeEncodingConfig()
+		for j := 0; j < numTimesToRunPerSeed; j++ {
+			var logger log.Logger
+			if simapp.FlagVerboseValue {
+				logger = log.TestingLogger()
+			} else {
+				logger = log.NewNopLogger()
+			}
 
-	app := app.New(
-		logger,
-		db,
-		nil,
-		true,
-		map[int64]bool{},
-		app.DefaultNodeHome,
-		0,
-		encoding,
-		simapp.EmptyAppOptions{},
-	)
+			db := dbm.NewMemDB()
+			app := app.New(
+				logger,
+				db,
+				nil,
+				true,
+				map[int64]bool{},
+				simapp.DefaultNodeHome,
+				simapp.FlagPeriodValue,
+				app.MakeEncodingConfig(),
+				simapp.EmptyAppOptions{},
+				interBlockCacheOpt(),
+			)
 
-	// Run randomized simulations
-	_, simParams, simErr := simulation.SimulateFromSeed(
-		b,
-		os.Stdout,
-		app.BaseApp,
-		simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
-		simulationtypes.RandomAccounts,
-		simapp.SimulationOperations(app, app.AppCodec(), config),
-		app.ModuleAccountAddrs(),
-		config,
-		app.AppCodec(),
-	)
+			fmt.Printf(
+				"running non-determinism simulation; seed %d: %d/%d, attempt: %d/%d\n",
+				config.Seed, i+1, numSeeds, j+1, numTimesToRunPerSeed,
+			)
 
-	// export state and simParams before the simulation error is checked
-	err = simapp.CheckExportSimulation(app, config, simParams)
-	require.NoError(b, err)
-	require.NoError(b, simErr)
+			_, _, err := simulation.SimulateFromSeed(
+				t,
+				os.Stdout,
+				app.BaseApp,
+				simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
+				simulationtypes.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
+				simapp.SimulationOperations(app, app.AppCodec(), config),
+				app.ModuleAccountAddrs(),
+				config,
+				app.AppCodec(),
+			)
+			require.NoError(t, err)
 
-	if config.Commit {
-		simapp.PrintStats(db)
+			if config.Commit {
+				PrintStats(db)
+			}
+
+			appHash := app.LastCommitID().Hash
+			appHashList[j] = appHash
+
+			if j != 0 {
+				require.Equal(
+					t, string(appHashList[0]), string(appHashList[j]),
+					"non-determinism in seed %d: %d/%d, attempt: %d/%d\n", config.Seed, i+1, numSeeds, j+1, numTimesToRunPerSeed,
+				)
+			}
+		}
 	}
+}
+
+// PrintStats prints the corresponding statistics from the app DB.
+func PrintStats(db dbm.DB) {
+	fmt.Println("\nLevelDB Stats")
+	fmt.Println(db.Stats()["leveldb.stats"])
+	fmt.Println("LevelDB cached block size", db.Stats()["leveldb.cachedblock"])
 }

@@ -22,6 +22,13 @@ func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSP
 	gasBalance := k.bankKeeper.GetBalance(ctx, addr, types.GasDenom).Amount
 	spBalance := k.bankKeeper.GetBalance(ctx, addr, types.SPDenom).Amount
 
+	if gasBalance.IsNil() {
+		gasBalance = sdk.ZeroInt()
+	}
+	if spBalance.IsNil() {
+		spBalance = sdk.ZeroInt()
+	}
+
 	gasAdjust := calculateGasAdjustAmount(
 		sdk.NewDecFromInt(spBalance),
 		sdk.NewDecFromInt(params.GasLimit.Int),
@@ -37,13 +44,15 @@ func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSP
 	// do not overflow gasLimit
 	if gasBalance.Add(gasAdjust).GT(params.GasLimit.Int) {
 		gasAdjust = params.GasLimit.Int.Sub(gasBalance)
-
-		s.Delete(addr)
 	}
 
-	if err := k.Mint(ctx, addr, sdk.NewCoin(types.GasDenom, gasAdjust)); err != nil {
-		panic(err)
+	if gasAdjust.IsPositive() {
+		if err := k.Mint(ctx, addr, sdk.NewCoin(types.GasDenom, gasAdjust)); err != nil {
+			panic(err)
+		}
 	}
+
+	s.Delete(addr)
 }
 
 func (k Keeper) RestoreGas(ctx sdk.Context) {

@@ -69,6 +69,11 @@ test:
 	@echo "Running tests"
 	$(V)go test -mod=readonly $(shell go list ./... | grep -v '/simulation')
 
+.PHONY: test-determinism
+test-determinism:
+	@echo "Running simulation"
+	$(V)go test -mod=readonly --tags=simulation -v -run TestAppStateDeterminism ./app
+
 .PHONY: lint
 lint:
 	@echo "Running linter"

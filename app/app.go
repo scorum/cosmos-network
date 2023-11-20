@@ -498,7 +498,7 @@ func New(
 		app.BankKeeper,
 		authtypes.FeeCollectorName,
 	)
-	scorumModule := scorum.NewAppModule(appCodec, app.ScorumKeeper, app.BankKeeper)
+	scorumModule := scorum.NewAppModule(appCodec, app.ScorumKeeper, app.AccountKeeper, app.BankKeeper)
 
 	app.AviatrixKeeper = aviatrixkeeper.NewKeeper(
 		appCodec,
@@ -507,7 +507,7 @@ func New(
 		app.NftKeeper,
 		app.ScorumKeeper,
 	)
-	aviatrixModule := aviatrix.NewAppModule(appCodec, app.AviatrixKeeper)
+	aviatrixModule := aviatrix.NewAppModule(appCodec, app.AviatrixKeeper, app.ScorumKeeper, app.NftKeeper, app.AccountKeeper, app.BankKeeper)
 
 	govRouter := govv1beta1.NewRouter()
 	govRouter.
