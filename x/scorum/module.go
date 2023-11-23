@@ -4,7 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	accountkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
@@ -17,6 +21,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/scorum/cosmos-network/x/scorum/client/cli"
 	"github.com/scorum/cosmos-network/x/scorum/keeper"
+	"github.com/scorum/cosmos-network/x/scorum/simulation"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
@@ -92,18 +97,21 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 type AppModule struct {
 	AppModuleBasic
 
-	keeper     keeper.Keeper
-	bankKeeper types.BankKeeper
+	keeper        keeper.Keeper
+	accountKeeper accountkeeper.AccountKeeper
+	bankKeeper    bankkeeper.Keeper
 }
 
 func NewAppModule(
 	cdc codec.Codec,
 	keeper keeper.Keeper,
-	bankKeeper types.BankKeeper,
+	accountKeeper accountkeeper.AccountKeeper,
+	bankKeeper bankkeeper.Keeper,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
+		accountKeeper:  accountKeeper,
 		bankKeeper:     bankKeeper,
 	}
 }
@@ -158,4 +166,34 @@ func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {
 // EndBlock contains the logic that is automatically triggered at the end of each block
 func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
+}
+
+// AppModuleSimulation functions
+
+// GenerateGenesisState creates a randomized GenState of the distribution module.
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	simulation.GenerateGenesisState(simState)
+}
+
+// ProposalContents returns all the distribution content functions used to
+// simulate governance proposals.
+func (am AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+	return simulation.ProposalContents(simState)
+}
+
+// RandomizedParams creates randomized distribution param changes for the simulator.
+func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	return simulation.ParamChanges(r)
+}
+
+// RegisterStoreDecoder registers a decoder for distribution module's types
+func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
+	// sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc)
+}
+
+// WeightedOperations returns the all the gov module operations with their respective weights.
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	return simulation.WeightedOperations(
+		simState, am.accountKeeper, am.bankKeeper, am.keeper,
+	)
 }

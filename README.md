@@ -87,7 +87,12 @@ make generate
 
 #### Run tests
 ```shell
+make test
+```
 
+Also you can run non-determinism simulation
+```shell
+make test-determinism
 ```
 
 #### Run linter

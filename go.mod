@@ -14,7 +14,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0
-	github.com/mikluke/co-pilot v0.0.0-20230727024632-ec600865e457
+	github.com/mikluke/co-pilot v0.0.0-20231002172848-ba00fa031618
 	github.com/regen-network/cosmos-proto v0.3.1
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.6.1
@@ -159,7 +159,7 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230526203410-71b5a4ffd15e // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230530153820-e85fd2cbaebc // indirect
-	google.golang.org/protobuf v1.30.0 // indirect
+	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
