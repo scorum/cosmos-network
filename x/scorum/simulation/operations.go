@@ -194,13 +194,12 @@ func SimulateMsgWithdrawSP(
 
 		owner, _ := simtypes.RandomAcc(r, accs)
 		recipient, _ := simtypes.RandomAcc(r, accs)
-		reserved := k.GetParams(ctx).RegistrationSPDelegationAmount.Int
 		amount, err := simtypes.RandPositiveInt(r, math.NewInt(10000))
 		if err != nil {
 			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgWithdrawSP, "failed to rand int"), nil, nil
 		}
 
-		if err := k.Mint(ctx, owner.Address, sdk.NewCoin(types.SPDenom, amount.Add(reserved))); err != nil {
+		if err := k.Mint(ctx, owner.Address, sdk.NewCoin(types.SPDenom, amount)); err != nil {
 			panic(err)
 		}
 
@@ -222,7 +221,7 @@ func SimulateMsgWithdrawSP(
 			AccountKeeper:   ak,
 			Bankkeeper:      bk,
 			ModuleName:      types.ModuleName,
-			CoinsSpentInMsg: sdk.NewCoins(sdk.NewCoin(types.SPDenom, amount.Add(reserved))),
+			CoinsSpentInMsg: sdk.NewCoins(sdk.NewCoin(types.SPDenom, amount)),
 		}
 
 		return simulation.GenAndDeliverTxWithRandFees(txCtx)

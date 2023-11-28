@@ -22,7 +22,6 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(
 		CmdBurn(),
-		CmdRegisterAccount(),
 		CmdConvertSCR2SP(),
 		CmdWithdrawSP(),
 		CmdStopSPWithdrawal(),

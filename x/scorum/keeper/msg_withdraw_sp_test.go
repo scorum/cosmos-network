@@ -21,7 +21,7 @@ func TestMsgServer_WithdrawSP(t *testing.T) {
 	_, err := s.WithdrawSP(ctx, &types.MsgWithdrawSP{
 		Owner:     addr.String(),
 		Recipient: addr.String(),
-		Amount:    sdk.IntProto{Int: sdk.NewInt(99)},
+		Amount:    sdk.IntProto{Int: sdk.NewInt(101)},
 	})
 	require.Error(t, err)
 
@@ -36,7 +36,7 @@ func TestMsgServer_WithdrawSP(t *testing.T) {
 	_, err = s.WithdrawSP(ctx, &types.MsgWithdrawSP{
 		Owner:     addr.String(),
 		Recipient: addr.String(),
-		Amount:    sdk.IntProto{Int: sdk.NewInt(50)},
+		Amount:    sdk.IntProto{Int: sdk.NewInt(51)},
 	})
 	require.Error(t, err)
 

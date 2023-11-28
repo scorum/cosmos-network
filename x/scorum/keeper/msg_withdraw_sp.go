@@ -57,7 +57,7 @@ func (m msgServer) WithdrawSP(goCtx context.Context, msg *types.MsgWithdrawSP) (
 }
 
 func (m msgServer) getReservedSP(ctx sdk.Context, owner sdk.AccAddress) sdkmath.Int {
-	total := m.Keeper.GetParams(ctx).RegistrationSPDelegationAmount.Int
+	total := sdk.ZeroInt()
 
 	for _, w := range m.Keeper.ListWithdrawals(ctx, owner) {
 		if !w.IsActive {

@@ -17,10 +17,9 @@ message Params {
   cosmos.base.v1beta1.IntProto gas_limit = 2 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.IntProto gas_unconditioned_amount = 3 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.DecProto gas_adjust_coefficient = 4 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.IntProto registration_sp_delegation_amount = 5 [(gogoproto.nullable) = false, (gogoproto.customname) = "RegistrationSPDelegationAmount"];
-  uint32 sp_withdrawal_total_periods = 6;
-  uint32 sp_withdrawal_period_duration_seconds = 7;
-  ValidatorsRewardParams validators_reward = 8 [(gogoproto.nullable) = false];
+  uint32 sp_withdrawal_total_periods = 5;
+  uint32 sp_withdrawal_period_duration_seconds = 6;
+  ValidatorsRewardParams validators_reward = 7 [(gogoproto.nullable) = false];
 }
 
 message ValidatorsRewardParams {
