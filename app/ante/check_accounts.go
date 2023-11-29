@@ -1,32 +1,25 @@
 package ante
 
 import (
+	"fmt"
 	"reflect"
-	"strings"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	scorumtypes "github.com/scorum/cosmos-network/x/scorum/types"
-	"golang.org/x/exp/slices"
 )
 
 // CheckAddressesDecorator checks if all addresses are registered
 type CheckAddressesDecorator struct {
 	ak AccountKeeper
 	sk ScorumKeeper
-
-	ignore map[reflect.Type]struct{}
 }
 
 func NewCheckAddressesDecorator(ak AccountKeeper, sk ScorumKeeper) CheckAddressesDecorator {
 	return CheckAddressesDecorator{
 		ak: ak,
 		sk: sk,
-
-		ignore: map[reflect.Type]struct{}{
-			reflect.TypeOf(&scorumtypes.MsgRegisterAccount{}): {},
-		},
 	}
 }
 
@@ -37,20 +30,12 @@ func (d CheckAddressesDecorator) AnteHandle(
 	next sdk.AnteHandler,
 ) (newCtx sdk.Context, err error) {
 	for _, msg := range tx.GetMsgs() {
-		if _, ok := d.ignore[reflect.TypeOf(msg)]; ok || slices.Contains(strings.Split(sdk.MsgTypeURL(msg), "."), "ibc") {
-			continue
-		}
-
 		for _, addr := range extractAddresses(msg) {
-			if d.sk.IsSupervisor(ctx, addr.String()) {
-				continue
+			if !d.ak.HasAccount(ctx, addr) {
+				if err := d.sk.Mint(ctx, addr, sdk.NewCoin(scorumtypes.GasDenom, d.sk.GetParams(ctx).GasLimit.Int)); err != nil {
+					return sdk.Context{}, errorsmod.Wrap(sdkerrors.ErrPanic, fmt.Sprintf("failed to mint gas to new account: %s", err.Error()))
+				}
 			}
-
-			if d.ak.HasAccount(ctx, addr) {
-				continue
-			}
-
-			return sdk.Context{}, errorsmod.Wrap(sdkerrors.ErrUnknownAddress, "address is not registered in ScorumModule")
 		}
 	}
 

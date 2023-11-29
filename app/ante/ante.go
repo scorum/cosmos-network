@@ -36,7 +36,6 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		NewZeroGasTxDecorator(options.ScorumKeeper),
 		NewTrackGasConsumedDecorator(options.AccountKeeper, options.BankKeeper, options.ScorumKeeper),
-		NewTrackGasConsumedDecorator(options.AccountKeeper, options.BankKeeper, options.ScorumKeeper),
 		ante.NewExtensionOptionsDecorator(options.ExtensionOptionChecker),
 		ante.NewValidateBasicDecorator(),
 		ante.NewTxTimeoutHeightDecorator(),

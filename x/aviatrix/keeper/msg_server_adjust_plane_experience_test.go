@@ -92,7 +92,6 @@ func TestMsgServer_AdjustPlaneExperience(t *testing.T) {
 				GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000)},
 				GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(500)},
 				GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
-				RegistrationSPDelegationAmount:    sdk.IntProto{Int: sdk.NewInt(5)},
 				SpWithdrawalTotalPeriods:          52,
 				SpWithdrawalPeriodDurationSeconds: 1,
 			})

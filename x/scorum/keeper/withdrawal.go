@@ -155,10 +155,8 @@ func (k Keeper) listWithdrawalsByNextWithdrawalTime(ctx sdk.Context, t uint64) [
 }
 
 func (k Keeper) WithdrawSP(ctx sdk.Context, timestamp uint64) {
-	registrationAmount := k.GetParams(ctx).RegistrationSPDelegationAmount.Int
-
 	for _, w := range k.listWithdrawalsByNextWithdrawalTime(ctx, timestamp) {
-		balance := k.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(w.From), types.SPDenom).Amount.Sub(registrationAmount)
+		balance := k.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(w.From), types.SPDenom).Amount
 
 		toWithdraw := w.ToWithdraw(timestamp)
 		if balance.LT(toWithdraw) {

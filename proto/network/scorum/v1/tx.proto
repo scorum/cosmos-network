@@ -11,8 +11,6 @@ import "cosmos/base/v1beta1/coin.proto";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc RegisterAccount(MsgRegisterAccount) returns (MsgRegisterAccountResponse);
-
   rpc ConvertSCR2SP(MsgConvertSCR2SP) returns (MsgConvertSCR2SPResponse);
 
   rpc WithdrawSP(MsgWithdrawSP) returns (MsgWithdrawSPResponse);
@@ -20,14 +18,6 @@ service Msg {
 
   rpc Burn(MsgBurn) returns (MsgBurnResponse);
 }
-
-message MsgRegisterAccount {
-  option (cosmos.msg.v1.signer) = "supervisor";
-
-  string supervisor = 1;
-  string address = 2;
-}
-message MsgRegisterAccountResponse {}
 
 message MsgConvertSCR2SP {
   option (cosmos.msg.v1.signer) = "owner";

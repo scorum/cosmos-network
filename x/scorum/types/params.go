@@ -16,7 +16,6 @@ var (
 	KeyGasLimit                          = []byte("GasLimit")
 	KeyGasAdjustCoefficient              = []byte("GasAdjustCoefficient")
 	KeyGasUnconditionedAmount            = []byte("GasUnconditionedAmount")
-	KeyRegistrationSPDelegationAmount    = []byte("RegistrationSPDelegationAmount")
 	KeySPWithdrawalTotalPeriods          = []byte("SPWithdrawalTotalPeriods")
 	KeySPWithdrawalPeriodDurationSeconds = []byte("SPWithdrawalPeriodDurationSeconds")
 	KeyValidatorsRewardPoolAddress       = []byte("ValidatorsRewardPoolAddress")
@@ -34,7 +33,6 @@ func NewParams(
 	gasLimit sdkmath.Int,
 	gasUnconditionedAmount sdkmath.Int,
 	gasAdjustCoefficient sdk.Dec,
-	registrationSPDelegationAmount sdkmath.Int,
 	spWithdrawalTotalPeriods uint,
 	spWithdrawalPeriodDuration uint,
 ) Params {
@@ -43,7 +41,6 @@ func NewParams(
 		GasLimit:                          sdk.IntProto{Int: gasLimit},
 		GasUnconditionedAmount:            sdk.IntProto{Int: gasUnconditionedAmount},
 		GasAdjustCoefficient:              sdk.DecProto{Dec: gasAdjustCoefficient},
-		RegistrationSPDelegationAmount:    sdk.IntProto{Int: registrationSPDelegationAmount},
 		SpWithdrawalTotalPeriods:          uint32(spWithdrawalTotalPeriods),
 		SpWithdrawalPeriodDurationSeconds: uint32(spWithdrawalPeriodDuration),
 	}
@@ -56,7 +53,6 @@ func DefaultParams() Params {
 		GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000000)},
 		GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(15000)},
 		GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
-		RegistrationSPDelegationAmount:    sdk.IntProto{Int: sdk.NewInt(5)},
 		SpWithdrawalTotalPeriods:          52,
 		SpWithdrawalPeriodDurationSeconds: 7 * 24 * 60 * 60, // 52 weeks
 		ValidatorsReward: ValidatorsRewardParams{
@@ -76,7 +72,6 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyGasLimit, &p.GasLimit, validateGasLimit),
 		paramtypes.NewParamSetPair(KeyGasUnconditionedAmount, &p.GasUnconditionedAmount, validateGasUnconditionedAmount),
 		paramtypes.NewParamSetPair(KeyGasAdjustCoefficient, &p.GasAdjustCoefficient, validateGasAdjustCoefficient),
-		paramtypes.NewParamSetPair(KeyRegistrationSPDelegationAmount, &p.RegistrationSPDelegationAmount, validateRegistrationSPDelegationAmount),
 		paramtypes.NewParamSetPair(KeySPWithdrawalTotalPeriods, &p.SpWithdrawalTotalPeriods, validateSPWithdrawalTotalPeriods),
 		paramtypes.NewParamSetPair(KeySPWithdrawalPeriodDurationSeconds, &p.SpWithdrawalPeriodDurationSeconds, validateSPWithdrawalPeriodDurationSeconds),
 		paramtypes.NewParamSetPair(KeyValidatorsRewardPoolAddress, &p.ValidatorsReward.PoolAddress, validateValidatorsRewardPoolAddress),
@@ -96,10 +91,6 @@ func (p Params) Validate() error {
 
 	if err := validateGasAdjustCoefficient(p.GasAdjustCoefficient); err != nil {
 		return fmt.Errorf("invalid gasAdjustCoefficient: %w", err)
-	}
-
-	if err := validateRegistrationSPDelegationAmount(p.RegistrationSPDelegationAmount); err != nil {
-		return fmt.Errorf("invalid registrationSPDelegationAmount: %w", err)
 	}
 
 	if err := validateSPWithdrawalTotalPeriods(p.SpWithdrawalTotalPeriods); err != nil {
@@ -180,19 +171,6 @@ func validateSupervisors(i interface{}) error {
 		if err := sdk.VerifyAddressFormat(addr); err != nil {
 			return fmt.Errorf("invalid address %d", i+1)
 		}
-	}
-
-	return nil
-}
-
-func validateRegistrationSPDelegationAmount(i interface{}) error {
-	s, ok := i.(sdk.IntProto)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if s.Int.IsNegative() {
-		return fmt.Errorf("can not be negative")
 	}
 
 	return nil

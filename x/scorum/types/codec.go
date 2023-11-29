@@ -10,9 +10,10 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MintProposal{}, "scorum/MintProposal", nil)
-	cdc.RegisterConcrete(&MsgBurn{}, "scorum/Burn", nil)
-	cdc.RegisterConcrete(&MsgRegisterAccount{}, "scorum/RegisterAccount", nil)
-	cdc.RegisterConcrete(&MsgConvertSCR2SP{}, "scorum/ConvertSCR2SP", nil)
+	cdc.RegisterConcrete(&MsgBurn{}, "scorum/MsgBurn", nil)
+	cdc.RegisterConcrete(&MsgConvertSCR2SP{}, "scorum/MsgConvertSCR2SP", nil)
+	cdc.RegisterConcrete(&MsgWithdrawSP{}, "scorum/MsgWithdrawSP", nil)
+	cdc.RegisterConcrete(&MsgStopSPWithdrawal{}, "scorum/MsgStopSPWithdrawal", nil)
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -23,8 +24,9 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
 		&MsgBurn{},
-		&MsgRegisterAccount{},
 		&MsgConvertSCR2SP{},
+		&MsgWithdrawSP{},
+		&MsgStopSPWithdrawal{},
 	)
 	registry.RegisterInterface(
 		"cosmos.gov.v1beta1.Content",

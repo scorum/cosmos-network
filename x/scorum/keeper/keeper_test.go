@@ -35,7 +35,6 @@ func setupKeeper(t testing.TB) (keeperSet, testutil.TestContext) {
 		GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000)},
 		GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(500)},
 		GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
-		RegistrationSPDelegationAmount:    sdk.IntProto{Int: sdk.NewInt(5)},
 		SpWithdrawalTotalPeriods:          52,
 		SpWithdrawalPeriodDurationSeconds: 7 * 24 * 60 * 60,
 	})
