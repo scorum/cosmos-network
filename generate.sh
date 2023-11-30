@@ -55,11 +55,11 @@ function gentx() {
   do
     addr=$(echo $PASSWORD | scorumd keys show ${account} -a --home=${homed} --keyring-backend=file --keyring-dir ${keyring}/${account})
     rm -rf ${homed}
-    scorumd init ${account} --staking-bond-denom sp --chain-id=${CHAIN_ID} --home=${homed}
-    scorumd add-genesis-account ${addr} 1000000000000scr,1000000000000sp --home=${homed}
+    scorumd init ${account} --staking-bond-denom nsp --chain-id=${CHAIN_ID} --home=${homed}
+    scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
     scorumd add-genesis-supervisor ${addr} --home=${homed}
 
-    echo $PASSWORD | scorumd gentx ${account} 100000000000sp \
+    echo $PASSWORD | scorumd gentx ${account} 100000000000nsp \
       --website "https://scorum.com" --home=${homed} \
       --chain-id=${CHAIN_ID} --keyring-backend=file \
       --keyring-dir ${keyring}/${account} \
@@ -77,13 +77,13 @@ function genesis() {
    moniker=`echo $VALIDATORS | awk '{print $1}'`
 
    # add genesis accounts
-   scorumd init "${moniker}" --staking-bond-denom sp --chain-id=${CHAIN_ID} --home=${homed}
+   scorumd init "${moniker}" --staking-bond-denom nsp --chain-id=${CHAIN_ID} --home=${homed}
 
    for account in ${VALIDATORS} ${SUPERVISORS}
    do
      addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
 
-     scorumd add-genesis-account ${addr} 1000000000000scr,1000000000000sp --home=${homed}
+     scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
      scorumd add-genesis-supervisor ${addr} --home=${homed}
    done
 
@@ -101,7 +101,7 @@ gentx
 genesis
 
 # extra update genesis
-sed -i -e 's/"stake"/"sp"/g' ${homed}/config/genesis.json
+sed -i -e 's/"stake"/"nsp"/g' ${homed}/config/genesis.json
 # set inflation fields to 0, because there will be another reward mechanism
 sed -i 's/"\(inflation[^"]*\)": "[0-9.]\+",/"\1": "0",/g' ${homed}/config/genesis.json
 # set min_commission_rate to 1

@@ -12,14 +12,14 @@ import (
 func TestMsgServer_ConvertSCR2SP(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
-	coin := sdk.NewCoin("scr", sdk.NewInt(1000))
+	coin := sdk.NewCoin(types.SCRDenom, sdk.NewInt(1000))
 
 	s := keeper.NewMsgServer(set.keeper)
 
 	require.NoError(t, set.bankKeeper.MintCoins(ctx.Context, types.ModuleName, sdk.NewCoins(coin)))
 	require.NoError(t, set.bankKeeper.SendCoinsFromModuleToAccount(ctx.Context, types.ModuleName, set.supervisor, sdk.NewCoins(coin)))
 
-	require.True(t, coin.Equal(set.bankKeeper.GetBalance(ctx.Context, set.supervisor, "scr")))
+	require.True(t, coin.Equal(set.bankKeeper.GetBalance(ctx.Context, set.supervisor, types.SCRDenom)))
 
 	_, err := s.ConvertSCR2SP(ctx, &types.MsgConvertSCR2SP{
 		Owner:  set.supervisor.String(),
@@ -27,6 +27,6 @@ func TestMsgServer_ConvertSCR2SP(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	require.EqualValues(t, 700, set.bankKeeper.GetBalance(ctx.Context, set.supervisor, "scr").Amount.Int64())
-	require.EqualValues(t, 300, set.bankKeeper.GetBalance(ctx.Context, set.supervisor, "sp").Amount.Int64())
+	require.EqualValues(t, 700, set.bankKeeper.GetBalance(ctx.Context, set.supervisor, types.SCRDenom).Amount.Int64())
+	require.EqualValues(t, 300, set.bankKeeper.GetBalance(ctx.Context, set.supervisor, types.SPDenom).Amount.Int64())
 }

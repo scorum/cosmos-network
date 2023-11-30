@@ -120,7 +120,7 @@
       "params": {
         "send_enabled": [
           {
-            "denom": "sp",
+            "denom": "nsp",
             "enabled": false
           },
           {
@@ -135,11 +135,11 @@
           "address": "scorum19dftw5wcrz8cr0ayd002mkq5ntxmaxqtrefxk5",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -148,11 +148,11 @@
           "address": "scorum19adqslnammmgtm9qkd5ujgqayd3jld20fxnl76",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -161,11 +161,11 @@
           "address": "scorum189vfs07lq07puaduecrneq69w6r3er3cwskml5",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -174,11 +174,11 @@
           "address": "scorum1t6da9pgget5zfkf3vv6g4th7fwxa56lsqeruh9",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -187,11 +187,11 @@
           "address": "scorum1vjysv9e2wq8ahf9s5vfnpgefx4cd78psu6ycet",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -200,11 +200,11 @@
           "address": "scorum1v760yhkcg66mdpkvsg9zek95tug8mvqes32ff3",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -213,11 +213,11 @@
           "address": "scorum1kmy3dlv4mzfhzrffq2vaj5aprxhffz30eq3hw5",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -226,11 +226,11 @@
           "address": "scorum16tqj4d29g5c35cdya7mnj92n4lplpynglqjjxu",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -239,11 +239,11 @@
           "address": "scorum16w7q6splgznmaeqhk4altfft9mjj8rxkxuez5r",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -252,11 +252,11 @@
           "address": "scorum1m8wxxm3clfuprra2thmcqzp3s447jx8q4fzlpd",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -265,11 +265,11 @@
           "address": "scorum17g9n7pyva3k0cl7tu763e0udqu2vvj764lefjc",
           "coins": [
             {
-              "denom": "scr",
+              "denom": "nscr",
               "amount": "1000000000000"
             },
             {
-              "denom": "sp",
+              "denom": "nsp",
               "amount": "1000000000000"
             }
           ]
@@ -284,7 +284,7 @@
     },
     "crisis": {
       "constant_fee": {
-        "denom": "sp",
+        "denom": "nsp",
         "amount": "1000"
       }
     },
@@ -340,7 +340,7 @@
                   "key": "ocu2NA9GxxsWp4G14grTRyAOmRykbCBoH0kZUi/Tl4M="
                 },
                 "value": {
-                  "denom": "sp",
+                  "denom": "nsp",
                   "amount": "100000000000"
                 }
               }
@@ -387,7 +387,7 @@
       "deposit_params": {
         "min_deposit": [
           {
-            "denom": "sp",
+            "denom": "nsp",
             "amount": "10000000"
           }
         ],
@@ -472,7 +472,7 @@
         "annual_provisions": "0.000000000000000000"
       },
       "params": {
-        "mint_denom": "sp",
+        "mint_denom": "nsp",
         "inflation_rate_change": "0",
         "inflation_max": "0",
         "inflation_min": "0",
@@ -514,7 +514,7 @@
         "validators_reward": {
           "pool_address": "",
           "block_reward": {
-            "denom": "sp",
+            "denom": "nsp",
             "amount": "0"
           }
         }
@@ -539,7 +539,7 @@
         "max_validators": 100,
         "max_entries": 7,
         "historical_entries": 10000,
-        "bond_denom": "sp",
+        "bond_denom": "nsp",
         "min_commission_rate": "1"
       },
       "last_total_power": "0",

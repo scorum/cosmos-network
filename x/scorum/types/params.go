@@ -58,7 +58,7 @@ func DefaultParams() Params {
 		ValidatorsReward: ValidatorsRewardParams{
 			PoolAddress: "",
 			BlockReward: sdk.Coin{
-				Denom:  "sp",
+				Denom:  SPDenom,
 				Amount: sdk.ZeroInt(),
 			},
 		},

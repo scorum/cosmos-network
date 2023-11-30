@@ -181,25 +181,25 @@ local-init:
 	$(V)rm -rf test
 
 	@echo initalizing test chain
-	$(V)$(SCORUMD) init --staking-bond-denom sp local-network
+	$(V)$(SCORUMD) init --staking-bond-denom nsp local-network
 
 	@echo adding key 'test'
 	$(V)$(SCORUMD) keys add test --keyring-backend test --keyring-dir test
 
 	@echo adding genesis account
-	$(V)$(SCORUMD) add-genesis-account --keyring-backend test test 1000000000scr,1000000000sp
+	$(V)$(SCORUMD) add-genesis-account --keyring-backend test test 1000000000nscr,1000000000nsp
 
 	@echo adding genesis supervisor
 	$(V)$(SCORUMD) add-genesis-supervisor --keyring-backend test test
 
 	@echo creating gentx
-	$(V)$(SCORUMD) gentx --keyring-backend test test 1000000sp
+	$(V)$(SCORUMD) gentx --keyring-backend test test 1000000nsp
 
 	@echo collecting gentx
 	$(V)$(SCORUMD) collect-gentxs
 
-	@echo replace stake with sp
-	sed -i -e 's/"stake"/"sp"/g' test/config/genesis.json
+	@echo replace stake with nsp
+	sed -i -e 's/"stake"/"nsp"/g' test/config/genesis.json
 
 	@echo validate genesis
 	$(V)$(SCORUMD) validate-genesis

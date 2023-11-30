@@ -32,7 +32,7 @@ Where proposal.json contains:
   "recipient": "scorum16rlsek5yak6avnjpuatw6psxg246nzlwruaet5",
   "amount": 
   	{
-			"denom": "scr",
+			"denom": "nscr",
 			"amount": "100000000000"
 	},
   "deposit": "1000scr"
