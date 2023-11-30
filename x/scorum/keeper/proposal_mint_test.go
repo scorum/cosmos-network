@@ -14,7 +14,7 @@ func TestProposal_Mint(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
 	addr := sample.AccAddress()
-	coin := sdk.NewCoin("scr", sdk.NewInt(1000))
+	coin := sdk.NewCoin(types.SCRDenom, sdk.NewInt(1000))
 
 	require.NoError(t, keeper.HandleMintProposal(ctx.Context, set.keeper, &types.MintProposal{
 		Title:       "test",
@@ -23,5 +23,5 @@ func TestProposal_Mint(t *testing.T) {
 		Amount:      coin,
 	}))
 
-	require.True(t, coin.Equal(set.bankKeeper.GetBalance(ctx.Context, addr, "scr")))
+	require.True(t, coin.Equal(set.bankKeeper.GetBalance(ctx.Context, addr, types.SCRDenom)))
 }
