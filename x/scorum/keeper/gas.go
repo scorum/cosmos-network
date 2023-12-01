@@ -29,6 +29,10 @@ func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSP
 		spBalance = sdk.ZeroInt()
 	}
 
+	if gasBalance.GTE(params.GasLimit.Int) {
+		s.Delete(addr)
+	}
+
 	gasAdjust := calculateGasAdjustAmount(
 		sdk.NewDecFromInt(spBalance),
 		sdk.NewDecFromInt(params.GasLimit.Int),
@@ -36,10 +40,6 @@ func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSP
 		avgSPBalance,
 		params.GasAdjustCoefficient.Dec,
 	).RoundInt()
-
-	if gasAdjust.IsZero() {
-		gasAdjust = sdk.NewInt(1)
-	}
 
 	// do not overflow gasLimit
 	if gasBalance.Add(gasAdjust).GT(params.GasLimit.Int) {
@@ -51,8 +51,6 @@ func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSP
 			panic(err)
 		}
 	}
-
-	s.Delete(addr)
 }
 
 func (k Keeper) RestoreGas(ctx sdk.Context) {
