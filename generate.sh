@@ -24,6 +24,13 @@ if [[ -z "${SUPERVISORS}" ]]; then
   SUPERVISORS="orion pulsar aurora meteor nebula quasar supernova eclipse comet galaxy"
 fi
 
+# rewards for validators are optional, but for now turned on by default
+if [[ -z "${VALIDATOR_REWARDS_ACCOUNT}" ]]; then
+  VALIDATOR_REWARDS_ACCOUNT="aurora"
+  # NOTE: will be set later
+  VALIDATOR_REWARDS_ADDR=""
+fi
+
 echo "CHAIN_ID is set to $CHAIN_ID"
 echo "VALIDATORS is set to $VALIDATORS"
 echo "SUPERVISORS is set to $SUPERVISORS"
@@ -81,10 +88,16 @@ function genesis() {
 
    for account in ${VALIDATORS} ${SUPERVISORS}
    do
-     addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
+      addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
 
-     scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
-     scorumd add-genesis-supervisor ${addr} --home=${homed}
+      if [ "$account" == "$VALIDATOR_REWARDS_ACCOUNT" ]; then
+        VALIDATOR_REWARDS_ADDR=$addr
+        scorumd add-genesis-account ${addr} 0nscr,0nsp --home=${homed}
+      else
+        scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
+      fi
+
+      scorumd add-genesis-supervisor ${addr} --home=${homed}
    done
 
    # generate genesis.json
@@ -106,6 +119,8 @@ sed -i -e 's/"stake"/"nsp"/g' ${homed}/config/genesis.json
 sed -i 's/"\(inflation[^"]*\)": "[0-9.]\+",/"\1": "0",/g' ${homed}/config/genesis.json
 # set min_commission_rate to 1
 sed -i 's/"min_commission_rate": "[0-9.]\+"/"min_commission_rate": "1"/' ${homed}/config/genesis.json
+# add rewards address
+sed -i 's/"pool_address": ""/"pool_address": '\"$VALIDATOR_REWARDS_ADDR\"'/' ${homed}/config/genesis.json
 
 cp ${homed}/config/genesis.json genesis.json
 
