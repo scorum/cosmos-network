@@ -7,7 +7,7 @@ COMMIT := $(shell git log -1 --format='%H')
 COSMOS_PKG_VERSION := $(shell go list -m github.com/cosmos/cosmos-sdk | sed 's:.* ::')
 
 LINTER_NAME := golangci-lint
-LINTER_VERSION := v1.50.1
+LINTER_VERSION := v1.51.2
 
 GOBIN := $(shell go env GOPATH)/bin
 

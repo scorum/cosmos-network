@@ -2,12 +2,14 @@ package cli
 
 import (
 	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/scorum/cosmos-network/x/scorum/types"
 	"github.com/spf13/cobra"
+
+	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
 func CmdMintGas() *cobra.Command {

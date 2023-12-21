@@ -74,6 +74,7 @@ issues:
     # exclude mostly copy of cosmos sources
     - linters:
         - lll
+        - staticcheck
       path: app/ante/sig_verification.go
 
         # allow "temporary" unused constants and variables in cli code
