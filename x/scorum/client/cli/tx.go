@@ -21,10 +21,27 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		CmdBurn(),
 		CmdConvertSCR2SP(),
 		CmdWithdrawSP(),
 		CmdStopSPWithdrawal(),
+		GetSupervisorTxCmd(),
+	)
+
+	return cmd
+}
+
+func GetSupervisorTxCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                        "admin",
+		Short:                      "Supervisor transactions subcommands",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+
+	cmd.AddCommand(
+		CmdBurn(),
+		CmdMintGas(),
 	)
 
 	return cmd
