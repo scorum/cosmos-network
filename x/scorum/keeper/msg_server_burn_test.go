@@ -17,8 +17,7 @@ func TestMsgServer_Burn(t *testing.T) {
 
 	s := keeper.NewMsgServer(set.keeper)
 
-	require.NoError(t, set.bankKeeper.MintCoins(ctx.Context, types.ModuleName, sdk.NewCoins(coin)))
-	require.NoError(t, set.bankKeeper.SendCoinsFromModuleToAccount(ctx.Context, types.ModuleName, set.supervisor, sdk.NewCoins(coin)))
+	require.NoError(t, set.keeper.Mint(ctx.Context, set.supervisor, coin))
 
 	require.True(t, coin.Equal(set.bankKeeper.GetBalance(ctx.Context, set.supervisor, types.SCRDenom)))
 
@@ -39,8 +38,7 @@ func TestMsgServer_Burn_NotSupervisor(t *testing.T) {
 
 	s := keeper.NewMsgServer(set.keeper)
 
-	require.NoError(t, set.bankKeeper.MintCoins(ctx.Context, types.ModuleName, sdk.NewCoins(coin)))
-	require.NoError(t, set.bankKeeper.SendCoinsFromModuleToAccount(ctx.Context, types.ModuleName, addr, sdk.NewCoins(coin)))
+	require.NoError(t, set.keeper.Mint(ctx.Context, addr, coin))
 
 	require.True(t, coin.Equal(set.bankKeeper.GetBalance(ctx.Context, addr, types.SCRDenom)))
 

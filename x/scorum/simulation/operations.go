@@ -21,6 +21,9 @@ const (
 	opWeightMsgBurn      = "op_weight_msg_burn"
 	defaultWeightMsgBurn = 10
 
+	opWeightMsgMintGas      = "op_weight_msg_mint_gas"
+	defaultWeightMsgMintGas = 10
+
 	opWeightMsgConvertSCR2SP      = "op_weight_msg_convert_scr_2_sp"
 	defaultWeightMsgConvertSCR2SP = 10
 
@@ -37,6 +40,7 @@ func WeightedOperations(
 ) []simtypes.WeightedOperation {
 	var (
 		weightMsgBurn             int
+		weightMsgMintGas          int
 		weightMsgConvertSCR2SP    int
 		weightMsgWithdrawSP       int
 		weightMsgStopSPWithdrawal int
@@ -45,6 +49,11 @@ func WeightedOperations(
 	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgBurn, &weightMsgBurn, nil,
 		func(_ *rand.Rand) {
 			weightMsgBurn = defaultWeightMsgBurn
+		},
+	)
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMintGas, &weightMsgMintGas, nil,
+		func(_ *rand.Rand) {
+			weightMsgMintGas = defaultWeightMsgMintGas
 		},
 	)
 	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgConvertSCR2SP, &weightMsgConvertSCR2SP, nil,
@@ -67,6 +76,10 @@ func WeightedOperations(
 		simulation.NewWeightedOperation(
 			weightMsgBurn,
 			SimulateMsgBurn(k, ak, bk),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgMintGas,
+			SimulateMsgMintGas(k, ak, bk),
 		),
 		simulation.NewWeightedOperation(
 			weightMsgConvertSCR2SP,
@@ -131,6 +144,53 @@ func SimulateMsgBurn(
 		}
 
 		return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "empty balance"), nil, nil
+	}
+}
+
+func SimulateMsgMintGas(
+	k keeper.Keeper,
+	ak types.AccountKeeper,
+	bk bankkeeper.Keeper,
+) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		if len(accs) == 0 {
+			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "accounts are empty"), nil, nil
+		}
+
+		supervisor := accs[0]
+		if !k.IsSupervisor(ctx, supervisor.Address.String()) {
+			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "first acc is not a supervisor"), nil, nil
+		}
+
+		addr, _ := simtypes.RandomAcc(r, accs)
+		amount, err := simtypes.RandPositiveInt(r, math.NewInt(1000000))
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgMintGas, "failed to rand int"), nil, nil
+		}
+
+		msg := &types.MsgMintGas{
+			Supervisor: supervisor.Address.String(),
+			Address:    addr.Address.String(),
+			Amount:     sdk.IntProto{Int: amount},
+		}
+
+		txCtx := simulation.OperationInput{
+			R:             r,
+			App:           app,
+			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			Cdc:           nil,
+			Msg:           msg,
+			MsgType:       msg.Type(),
+			Context:       ctx,
+			SimAccount:    supervisor,
+			AccountKeeper: ak,
+			Bankkeeper:    bk,
+			ModuleName:    types.ModuleName,
+		}
+
+		return simulation.GenAndDeliverTxWithRandFees(txCtx)
 	}
 }
 

@@ -3433,6 +3433,539 @@ definitions:
       message:
         type: string
     type: object
+  ibc.applications.interchain_accounts.v1.QueryInterchainAccountAddressResponse:
+    properties:
+      interchain_account_address:
+        title: The corresponding interchain account address on the host chain
+        type: string
+    title: Query response for an interchain account address
+    type: object
+  ibc.applications.transfer.v1.DenomTrace:
+    description: |-
+      DenomTrace contains the base denomination for ICS20 fungible tokens and the
+      source tracing information path.
+    properties:
+      base_denom:
+        description: base denomination of the relayed fungible token.
+        type: string
+      path:
+        description: |-
+          path defines the chain of port/channel identifiers used for tracing the
+          source of the fungible token.
+        type: string
+    type: object
+  ibc.applications.transfer.v1.Params:
+    description: |-
+      Params defines the set of IBC transfer parameters.
+      NOTE: To prevent a single token from being transferred, set the
+      TransfersEnabled parameter to true and then set the bank module's SendEnabled
+      parameter for the denomination to false.
+    properties:
+      receive_enabled:
+        description: |-
+          receive_enabled enables or disables all cross-chain token transfers to this
+          chain.
+        type: boolean
+      send_enabled:
+        description: |-
+          send_enabled enables or disables all cross-chain token transfers from this
+          chain.
+        type: boolean
+    type: object
+  ibc.applications.transfer.v1.QueryDenomTraceResponse:
+    description: |-
+      QueryDenomTraceResponse is the response type for the Query/DenomTrace RPC
+      method.
+    properties:
+      denom_trace:
+        $ref: '#/definitions/ibc.applications.transfer.v1.DenomTrace'
+        description: denom_trace returns the requested denomination trace information.
+    type: object
+  ibc.applications.transfer.v1.QueryDenomTracesResponse:
+    description: |-
+      QueryConnectionsResponse is the response type for the Query/DenomTraces RPC
+      method.
+    properties:
+      denom_traces:
+        description: denom_traces returns all denominations trace information.
+        items:
+          $ref: '#/definitions/ibc.applications.transfer.v1.DenomTrace'
+        type: array
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        description: pagination defines the pagination in the response.
+    type: object
+  ibc.applications.transfer.v1.QueryParamsResponse:
+    description: QueryParamsResponse is the response type for the Query/Params RPC
+      method.
+    properties:
+      params:
+        $ref: '#/definitions/ibc.applications.transfer.v1.Params'
+        description: params defines the parameters of the module.
+    type: object
+  ibc.core.channel.v1.Channel:
+    description: |-
+      Channel defines pipeline for exactly-once packet delivery between specific
+      modules on separate blockchains, which has at least one end capable of
+      sending packets and one end capable of receiving packets.
+    properties:
+      connection_hops:
+        items:
+          type: string
+        title: |-
+          list of connection identifiers, in order, along which packets sent on
+          this channel will travel
+        type: array
+      counterparty:
+        $ref: '#/definitions/ibc.core.channel.v1.Counterparty'
+        title: counterparty channel end
+      ordering:
+        $ref: '#/definitions/ibc.core.channel.v1.Order'
+        title: whether the channel is ordered or unordered
+      state:
+        $ref: '#/definitions/ibc.core.channel.v1.State'
+        title: current state of the channel end
+      version:
+        title: opaque channel version, which is agreed upon during the handshake
+        type: string
+    type: object
+  ibc.core.channel.v1.Counterparty:
+    properties:
+      channel_id:
+        title: channel end on the counterparty chain
+        type: string
+      port_id:
+        description: port on the counterparty chain which owns the other end of the
+          channel.
+        type: string
+    title: Counterparty defines a channel end counterparty
+    type: object
+  ibc.core.channel.v1.IdentifiedChannel:
+    description: |-
+      IdentifiedChannel defines a channel with additional port and channel
+      identifier fields.
+    properties:
+      channel_id:
+        title: channel identifier
+        type: string
+      connection_hops:
+        items:
+          type: string
+        title: |-
+          list of connection identifiers, in order, along which packets sent on
+          this channel will travel
+        type: array
+      counterparty:
+        $ref: '#/definitions/ibc.core.channel.v1.Counterparty'
+        title: counterparty channel end
+      ordering:
+        $ref: '#/definitions/ibc.core.channel.v1.Order'
+        title: whether the channel is ordered or unordered
+      port_id:
+        title: port identifier
+        type: string
+      state:
+        $ref: '#/definitions/ibc.core.channel.v1.State'
+        title: current state of the channel end
+      version:
+        title: opaque channel version, which is agreed upon during the handshake
+        type: string
+    type: object
+  ibc.core.channel.v1.Order:
+    default: ORDER_NONE_UNSPECIFIED
+    description: |-
+      - ORDER_NONE_UNSPECIFIED: zero-value for channel ordering
+       - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
+      which they were sent.
+       - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+    enum:
+    - ORDER_NONE_UNSPECIFIED
+    - ORDER_UNORDERED
+    - ORDER_ORDERED
+    title: Order defines if a channel is ORDERED or UNORDERED
+    type: string
+  ibc.core.channel.v1.PacketState:
+    description: |-
+      PacketState defines the generic type necessary to retrieve and store
+      packet commitments, acknowledgements, and receipts.
+      Caller is responsible for knowing the context necessary to interpret this
+      state as a commitment, acknowledgement, or a receipt.
+    properties:
+      channel_id:
+        description: channel unique identifier.
+        type: string
+      data:
+        description: embedded data that represents packet state.
+        format: byte
+        type: string
+      port_id:
+        description: channel port identifier.
+        type: string
+      sequence:
+        description: packet sequence.
+        format: uint64
+        type: string
+    type: object
+  ibc.core.channel.v1.QueryChannelClientStateResponse:
+    properties:
+      identified_client_state:
+        $ref: '#/definitions/ibc.core.client.v1.IdentifiedClientState'
+        title: client state associated with the channel
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    title: |-
+      QueryChannelClientStateResponse is the Response type for the
+      Query/QueryChannelClientState RPC method
+    type: object
+  ibc.core.channel.v1.QueryChannelConsensusStateResponse:
+    properties:
+      client_id:
+        title: client ID associated with the consensus state
+        type: string
+      consensus_state:
+        $ref: '#/definitions/google.protobuf.Any'
+        title: consensus state associated with the channel
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    title: |-
+      QueryChannelClientStateResponse is the Response type for the
+      Query/QueryChannelClientState RPC method
+    type: object
+  ibc.core.channel.v1.QueryChannelResponse:
+    description: |-
+      QueryChannelResponse is the response type for the Query/Channel RPC method.
+      Besides the Channel end, it includes a proof and the height from which the
+      proof was retrieved.
+    properties:
+      channel:
+        $ref: '#/definitions/ibc.core.channel.v1.Channel'
+        title: channel associated with the request identifiers
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    type: object
+  ibc.core.channel.v1.QueryChannelsResponse:
+    description: QueryChannelsResponse is the response type for the Query/Channels
+      RPC method.
+    properties:
+      channels:
+        description: list of stored channels of the chain.
+        items:
+          $ref: '#/definitions/ibc.core.channel.v1.IdentifiedChannel'
+        type: array
+      height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: query block height
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        title: pagination response
+    type: object
+  ibc.core.channel.v1.QueryConnectionChannelsResponse:
+    properties:
+      channels:
+        description: list of channels associated with a connection.
+        items:
+          $ref: '#/definitions/ibc.core.channel.v1.IdentifiedChannel'
+        type: array
+      height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: query block height
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        title: pagination response
+    title: |-
+      QueryConnectionChannelsResponse is the Response type for the
+      Query/QueryConnectionChannels RPC method
+    type: object
+  ibc.core.channel.v1.QueryNextSequenceReceiveResponse:
+    properties:
+      next_sequence_receive:
+        format: uint64
+        title: next sequence receive number
+        type: string
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    title: |-
+      QuerySequenceResponse is the request type for the
+      Query/QueryNextSequenceReceiveResponse RPC method
+    type: object
+  ibc.core.channel.v1.QueryPacketAcknowledgementResponse:
+    properties:
+      acknowledgement:
+        format: byte
+        title: packet associated with the request fields
+        type: string
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    title: |-
+      QueryPacketAcknowledgementResponse defines the client query response for a
+      packet which also includes a proof and the height from which the
+      proof was retrieved
+    type: object
+  ibc.core.channel.v1.QueryPacketAcknowledgementsResponse:
+    properties:
+      acknowledgements:
+        items:
+          $ref: '#/definitions/ibc.core.channel.v1.PacketState'
+        type: array
+      height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: query block height
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        title: pagination response
+    title: |-
+      QueryPacketAcknowledgemetsResponse is the request type for the
+      Query/QueryPacketAcknowledgements RPC method
+    type: object
+  ibc.core.channel.v1.QueryPacketCommitmentResponse:
+    properties:
+      commitment:
+        format: byte
+        title: packet associated with the request fields
+        type: string
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    title: |-
+      QueryPacketCommitmentResponse defines the client query response for a packet
+      which also includes a proof and the height from which the proof was
+      retrieved
+    type: object
+  ibc.core.channel.v1.QueryPacketCommitmentsResponse:
+    properties:
+      commitments:
+        items:
+          $ref: '#/definitions/ibc.core.channel.v1.PacketState'
+        type: array
+      height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: query block height
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        title: pagination response
+    title: |-
+      QueryPacketCommitmentsResponse is the request type for the
+      Query/QueryPacketCommitments RPC method
+    type: object
+  ibc.core.channel.v1.QueryPacketReceiptResponse:
+    properties:
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+      received:
+        title: success flag for if receipt exists
+        type: boolean
+    title: |-
+      QueryPacketReceiptResponse defines the client query response for a packet receipt
+      which also includes a proof, and the height from which the proof was
+      retrieved
+    type: object
+  ibc.core.channel.v1.QueryUnreceivedAcksResponse:
+    properties:
+      height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: query block height
+      sequences:
+        items:
+          format: uint64
+          type: string
+        title: list of unreceived acknowledgement sequences
+        type: array
+    title: |-
+      QueryUnreceivedAcksResponse is the response type for the
+      Query/UnreceivedAcks RPC method
+    type: object
+  ibc.core.channel.v1.QueryUnreceivedPacketsResponse:
+    properties:
+      height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: query block height
+      sequences:
+        items:
+          format: uint64
+          type: string
+        title: list of unreceived packet sequences
+        type: array
+    title: |-
+      QueryUnreceivedPacketsResponse is the response type for the
+      Query/UnreceivedPacketCommitments RPC method
+    type: object
+  ibc.core.channel.v1.State:
+    default: STATE_UNINITIALIZED_UNSPECIFIED
+    description: |-
+      State defines if a channel is in one of the following states:
+      CLOSED, INIT, TRYOPEN, OPEN or UNINITIALIZED.
+
+       - STATE_UNINITIALIZED_UNSPECIFIED: Default State
+       - STATE_INIT: A channel has just started the opening handshake.
+       - STATE_TRYOPEN: A channel has acknowledged the handshake step on the counterparty chain.
+       - STATE_OPEN: A channel has completed the handshake. Open channels are
+      ready to send and receive packets.
+       - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
+      packets.
+    enum:
+    - STATE_UNINITIALIZED_UNSPECIFIED
+    - STATE_INIT
+    - STATE_TRYOPEN
+    - STATE_OPEN
+    - STATE_CLOSED
+    type: string
+  ibc.core.client.v1.ConsensusStateWithHeight:
+    description: ConsensusStateWithHeight defines a consensus state with an additional
+      height field.
+    properties:
+      consensus_state:
+        $ref: '#/definitions/google.protobuf.Any'
+        title: consensus state
+      height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: consensus state height
+    type: object
+  ibc.core.client.v1.Height:
+    description: |-
+      Normally the RevisionHeight is incremented at each height while keeping RevisionNumber
+      the same. However some consensus algorithms may choose to reset the
+      height in certain conditions e.g. hard forks, state-machine breaking changes
+      In these cases, the RevisionNumber is incremented so that height continues to
+      be monitonically increasing even as the RevisionHeight gets reset
+    properties:
+      revision_height:
+        format: uint64
+        title: the height within the given revision
+        type: string
+      revision_number:
+        format: uint64
+        title: the revision that the client is currently on
+        type: string
+    title: |-
+      Height is a monotonically increasing data type
+      that can be compared against another Height for the purposes of updating and
+      freezing clients
+    type: object
+  ibc.core.client.v1.IdentifiedClientState:
+    description: |-
+      IdentifiedClientState defines a client state with an additional client
+      identifier field.
+    properties:
+      client_id:
+        title: client identifier
+        type: string
+      client_state:
+        $ref: '#/definitions/google.protobuf.Any'
+        title: client state
+    type: object
+  ibc.core.client.v1.Params:
+    description: Params defines the set of IBC light client parameters.
+    properties:
+      allowed_clients:
+        description: allowed_clients defines the list of allowed client state types.
+        items:
+          type: string
+        type: array
+    type: object
+  ibc.core.client.v1.QueryClientParamsResponse:
+    description: QueryClientParamsResponse is the response type for the Query/ClientParams
+      RPC method.
+    properties:
+      params:
+        $ref: '#/definitions/ibc.core.client.v1.Params'
+        description: params defines the parameters of the module.
+    type: object
+  ibc.core.client.v1.QueryClientStateResponse:
+    description: |-
+      QueryClientStateResponse is the response type for the Query/ClientState RPC
+      method. Besides the client state, it includes a proof and the height from
+      which the proof was retrieved.
+    properties:
+      client_state:
+        $ref: '#/definitions/google.protobuf.Any'
+        title: client state associated with the request identifier
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    type: object
+  ibc.core.client.v1.QueryClientStatesResponse:
+    description: |-
+      QueryClientStatesResponse is the response type for the Query/ClientStates RPC
+      method.
+    properties:
+      client_states:
+        description: list of stored ClientStates of the chain.
+        items:
+          $ref: '#/definitions/ibc.core.client.v1.IdentifiedClientState'
+        type: array
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        title: pagination response
+    type: object
+  ibc.core.client.v1.QueryConsensusStateResponse:
+    properties:
+      consensus_state:
+        $ref: '#/definitions/google.protobuf.Any'
+        title: consensus state associated with the client identifier at the given
+          height
+      proof:
+        format: byte
+        title: merkle proof of existence
+        type: string
+      proof_height:
+        $ref: '#/definitions/ibc.core.client.v1.Height'
+        title: height at which the proof was retrieved
+    title: |-
+      QueryConsensusStateResponse is the response type for the Query/ConsensusState
+      RPC method
+    type: object
+  ibc.core.client.v1.QueryConsensusStatesResponse:
+    properties:
+      consensus_states:
+        items:
+          $ref: '#/definitions/ibc.core.client.v1.ConsensusStateWithHeight'
+        title: consensus states associated with the identifier
+        type: array
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        title: pagination response
+    title: |-
+      QueryConsensusStatesResponse is the response type for the
+      Query/ConsensusStates RPC method
+    type: object
   network.aviatrix.v1.Params:
     description: Params defines the parameters for the module.
     type: object
@@ -3443,11 +3976,6 @@ definitions:
         $ref: '#/definitions/network.aviatrix.v1.Params'
         description: params holds all the parameters of this module.
     type: object
-  network.aviatrix.v1.QueryPlaneByNameResponse:
-    properties:
-      nft:
-        $ref: '#/definitions/cosmos.nft.v1beta1.NFT'
-    type: object
   network.scorum.v1.Params:
     description: Params defines the parameters for the module.
     properties:
@@ -3456,8 +3984,6 @@ definitions:
       gas_limit:
         $ref: '#/definitions/cosmos.base.v1beta1.IntProto'
       gas_unconditioned_amount:
-        $ref: '#/definitions/cosmos.base.v1beta1.IntProto'
-      registration_sp_delegation_amount:
         $ref: '#/definitions/cosmos.base.v1beta1.IntProto'
       sp_withdrawal_period_duration_seconds:
         format: int64
