@@ -13,7 +13,7 @@ func (m msgServer) MintGas(goCtx context.Context, msg *types.MsgMintGas) (*types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !m.IsSupervisor(ctx, msg.Supervisor) {
-		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "burn is only allowed to supervisors")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "mint-gas is only allowed to supervisors")
 	}
 
 	address, err := sdk.AccAddressFromBech32(msg.Address)
