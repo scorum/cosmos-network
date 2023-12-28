@@ -10,6 +10,7 @@ FROM alpine:${ALPINE_VERSION}
 RUN apk update && apk add --update ca-certificates libc6-compat
 COPY --from=build-env /go/src/github.com/scorum/cosmos-network/build/scorumd-linux-amd64 /usr/bin/scorumd
 COPY --from=build-env /go/src/github.com/scorum/cosmos-network/genesis/devnet/ /etc/devnet/
+COPY --from=build-env /go/src/github.com/scorum/cosmos-network/genesis/testnet/ /etc/testnet/
 
 EXPOSE 26657
 EXPOSE 26656
