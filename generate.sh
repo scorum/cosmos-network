@@ -24,9 +24,16 @@ if [[ -z "${SUPERVISORS}" ]]; then
   SUPERVISORS="orion pulsar aurora meteor nebula quasar supernova eclipse comet galaxy"
 fi
 
+if [[ -z "${VALIDATOR_REWARDS_POOL}" ]]; then
+  VALIDATOR_REWARDS_POOL="rewards1"
+fi
+
 echo "CHAIN_ID is set to $CHAIN_ID"
 echo "VALIDATORS is set to $VALIDATORS"
 echo "SUPERVISORS is set to $SUPERVISORS"
+echo "VALIDATOR_REWARDS_POOL is set to $VALIDATOR_REWARDS_POOL"
+
+VALIDATOR_REWARDS_POOL_ADDR=""
 
 out=output
 keys=keys
@@ -44,7 +51,7 @@ function join_by { local IFS="$1"; shift; echo "$*"; }
 scorumd config output json --home=${homed}
 
 function addKeys() {
-  for account in ${VALIDATORS} ${SUPERVISORS}
+  for account in ${VALIDATORS} ${SUPERVISORS} ${VALIDATOR_REWARDS_POOL}
   do
     echo $PASSWORD$'\n'$PASSWORD | scorumd keys add ${account} --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account} >> accounts.txt 2>&1
   done
@@ -81,10 +88,18 @@ function genesis() {
 
    for account in ${VALIDATORS} ${SUPERVISORS}
    do
-     addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
+      addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
 
-     scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
-     scorumd add-genesis-supervisor ${addr} --home=${homed}
+      scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
+      scorumd add-genesis-supervisor ${addr} --home=${homed}
+   done
+
+   for account in ${VALIDATOR_REWARDS_POOL}
+   do
+      addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
+
+      VALIDATOR_REWARDS_POOL_ADDR=$addr
+      scorumd add-genesis-account ${addr} 0nscr,0nsp --home=${homed}
    done
 
    # generate genesis.json
@@ -106,6 +121,8 @@ sed -i -e 's/"stake"/"nsp"/g' ${homed}/config/genesis.json
 sed -i 's/"\(inflation[^"]*\)": "[0-9.]\+",/"\1": "0",/g' ${homed}/config/genesis.json
 # set min_commission_rate to 1
 sed -i 's/"min_commission_rate": "[0-9.]\+"/"min_commission_rate": "1"/' ${homed}/config/genesis.json
+# add rewards address
+sed -i 's/"pool_address": ""/"pool_address": '\"$VALIDATOR_REWARDS_POOL_ADDR\"'/' ${homed}/config/genesis.json
 
 cp ${homed}/config/genesis.json genesis.json
 
