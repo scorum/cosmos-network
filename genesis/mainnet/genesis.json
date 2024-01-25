@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2024-01-25T14:57:36.041066561Z",
+  "genesis_time": "2024-01-25T15:25:40.533426903Z",
   "chain_id": "mainnet-1",
   "initial_height": "1",
   "consensus_params": {
@@ -33,175 +33,182 @@
       "accounts": [
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1jeyg3xa29m8a2ycfeslkzhapjld0rlzu4xkqza",
+          "address": "scorum10c2qgns7kpun4lqy7tufefgcvxycwt0qauc2sj",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1j5w3ngsu92fvx6ev5xye9ld5cp5d4w3nc3um8r",
+          "address": "scorum1d5s5x3jkvvytkclz0p8w6qn63enaev25lryal2",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum19szas9hxt2uzjje6jcaz2f94azezw2xcwh57kn",
+          "address": "scorum12y5at2lt3pxqkl3xasxrg98fm6nxdjfgvhv6u4",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1d4gzele84xh35qe6tk80czwdajygrh9m3q3ve8",
+          "address": "scorum1skjllcx2tmh97nmcpen0lgrxnc9d6p9xdg9wzy",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1qqy3qdgx7qpnn5unyfq8c5nxhdv55pszlvugsk",
+          "address": "scorum1zh23x02wdjxd7j5hkwzw02sm98tfrvc0dzkv4l",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1zkp9sv99xldjues6e7rjrwjvgkjlqs5899dq0k",
+          "address": "scorum1x79mu43a26fdwvudu0rlpf9cwt246d5rzdt3cy",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1rlp0ax3fs46dtf98ldkctwprdw86lr2l84vys6",
+          "address": "scorum1kjvppl24tswxcyt9jayqfx5uu8zzy88txkxcpu",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1u2c9hp2en5jm3rj79twvfyr86wu7cpv93ku7mp",
+          "address": "scorum17ns666qgfnfsphqwlxs2ewt70yavf2w28vmhhg",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum17rpj204rf97jah37gasmrxa9evumzgt00vk494",
+          "address": "scorum1a8vujvga80mcwqs3v5ej9lh3wve0aagnndq35a",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1d22zyrycw9hs8xsu60dhvqxvkyye439w3p2t4z",
+          "address": "scorum1lyx0m69fdl07cvhqx7jhq3jq582r76cxezyefp",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1ntahdh2ak5t5huz4e2hrzm9ffx5s4n3fsp2ut3",
+          "address": "scorum170wdn3t2gy4yqv94s7vmv7dp2hyx6evres7z2f",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1s3ul6a6ysqrvgx3xcgxrytqc99lykhar3894eh",
+          "address": "scorum1r9hd4ecny7peykvgnvn0eq3g2vymeuw00wkvtq",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum13lcy5yv2v7jezslxg3d8tvymlgavyw5eqvaefs",
+          "address": "scorum137t02s37xvfesynd69jv2gsulxszgxhpnssma8",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1pteam2ud4sr44v3cpyhcxrga43cu6qfds7y7gt",
+          "address": "scorum1dqln846qz3rt959dmwczgj2z4gsu4n9k8mfk8k",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1zw3umz05jeyh2ak5s5pvj3ggy0qzgygx6r4m9w",
+          "address": "scorum107qqydyyy5axdqd7wgghrd8820384vyuy52mps",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1rcjvn67vj0v8ngyyu5wxnwvz9t72wjvjehelnd",
+          "address": "scorum1dhfhl7srs63m590rqwq32d6tacs25jcdcl7ysn",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1pzrc0hx2tzz6szprte23lh05udgl6psrqy4apy",
+          "address": "scorum10ey0w7u9vp95qgu72yl3mfavm4ctug8gf4nvp3",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum17v3k8ln2x2nn6tg9pw0d6sh5w77pfqu43e72xv",
+          "address": "scorum1tutdh95qgemtvyhjv9wcn70lly8ytrq4uanm4j",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum19x7zg4rkppmpqan3trggqnvdpesjrj8t5ux4xj",
+          "address": "scorum1uwph4jnmelkvawg04se9jxygpxx6dp3cmsuhhn",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1jkwzf8fev099f6f6y48re6msu4g90ftvjnk3nx",
+          "address": "scorum12lyzqmys5vf9xaxc45yc3eykklvfhxf09fve9y",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1ppndesmsn2vtjkk9wzr7y00mhcepdsn45063ae",
+          "address": "scorum1fd5wglu9y07578etauualn5nhp0w5yq3gzc9xk",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1duqtxm9v0ctjn4tryw823c3k2gf40tn9ulx6r2",
+          "address": "scorum1wl93a4ehy8ptklntg2g0a00908s0fdclcfm0nz",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1zak0lnttawupd9gg2t5p8g5d6dl40y07mr05sh",
+          "address": "scorum1mlufkhyf0czthkwmgaq0g4twcqgwlte896fcaf",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1jm6pgpqrfsnf7vpk5s0xkre6ray59fq385rp26",
+          "address": "scorum1nm7tnkmh446k6n0a0unc03e2830zzcl5rrlgu5",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
         },
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
-          "address": "scorum1wjh7rtfs3q207scwvk2kkxvm44tpdflm0tkh5q",
+          "address": "scorum1da08f3tj62l8elm5drlqrjddy39wtexarjfj4v",
+          "pub_key": null,
+          "account_number": "0",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "scorum136y7enl7fvfq7dqtksamyjg6shgt3q3mkq9mgp",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
@@ -230,7 +237,7 @@
       },
       "balances": [
         {
-          "address": "scorum1qqy3qdgx7qpnn5unyfq8c5nxhdv55pszlvugsk",
+          "address": "scorum1zh23x02wdjxd7j5hkwzw02sm98tfrvc0dzkv4l",
           "coins": [
             {
               "denom": "nsp",
@@ -239,7 +246,20 @@
           ]
         },
         {
-          "address": "scorum1ppndesmsn2vtjkk9wzr7y00mhcepdsn45063ae",
+          "address": "scorum1r9hd4ecny7peykvgnvn0eq3g2vymeuw00wkvtq",
+          "coins": []
+        },
+        {
+          "address": "scorum1x79mu43a26fdwvudu0rlpf9cwt246d5rzdt3cy",
+          "coins": [
+            {
+              "denom": "nsp",
+              "amount": "7500000000000000"
+            }
+          ]
+        },
+        {
+          "address": "scorum1fd5wglu9y07578etauualn5nhp0w5yq3gzc9xk",
           "coins": [
             {
               "denom": "nscr",
@@ -248,19 +268,7 @@
           ]
         },
         {
-          "address": "scorum1pzrc0hx2tzz6szprte23lh05udgl6psrqy4apy",
-          "coins": []
-        },
-        {
-          "address": "scorum1pteam2ud4sr44v3cpyhcxrga43cu6qfds7y7gt",
-          "coins": []
-        },
-        {
-          "address": "scorum1zw3umz05jeyh2ak5s5pvj3ggy0qzgygx6r4m9w",
-          "coins": []
-        },
-        {
-          "address": "scorum1zkp9sv99xldjues6e7rjrwjvgkjlqs5899dq0k",
+          "address": "scorum12y5at2lt3pxqkl3xasxrg98fm6nxdjfgvhv6u4",
           "coins": [
             {
               "denom": "nsp",
@@ -269,7 +277,32 @@
           ]
         },
         {
-          "address": "scorum1zak0lnttawupd9gg2t5p8g5d6dl40y07mr05sh",
+          "address": "scorum12lyzqmys5vf9xaxc45yc3eykklvfhxf09fve9y",
+          "coins": []
+        },
+        {
+          "address": "scorum1tutdh95qgemtvyhjv9wcn70lly8ytrq4uanm4j",
+          "coins": []
+        },
+        {
+          "address": "scorum1dqln846qz3rt959dmwczgj2z4gsu4n9k8mfk8k",
+          "coins": []
+        },
+        {
+          "address": "scorum1d5s5x3jkvvytkclz0p8w6qn63enaev25lryal2",
+          "coins": [
+            {
+              "denom": "nsp",
+              "amount": "7500000000000000"
+            }
+          ]
+        },
+        {
+          "address": "scorum1dhfhl7srs63m590rqwq32d6tacs25jcdcl7ysn",
+          "coins": []
+        },
+        {
+          "address": "scorum1da08f3tj62l8elm5drlqrjddy39wtexarjfj4v",
           "coins": [
             {
               "denom": "nscr",
@@ -278,51 +311,7 @@
           ]
         },
         {
-          "address": "scorum1rcjvn67vj0v8ngyyu5wxnwvz9t72wjvjehelnd",
-          "coins": []
-        },
-        {
-          "address": "scorum1rlp0ax3fs46dtf98ldkctwprdw86lr2l84vys6",
-          "coins": [
-            {
-              "denom": "nsp",
-              "amount": "7500000000000000"
-            }
-          ]
-        },
-        {
-          "address": "scorum19x7zg4rkppmpqan3trggqnvdpesjrj8t5ux4xj",
-          "coins": []
-        },
-        {
-          "address": "scorum19szas9hxt2uzjje6jcaz2f94azezw2xcwh57kn",
-          "coins": [
-            {
-              "denom": "nsp",
-              "amount": "7500000000000000"
-            }
-          ]
-        },
-        {
-          "address": "scorum1d22zyrycw9hs8xsu60dhvqxvkyye439w3p2t4z",
-          "coins": [
-            {
-              "denom": "nsp",
-              "amount": "7500000000000000"
-            }
-          ]
-        },
-        {
-          "address": "scorum1d4gzele84xh35qe6tk80czwdajygrh9m3q3ve8",
-          "coins": [
-            {
-              "denom": "nsp",
-              "amount": "7500000000000000"
-            }
-          ]
-        },
-        {
-          "address": "scorum1duqtxm9v0ctjn4tryw823c3k2gf40tn9ulx6r2",
+          "address": "scorum1wl93a4ehy8ptklntg2g0a00908s0fdclcfm0nz",
           "coins": [
             {
               "denom": "nscr",
@@ -331,7 +320,46 @@
           ]
         },
         {
-          "address": "scorum1wjh7rtfs3q207scwvk2kkxvm44tpdflm0tkh5q",
+          "address": "scorum10c2qgns7kpun4lqy7tufefgcvxycwt0qauc2sj",
+          "coins": [
+            {
+              "denom": "nsp",
+              "amount": "7500000000000000"
+            }
+          ]
+        },
+        {
+          "address": "scorum10ey0w7u9vp95qgu72yl3mfavm4ctug8gf4nvp3",
+          "coins": []
+        },
+        {
+          "address": "scorum107qqydyyy5axdqd7wgghrd8820384vyuy52mps",
+          "coins": []
+        },
+        {
+          "address": "scorum1skjllcx2tmh97nmcpen0lgrxnc9d6p9xdg9wzy",
+          "coins": [
+            {
+              "denom": "nsp",
+              "amount": "7500000000000000"
+            }
+          ]
+        },
+        {
+          "address": "scorum136y7enl7fvfq7dqtksamyjg6shgt3q3mkq9mgp",
+          "coins": [
+            {
+              "denom": "nscr",
+              "amount": "10000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "scorum137t02s37xvfesynd69jv2gsulxszgxhpnssma8",
+          "coins": []
+        },
+        {
+          "address": "scorum1nm7tnkmh446k6n0a0unc03e2830zzcl5rrlgu5",
           "coins": [
             {
               "denom": "nscr",
@@ -340,15 +368,7 @@
           ]
         },
         {
-          "address": "scorum1s3ul6a6ysqrvgx3xcgxrytqc99lykhar3894eh",
-          "coins": []
-        },
-        {
-          "address": "scorum13lcy5yv2v7jezslxg3d8tvymlgavyw5eqvaefs",
-          "coins": []
-        },
-        {
-          "address": "scorum1j5w3ngsu92fvx6ev5xye9ld5cp5d4w3nc3um8r",
+          "address": "scorum1kjvppl24tswxcyt9jayqfx5uu8zzy88txkxcpu",
           "coins": [
             {
               "denom": "nsp",
@@ -357,20 +377,7 @@
           ]
         },
         {
-          "address": "scorum1jkwzf8fev099f6f6y48re6msu4g90ftvjnk3nx",
-          "coins": []
-        },
-        {
-          "address": "scorum1jeyg3xa29m8a2ycfeslkzhapjld0rlzu4xkqza",
-          "coins": [
-            {
-              "denom": "nsp",
-              "amount": "7500000000000000"
-            }
-          ]
-        },
-        {
-          "address": "scorum1jm6pgpqrfsnf7vpk5s0xkre6ray59fq385rp26",
+          "address": "scorum1mlufkhyf0czthkwmgaq0g4twcqgwlte896fcaf",
           "coins": [
             {
               "denom": "nscr",
@@ -379,11 +386,11 @@
           ]
         },
         {
-          "address": "scorum1ntahdh2ak5t5huz4e2hrzm9ffx5s4n3fsp2ut3",
+          "address": "scorum1uwph4jnmelkvawg04se9jxygpxx6dp3cmsuhhn",
           "coins": []
         },
         {
-          "address": "scorum1u2c9hp2en5jm3rj79twvfyr86wu7cpv93ku7mp",
+          "address": "scorum1a8vujvga80mcwqs3v5ej9lh3wve0aagnndq35a",
           "coins": [
             {
               "denom": "nsp",
@@ -392,7 +399,11 @@
           ]
         },
         {
-          "address": "scorum17rpj204rf97jah37gasmrxa9evumzgt00vk494",
+          "address": "scorum170wdn3t2gy4yqv94s7vmv7dp2hyx6evres7z2f",
+          "coins": []
+        },
+        {
+          "address": "scorum17ns666qgfnfsphqwlxs2ewt70yavf2w28vmhhg",
           "coins": [
             {
               "denom": "nsp",
@@ -401,8 +412,13 @@
           ]
         },
         {
-          "address": "scorum17v3k8ln2x2nn6tg9pw0d6sh5w77pfqu43e72xv",
-          "coins": []
+          "address": "scorum1lyx0m69fdl07cvhqx7jhq3jq582r76cxezyefp",
+          "coins": [
+            {
+              "denom": "nsp",
+              "amount": "7500000000000000"
+            }
+          ]
         }
       ],
       "supply": [],
@@ -451,68 +467,6 @@
               {
                 "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
                 "description": {
-                  "moniker": "validator2",
-                  "identity": "",
-                  "website": "https://scorum.com",
-                  "security_contact": "",
-                  "details": ""
-                },
-                "commission": {
-                  "rate": "1.000000000000000000",
-                  "max_rate": "1.000000000000000000",
-                  "max_change_rate": "1.000000000000000000"
-                },
-                "min_self_delegation": "1",
-                "delegator_address": "scorum1j5w3ngsu92fvx6ev5xye9ld5cp5d4w3nc3um8r",
-                "validator_address": "scorumvaloper1j5w3ngsu92fvx6ev5xye9ld5cp5d4w3n2ekftd",
-                "pubkey": {
-                  "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "0LnoU+dCpEZ/jWoC9GyyNzJwbS8GcRHw/j4mlsa9ggE="
-                },
-                "value": {
-                  "denom": "nsp",
-                  "amount": "7500000000000000"
-                }
-              }
-            ],
-            "memo": "0f865ab583d3e83ca681a2d377f32a2c5e5a02c6@192.168.100.22:26656",
-            "timeout_height": "0",
-            "extension_options": [],
-            "non_critical_extension_options": []
-          },
-          "auth_info": {
-            "signer_infos": [
-              {
-                "public_key": {
-                  "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "Ax0EDWkOxMX6kSrL1EB8zROcHgjnU97hbrFYE36l5MXK"
-                },
-                "mode_info": {
-                  "single": {
-                    "mode": "SIGN_MODE_DIRECT"
-                  }
-                },
-                "sequence": "0"
-              }
-            ],
-            "fee": {
-              "amount": [],
-              "gas_limit": "200000",
-              "payer": "",
-              "granter": ""
-            },
-            "tip": null
-          },
-          "signatures": [
-            "6GRaJztPTkn3cOBqjxLtv7vZwxoLiJ/6mVIcaO0/yKJsZ1nGDNOmflrblV/bwzPB8nzENMmiooqg8uRCQ/F6RQ=="
-          ]
-        },
-        {
-          "body": {
-            "messages": [
-              {
-                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
-                "description": {
                   "moniker": "validator9",
                   "identity": "",
                   "website": "https://scorum.com",
@@ -525,11 +479,11 @@
                   "max_change_rate": "1.000000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "scorum17rpj204rf97jah37gasmrxa9evumzgt00vk494",
-                "validator_address": "scorumvaloper17rpj204rf97jah37gasmrxa9evumzgt0ayu8fm",
+                "delegator_address": "scorum1a8vujvga80mcwqs3v5ej9lh3wve0aagnndq35a",
+                "validator_address": "scorumvaloper1a8vujvga80mcwqs3v5ej9lh3wve0aagnp92rcn",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "E9FqEtcBLPGZ//RIbN4MCy2OSfpmMfVVTD+x7fAEfKs="
+                  "key": "hS4xo9cCLSsmKEllWZGDiAf/npr8I6dZrbui1U+2hJs="
                 },
                 "value": {
                   "denom": "nsp",
@@ -537,7 +491,7 @@
                 }
               }
             ],
-            "memo": "14574cea580fb90f744e990df61132e808fd5938@192.168.100.22:26656",
+            "memo": "1cd6bdaea121e8f2df7c61527b1e189bbaf28932@192.168.100.22:26656",
             "timeout_height": "0",
             "extension_options": [],
             "non_critical_extension_options": []
@@ -547,7 +501,7 @@
               {
                 "public_key": {
                   "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "A+4Rxsb1OOwUsLufIIk3BbtntMCnZZbRxa8GxjViWaKK"
+                  "key": "AsMIxYxgVjjakxqtQv3zPyJCVch2pU33N0yIzuzce7x5"
                 },
                 "mode_info": {
                   "single": {
@@ -566,7 +520,7 @@
             "tip": null
           },
           "signatures": [
-            "lxBosxqPpX+gL9ap8qSAvF+U6Sl1oCXHQWubdjQ1CzYnid1HhtzlP+qO+7seN7ZvwzFcHPm3uxce9epexyyxEA=="
+            "ySoNumyJK/WdJGpzNTL15OydqrY0q0SsZAu65mG18S9zoxgVUJSbsJ6cBPqNT3EiP4t4MGjoBiTmqzwOuhAdIQ=="
           ]
         },
         {
@@ -587,11 +541,11 @@
                   "max_change_rate": "1.000000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "scorum1rlp0ax3fs46dtf98ldkctwprdw86lr2l84vys6",
-                "validator_address": "scorumvaloper1rlp0ax3fs46dtf98ldkctwprdw86lr2l4axku5",
+                "delegator_address": "scorum1kjvppl24tswxcyt9jayqfx5uu8zzy88txkxcpu",
+                "validator_address": "scorumvaloper1kjvppl24tswxcyt9jayqfx5uu8zzy88t57v2dj",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "/A5On0pnIeVhcWDP6DfVdvH8r1uaq+v/QvdDdlZYNpQ="
+                  "key": "KUHUMQDss83NW4uIKZ+m5g6mLjXeehqS3G7iNwW9yZ4="
                 },
                 "value": {
                   "denom": "nsp",
@@ -599,7 +553,7 @@
                 }
               }
             ],
-            "memo": "16fd47c45e2db5bb7f1b70e2c012f15af2b16a81@192.168.100.22:26656",
+            "memo": "296696740a714b86b662ac862920e8531a1adbfe@192.168.100.22:26656",
             "timeout_height": "0",
             "extension_options": [],
             "non_critical_extension_options": []
@@ -609,7 +563,7 @@
               {
                 "public_key": {
                   "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "AohWO1WEHzYTWp0Ni+NhWrTh1rtbHuL9FMLcYfjrBxuA"
+                  "key": "A+6f41KaIIaWHUvjlymWsxeJ5ihJHZMvDcI3vAt/pJXR"
                 },
                 "mode_info": {
                   "single": {
@@ -628,379 +582,7 @@
             "tip": null
           },
           "signatures": [
-            "aE9Ut3C0bcbQ52wpNDS8atDYqG8FltQCkRnbOqQ5dPoJ48qDYI9iP5CGVm4EZ2jSjFIAGHN/VCg8jjYYgVvRIg=="
-          ]
-        },
-        {
-          "body": {
-            "messages": [
-              {
-                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
-                "description": {
-                  "moniker": "validator5",
-                  "identity": "",
-                  "website": "https://scorum.com",
-                  "security_contact": "",
-                  "details": ""
-                },
-                "commission": {
-                  "rate": "1.000000000000000000",
-                  "max_rate": "1.000000000000000000",
-                  "max_change_rate": "1.000000000000000000"
-                },
-                "min_self_delegation": "1",
-                "delegator_address": "scorum1qqy3qdgx7qpnn5unyfq8c5nxhdv55pszlvugsk",
-                "validator_address": "scorumvaloper1qqy3qdgx7qpnn5unyfq8c5nxhdv55pszdyk6uc",
-                "pubkey": {
-                  "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "TOKWVR8SGjhRdfoG1lcTyARIt7pe8L3OCoqW9hCi9I8="
-                },
-                "value": {
-                  "denom": "nsp",
-                  "amount": "7500000000000000"
-                }
-              }
-            ],
-            "memo": "20b0a7c30a7fcbd0255b3d101b3cef34ac0b663f@192.168.100.22:26656",
-            "timeout_height": "0",
-            "extension_options": [],
-            "non_critical_extension_options": []
-          },
-          "auth_info": {
-            "signer_infos": [
-              {
-                "public_key": {
-                  "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "AjgYx9Vd52uP0d6riBKfe4r8yNlRYWdbWCWX1I2GfPxT"
-                },
-                "mode_info": {
-                  "single": {
-                    "mode": "SIGN_MODE_DIRECT"
-                  }
-                },
-                "sequence": "0"
-              }
-            ],
-            "fee": {
-              "amount": [],
-              "gas_limit": "200000",
-              "payer": "",
-              "granter": ""
-            },
-            "tip": null
-          },
-          "signatures": [
-            "SUC9TGb6+5UMmCc687JsGfC3I3Jw9XqaoLk53j9Ryx1eIW5X8a/6+d8ZwH6w2Ek8miHwZ8o30RmvGdpCDITGWw=="
-          ]
-        },
-        {
-          "body": {
-            "messages": [
-              {
-                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
-                "description": {
-                  "moniker": "validator6",
-                  "identity": "",
-                  "website": "https://scorum.com",
-                  "security_contact": "",
-                  "details": ""
-                },
-                "commission": {
-                  "rate": "1.000000000000000000",
-                  "max_rate": "1.000000000000000000",
-                  "max_change_rate": "1.000000000000000000"
-                },
-                "min_self_delegation": "1",
-                "delegator_address": "scorum1zkp9sv99xldjues6e7rjrwjvgkjlqs5899dq0k",
-                "validator_address": "scorumvaloper1zkp9sv99xldjues6e7rjrwjvgkjlqs58hd8jrc",
-                "pubkey": {
-                  "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "/fA+JifGHefbeQxq7c4fbcFxhnicpsTilj0E7NtPZe8="
-                },
-                "value": {
-                  "denom": "nsp",
-                  "amount": "7500000000000000"
-                }
-              }
-            ],
-            "memo": "2cc2ba292dbd2770d5f1a33d9a6d709adcfe216b@192.168.100.22:26656",
-            "timeout_height": "0",
-            "extension_options": [],
-            "non_critical_extension_options": []
-          },
-          "auth_info": {
-            "signer_infos": [
-              {
-                "public_key": {
-                  "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "AqMfSF9TpA77ypQJnZCXCk6+TQK6awLcfmGgJIVq+w23"
-                },
-                "mode_info": {
-                  "single": {
-                    "mode": "SIGN_MODE_DIRECT"
-                  }
-                },
-                "sequence": "0"
-              }
-            ],
-            "fee": {
-              "amount": [],
-              "gas_limit": "200000",
-              "payer": "",
-              "granter": ""
-            },
-            "tip": null
-          },
-          "signatures": [
-            "XLn0un2U1ThPtpe0EUFQAyh1nqrnFFcPM0RwxUjFdPUWBFQlFkExTjh/0rxAmwuj0vlil2PoHMDGkzlkEKsNzQ=="
-          ]
-        },
-        {
-          "body": {
-            "messages": [
-              {
-                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
-                "description": {
-                  "moniker": "validator10",
-                  "identity": "",
-                  "website": "https://scorum.com",
-                  "security_contact": "",
-                  "details": ""
-                },
-                "commission": {
-                  "rate": "1.000000000000000000",
-                  "max_rate": "1.000000000000000000",
-                  "max_change_rate": "1.000000000000000000"
-                },
-                "min_self_delegation": "1",
-                "delegator_address": "scorum1d22zyrycw9hs8xsu60dhvqxvkyye439w3p2t4z",
-                "validator_address": "scorumvaloper1d22zyrycw9hs8xsu60dhvqxvkyye439wrfqeev",
-                "pubkey": {
-                  "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "BRP2FENbux1FsZnL0Tl2IncnoHqTdqCYP6S89TiCO6w="
-                },
-                "value": {
-                  "denom": "nsp",
-                  "amount": "7500000000000000"
-                }
-              }
-            ],
-            "memo": "37b8e8c0826e966520cd3a86b6ff64a24be266aa@192.168.100.22:26656",
-            "timeout_height": "0",
-            "extension_options": [],
-            "non_critical_extension_options": []
-          },
-          "auth_info": {
-            "signer_infos": [
-              {
-                "public_key": {
-                  "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "AmCWdYB2/uz/2P9hEPuMgd4YxCd07sgNHf/MOarW4Gwd"
-                },
-                "mode_info": {
-                  "single": {
-                    "mode": "SIGN_MODE_DIRECT"
-                  }
-                },
-                "sequence": "0"
-              }
-            ],
-            "fee": {
-              "amount": [],
-              "gas_limit": "200000",
-              "payer": "",
-              "granter": ""
-            },
-            "tip": null
-          },
-          "signatures": [
-            "YTtZIEUt/sgtjhmB2gb92sfTZ+/o1UaC4RonvrX6LUAuG9B0qw09tBWqjaA3iUfyExrdc93RbWeqVJjvyNLAvA=="
-          ]
-        },
-        {
-          "body": {
-            "messages": [
-              {
-                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
-                "description": {
-                  "moniker": "validator8",
-                  "identity": "",
-                  "website": "https://scorum.com",
-                  "security_contact": "",
-                  "details": ""
-                },
-                "commission": {
-                  "rate": "1.000000000000000000",
-                  "max_rate": "1.000000000000000000",
-                  "max_change_rate": "1.000000000000000000"
-                },
-                "min_self_delegation": "1",
-                "delegator_address": "scorum1u2c9hp2en5jm3rj79twvfyr86wu7cpv93ku7mp",
-                "validator_address": "scorumvaloper1u2c9hp2en5jm3rj79twvfyr86wu7cpv9r7kvh0",
-                "pubkey": {
-                  "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "vidSyPzkFmWZuj/0jLki9rd6RcAy4D41beSwHG9FDrk="
-                },
-                "value": {
-                  "denom": "nsp",
-                  "amount": "7500000000000000"
-                }
-              }
-            ],
-            "memo": "82d25c08ed17220b6c8ff28535ceabfc3c268df6@192.168.100.22:26656",
-            "timeout_height": "0",
-            "extension_options": [],
-            "non_critical_extension_options": []
-          },
-          "auth_info": {
-            "signer_infos": [
-              {
-                "public_key": {
-                  "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "A4pu6HAGXZ+HiImXX/qiZZDzqTQd3hZc58jVYDB8yDgE"
-                },
-                "mode_info": {
-                  "single": {
-                    "mode": "SIGN_MODE_DIRECT"
-                  }
-                },
-                "sequence": "0"
-              }
-            ],
-            "fee": {
-              "amount": [],
-              "gas_limit": "200000",
-              "payer": "",
-              "granter": ""
-            },
-            "tip": null
-          },
-          "signatures": [
-            "uGOsezvw88+3E51WeYe5zlE6I2nPbyeJZTEkIdokKqpE3rQdDgnWXCGDlMiqQaKWc2IqaMlhhNQB34wWfQIEVw=="
-          ]
-        },
-        {
-          "body": {
-            "messages": [
-              {
-                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
-                "description": {
-                  "moniker": "validator4",
-                  "identity": "",
-                  "website": "https://scorum.com",
-                  "security_contact": "",
-                  "details": ""
-                },
-                "commission": {
-                  "rate": "1.000000000000000000",
-                  "max_rate": "1.000000000000000000",
-                  "max_change_rate": "1.000000000000000000"
-                },
-                "min_self_delegation": "1",
-                "delegator_address": "scorum1d4gzele84xh35qe6tk80czwdajygrh9m3q3ve8",
-                "validator_address": "scorumvaloper1d4gzele84xh35qe6tk80czwdajygrh9mrgm74f",
-                "pubkey": {
-                  "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "aXaWbCkcZAs9hBOWZvwOL48bNvpVEmXmmyHxMDD3HfU="
-                },
-                "value": {
-                  "denom": "nsp",
-                  "amount": "7500000000000000"
-                }
-              }
-            ],
-            "memo": "b592d6fc4016c25503a4b209a3b74a598835c7cd@192.168.100.22:26656",
-            "timeout_height": "0",
-            "extension_options": [],
-            "non_critical_extension_options": []
-          },
-          "auth_info": {
-            "signer_infos": [
-              {
-                "public_key": {
-                  "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "AivbUnVyjy4/L4/MI8Bt+FXxVWq5KEXr1PVHlFHf8qqP"
-                },
-                "mode_info": {
-                  "single": {
-                    "mode": "SIGN_MODE_DIRECT"
-                  }
-                },
-                "sequence": "0"
-              }
-            ],
-            "fee": {
-              "amount": [],
-              "gas_limit": "200000",
-              "payer": "",
-              "granter": ""
-            },
-            "tip": null
-          },
-          "signatures": [
-            "Y9+vdwg+7+l13TvB3eOXP4+u3Z1GGK66MY3uOhgNN4kCYplqX0B8Q6atng7zgx7xy6LjX6mcPkFEwTo57HMeJw=="
-          ]
-        },
-        {
-          "body": {
-            "messages": [
-              {
-                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
-                "description": {
-                  "moniker": "validator3",
-                  "identity": "",
-                  "website": "https://scorum.com",
-                  "security_contact": "",
-                  "details": ""
-                },
-                "commission": {
-                  "rate": "1.000000000000000000",
-                  "max_rate": "1.000000000000000000",
-                  "max_change_rate": "1.000000000000000000"
-                },
-                "min_self_delegation": "1",
-                "delegator_address": "scorum19szas9hxt2uzjje6jcaz2f94azezw2xcwh57kn",
-                "validator_address": "scorumvaloper19szas9hxt2uzjje6jcaz2f94azezw2xcul7v6a",
-                "pubkey": {
-                  "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "S+IbZoOTcNGXlbDu9zghtMyRSnxL29pZ84dz0QKE5Gk="
-                },
-                "value": {
-                  "denom": "nsp",
-                  "amount": "7500000000000000"
-                }
-              }
-            ],
-            "memo": "d25bc8a5f80f59a4eeb52a8cde3f42e19ccb3659@192.168.100.22:26656",
-            "timeout_height": "0",
-            "extension_options": [],
-            "non_critical_extension_options": []
-          },
-          "auth_info": {
-            "signer_infos": [
-              {
-                "public_key": {
-                  "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "AwBavrP1oL80mlosOK7gYKAMJ1QH9X+ZcD+tsM/X36ph"
-                },
-                "mode_info": {
-                  "single": {
-                    "mode": "SIGN_MODE_DIRECT"
-                  }
-                },
-                "sequence": "0"
-              }
-            ],
-            "fee": {
-              "amount": [],
-              "gas_limit": "200000",
-              "payer": "",
-              "granter": ""
-            },
-            "tip": null
-          },
-          "signatures": [
-            "GSAExccBnUsLwivh1hYs9sfgpbNflTGL2nZU3+TSTgl2jd8vdO1sOFZoEpxbpNHZE9XdWfj/ZvGFQJLgJDAeHQ=="
+            "kGL1PaicSJ0coKDZVCt0y7rMrZsiSOWEhlB6M70oCgYBey+pBUEKC6ip7BoSdvMnQlveKhxEg1USn0LtWMjKig=="
           ]
         },
         {
@@ -1021,11 +603,11 @@
                   "max_change_rate": "1.000000000000000000"
                 },
                 "min_self_delegation": "1",
-                "delegator_address": "scorum1jeyg3xa29m8a2ycfeslkzhapjld0rlzu4xkqza",
-                "validator_address": "scorumvaloper1jeyg3xa29m8a2ycfeslkzhapjld0rlzu8wujwn",
+                "delegator_address": "scorum10c2qgns7kpun4lqy7tufefgcvxycwt0qauc2sj",
+                "validator_address": "scorumvaloper10c2qgns7kpun4lqy7tufefgcvxycwt0q05jcuu",
                 "pubkey": {
                   "@type": "/cosmos.crypto.ed25519.PubKey",
-                  "key": "UXn8cWiULnKIdVMBJ5REQbygYJSXu1Ksc1itHiZ/4pU="
+                  "key": "5OuUY3a6hWzXgi5ObydEREDhaLxL4bF6GNi6hTyOjbg="
                 },
                 "value": {
                   "denom": "nsp",
@@ -1033,7 +615,7 @@
                 }
               }
             ],
-            "memo": "e30236c4a6a09775be6aaa13104b1a67ab2157f3@192.168.100.22:26656",
+            "memo": "3da83ebaad0a222a396a40f83b415cc885369bea@192.168.100.22:26656",
             "timeout_height": "0",
             "extension_options": [],
             "non_critical_extension_options": []
@@ -1043,7 +625,7 @@
               {
                 "public_key": {
                   "@type": "/cosmos.crypto.secp256k1.PubKey",
-                  "key": "A/ZeABk87LJ0RLgWTX2UWY76rajkV/YrHpMx8e/TCKUz"
+                  "key": "AvwcE1GwOa809g5SQ+XPHXPV1T8zJKkKsL6aZaCt117Z"
                 },
                 "mode_info": {
                   "single": {
@@ -1062,7 +644,441 @@
             "tip": null
           },
           "signatures": [
-            "pUK3kga8EYKiEAhPC8TM843zqvGfpLSS6I89iWVYOEArOd7cozqH8xFCemdGdoqpWKtEZTi7pAEYOufYvhXkSg=="
+            "zN51rz/G7wCnpHiRReAYfINTCE49YSBpylj3v0sPou5vKu5iRBHPTbJvK1Z+5uFYgRgWfO0RV58hlk+sMNAXOA=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator6",
+                  "identity": "",
+                  "website": "https://scorum.com",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "1.000000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "scorum1x79mu43a26fdwvudu0rlpf9cwt246d5rzdt3cy",
+                "validator_address": "scorumvaloper1x79mu43a26fdwvudu0rlpf9cwt246d5rs9pr52",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "kDHvope+hi2ZBW66r7cSXnwilYIv/bh4Pgg4F42N/Uw="
+                },
+                "value": {
+                  "denom": "nsp",
+                  "amount": "7500000000000000"
+                }
+              }
+            ],
+            "memo": "4f190564402817b0fc6759fee4c6e01a31c18591@192.168.100.22:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "Am+5gthOsGfrX8muGwXnxxngJYBjMAMkKkyIEx21YgXU"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "2eaclgTT+qtNLO7DGH4R4hcu4ZdShAXOHMEYGgSnJK4tntW3sIgtjr6eDsUt5ecea6QQN0Nf6qJnu2xjIm/pDA=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator8",
+                  "identity": "",
+                  "website": "https://scorum.com",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "1.000000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "scorum17ns666qgfnfsphqwlxs2ewt70yavf2w28vmhhg",
+                "validator_address": "scorumvaloper17ns666qgfnfsphqwlxs2ewt70yavf2w24y39mx",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "t+uR3ts4Y73XbCaNiTjM3eEu3Ism3NCSB5qhlbuHX5c="
+                },
+                "value": {
+                  "denom": "nsp",
+                  "amount": "7500000000000000"
+                }
+              }
+            ],
+            "memo": "56d1f42d56013d0ef4b8e8bb2cd8e2685361ca1c@192.168.100.22:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "A7V2tCSdmypBc7QTSx1WZptXPpSgDaoBqkTuE7DG+IKD"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "nKRq4CdbxJiKgBL67ggBlKTnqZSwVVL1IJ+IyL7VEUpsQ/eVZJbqQmPsCuKIHRxXrtUlv/am8+x6jDnYr6bVKg=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator3",
+                  "identity": "",
+                  "website": "https://scorum.com",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "1.000000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "scorum12y5at2lt3pxqkl3xasxrg98fm6nxdjfgvhv6u4",
+                "validator_address": "scorumvaloper12y5at2lt3pxqkl3xasxrg98fm6nxdjfg7lxgsm",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "z0t5OQe8qR5pskShuzDxOEqUkpdhQXecsHhgkBEtNdc="
+                },
+                "value": {
+                  "denom": "nsp",
+                  "amount": "7500000000000000"
+                }
+              }
+            ],
+            "memo": "876857691af56d9d353e693bdcbdc8a8566ef8f6@192.168.100.22:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "AuzPutt1W8q0zdd5tcZBrUz34eDKJJeAJpijS2t85AT0"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "T9EcnV02KftcNWs+cxhWAYUlDaWahfTbWQU8cVn+7PY0v6Xdx5Fe7b7CEeWN1ZYiwPz4raA01ejmPHQRAkBzqw=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator10",
+                  "identity": "",
+                  "website": "https://scorum.com",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "1.000000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "scorum1lyx0m69fdl07cvhqx7jhq3jq582r76cxezyefp",
+                "validator_address": "scorumvaloper1lyx0m69fdl07cvhqx7jhq3jq582r76cxt2wt90",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "18Lz786gC0QT1kUKmkc8gehW1sNPHhzKhe5QX6mqnUc="
+                },
+                "value": {
+                  "denom": "nsp",
+                  "amount": "7500000000000000"
+                }
+              }
+            ],
+            "memo": "9b05b60c1e29f818b2d2a13ed62d52cd62007eb2@192.168.100.22:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "Az1brkoE42kVVQuAdcfhHS7979LR65YWYSRdYk1FTaxX"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "3K/d5N7/pcI2QML4FV/qsFUb78G+S7ozy5RQk9SC0HRymaYp2zara3keAYe1vcxiPKRDP7bgcyN2Wc5gj/JtQw=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator5",
+                  "identity": "",
+                  "website": "https://scorum.com",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "1.000000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "scorum1zh23x02wdjxd7j5hkwzw02sm98tfrvc0dzkv4l",
+                "validator_address": "scorumvaloper1zh23x02wdjxd7j5hkwzw02sm98tfrvc0l2u7e3",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "idaP9/VOq95DyqVt39c1si2xB0/O8MrSjEYZ7vWq73o="
+                },
+                "value": {
+                  "denom": "nsp",
+                  "amount": "7500000000000000"
+                }
+              }
+            ],
+            "memo": "a13f6503f65a0fc7818916f2cb649dd041f06baa@192.168.100.22:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "AscBCYhbOr4KdoKM5rl94SibMEshmrojzod9m5ojOqql"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "NQr20ofOyHghYHXYXytih+ZlOBU1VGC+tp+fiqyHtp4d0ayW3QQIUBibVq5M/81ngEo7iYujeR46r/ymhgaCGQ=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator4",
+                  "identity": "",
+                  "website": "https://scorum.com",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "1.000000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "scorum1skjllcx2tmh97nmcpen0lgrxnc9d6p9xdg9wzy",
+                "validator_address": "scorumvaloper1skjllcx2tmh97nmcpen0lgrxnc9d6p9xlq0uw2",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "kX0Fkd49dZXL7TFu8Krxuv7hLKAa/wAERnAUm8Bv570="
+                },
+                "value": {
+                  "denom": "nsp",
+                  "amount": "7500000000000000"
+                }
+              }
+            ],
+            "memo": "dbb3c7865d1e470e87efaebc314e170eb708fdf2@192.168.100.22:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "Atp4ebhITim3dDitj06wdCGpeI/ffPGcH75GE+svyex8"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "s13VtEBkcoKnM4kx1tIDEeo7gZViwLGs9lRdwBJ5r/4zqWfkf0l2MZ25+8mQDLRorDcF9/yPjg0oEw1bQwiKkQ=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator2",
+                  "identity": "",
+                  "website": "https://scorum.com",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "1.000000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "scorum1d5s5x3jkvvytkclz0p8w6qn63enaev25lryal2",
+                "validator_address": "scorumvaloper1d5s5x3jkvvytkclz0p8w6qn63enaev25dtw0ny",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "aMYr2aZ7EBf/R3yGeAR77TiR5KDgJBGWhXuEzw1oE5Y="
+                },
+                "value": {
+                  "denom": "nsp",
+                  "amount": "7500000000000000"
+                }
+              }
+            ],
+            "memo": "fe341b50944ec2786b07297b741700bc3279f47f@192.168.100.22:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "A2p6LbkY52OdleRRtjBxdbbirTB/H3vAtIZzRt+IWoyZ"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "qtggVps+0mDIrxNdUTItnDs1Z9Jc80r++JnM/1q3FZgGG1M1cy6tuka+D9SfJEu/0fmkVmi4MbeWPdwvDyGmaA=="
           ]
         }
       ]
@@ -1176,26 +1192,27 @@
     "scorum": {
       "params": {
         "supervisors": [
-          "scorum1jeyg3xa29m8a2ycfeslkzhapjld0rlzu4xkqza",
-          "scorum1j5w3ngsu92fvx6ev5xye9ld5cp5d4w3nc3um8r",
-          "scorum19szas9hxt2uzjje6jcaz2f94azezw2xcwh57kn",
-          "scorum1d4gzele84xh35qe6tk80czwdajygrh9m3q3ve8",
-          "scorum1qqy3qdgx7qpnn5unyfq8c5nxhdv55pszlvugsk",
-          "scorum1zkp9sv99xldjues6e7rjrwjvgkjlqs5899dq0k",
-          "scorum1rlp0ax3fs46dtf98ldkctwprdw86lr2l84vys6",
-          "scorum1u2c9hp2en5jm3rj79twvfyr86wu7cpv93ku7mp",
-          "scorum17rpj204rf97jah37gasmrxa9evumzgt00vk494",
-          "scorum1d22zyrycw9hs8xsu60dhvqxvkyye439w3p2t4z",
-          "scorum1ntahdh2ak5t5huz4e2hrzm9ffx5s4n3fsp2ut3",
-          "scorum1s3ul6a6ysqrvgx3xcgxrytqc99lykhar3894eh",
-          "scorum13lcy5yv2v7jezslxg3d8tvymlgavyw5eqvaefs",
-          "scorum1pteam2ud4sr44v3cpyhcxrga43cu6qfds7y7gt",
-          "scorum1zw3umz05jeyh2ak5s5pvj3ggy0qzgygx6r4m9w",
-          "scorum1rcjvn67vj0v8ngyyu5wxnwvz9t72wjvjehelnd",
-          "scorum1pzrc0hx2tzz6szprte23lh05udgl6psrqy4apy",
-          "scorum17v3k8ln2x2nn6tg9pw0d6sh5w77pfqu43e72xv",
-          "scorum19x7zg4rkppmpqan3trggqnvdpesjrj8t5ux4xj",
-          "scorum1jkwzf8fev099f6f6y48re6msu4g90ftvjnk3nx"
+          "scorum10c2qgns7kpun4lqy7tufefgcvxycwt0qauc2sj",
+          "scorum1d5s5x3jkvvytkclz0p8w6qn63enaev25lryal2",
+          "scorum12y5at2lt3pxqkl3xasxrg98fm6nxdjfgvhv6u4",
+          "scorum1skjllcx2tmh97nmcpen0lgrxnc9d6p9xdg9wzy",
+          "scorum1zh23x02wdjxd7j5hkwzw02sm98tfrvc0dzkv4l",
+          "scorum1x79mu43a26fdwvudu0rlpf9cwt246d5rzdt3cy",
+          "scorum1kjvppl24tswxcyt9jayqfx5uu8zzy88txkxcpu",
+          "scorum17ns666qgfnfsphqwlxs2ewt70yavf2w28vmhhg",
+          "scorum1a8vujvga80mcwqs3v5ej9lh3wve0aagnndq35a",
+          "scorum1lyx0m69fdl07cvhqx7jhq3jq582r76cxezyefp",
+          "scorum170wdn3t2gy4yqv94s7vmv7dp2hyx6evres7z2f",
+          "scorum1r9hd4ecny7peykvgnvn0eq3g2vymeuw00wkvtq",
+          "scorum137t02s37xvfesynd69jv2gsulxszgxhpnssma8",
+          "scorum1dqln846qz3rt959dmwczgj2z4gsu4n9k8mfk8k",
+          "scorum107qqydyyy5axdqd7wgghrd8820384vyuy52mps",
+          "scorum1dhfhl7srs63m590rqwq32d6tacs25jcdcl7ysn",
+          "scorum10ey0w7u9vp95qgu72yl3mfavm4ctug8gf4nvp3",
+          "scorum1tutdh95qgemtvyhjv9wcn70lly8ytrq4uanm4j",
+          "scorum1uwph4jnmelkvawg04se9jxygpxx6dp3cmsuhhn",
+          "scorum12lyzqmys5vf9xaxc45yc3eykklvfhxf09fve9y",
+          "scorum136y7enl7fvfq7dqtksamyjg6shgt3q3mkq9mgp"
         ],
         "gas_limit": {
           "int": "1000000"
