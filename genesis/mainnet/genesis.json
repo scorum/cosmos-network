@@ -1,6 +1,6 @@
 {
   "genesis_time": "2024-01-29T10:47:57.298730935Z",
-  "chain_id": "mainnet-1",
+  "chain_id": "scorum-1",
   "initial_height": "1",
   "consensus_params": {
     "block": {
