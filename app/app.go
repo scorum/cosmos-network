@@ -112,6 +112,7 @@ import (
 	scorumclient "github.com/scorum/cosmos-network/x/scorum/client"
 	scorumkeeper "github.com/scorum/cosmos-network/x/scorum/keeper"
 	scorumtypes "github.com/scorum/cosmos-network/x/scorum/types"
+	scorumwrapper "github.com/scorum/cosmos-network/x/scorum/wrapper"
 
 	"github.com/scorum/cosmos-network/x/aviatrix"
 	aviatrixkeeper "github.com/scorum/cosmos-network/x/aviatrix/keeper"
@@ -446,7 +447,7 @@ func New(
 		app.IBCKeeper.ChannelKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
-		app.AccountKeeper,
+		scorumwrapper.NewAccountKeeper(app.AccountKeeper, app.BankKeeper, app.ScorumKeeper),
 		app.BankKeeper,
 		scopedTransferKeeper,
 	)
@@ -459,7 +460,7 @@ func New(
 		app.IBCKeeper.ChannelKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
-		app.AccountKeeper,
+		scorumwrapper.NewAccountKeeper(app.AccountKeeper, app.BankKeeper, app.ScorumKeeper),
 		scopedICAHostKeeper,
 		app.MsgServiceRouter(),
 	)
