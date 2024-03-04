@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
+	v101 "github.com/scorum/cosmos-network/app/upgrade/v101"
+
 	ibcnfttransfertypes "github.com/bianjieai/nft-transfer/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -753,6 +755,8 @@ func New(
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
+
+	app.UpgradeKeeper.SetUpgradeHandler(v101.Name, v101.Handler(app.configurator, app.mm))
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
