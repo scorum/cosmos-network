@@ -432,6 +432,15 @@ func New(
 
 	// ... other modules keepers
 
+	app.ScorumKeeper = scorumkeeper.NewKeeper(
+		appCodec,
+		keys[scorumtypes.StoreKey],
+		app.GetSubspace(scorumtypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		authtypes.FeeCollectorName,
+	)
+
 	// Create IBC Keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec, keys[ibchost.StoreKey],
@@ -439,6 +448,16 @@ func New(
 		app.StakingKeeper,
 		app.UpgradeKeeper,
 		scopedIBCKeeper,
+	)
+
+	// create keeper wrappers to mint gas
+	scorumWrapperAccountKeeper := scorumwrapper.NewAccountKeeper(app.AccountKeeper, app.BankKeeper, app.ScorumKeeper)
+	scorumWrapperBankKeeper := bankkeeper.NewBaseKeeper(
+		appCodec,
+		keys[banktypes.StoreKey],
+		scorumWrapperAccountKeeper,
+		app.GetSubspace(banktypes.ModuleName),
+		app.BlockedModuleAccountAddrs(),
 	)
 
 	// Create Transfer Keepers
@@ -449,8 +468,8 @@ func New(
 		app.IBCKeeper.ChannelKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
-		scorumwrapper.NewAccountKeeper(app.AccountKeeper, app.BankKeeper, app.ScorumKeeper),
-		app.BankKeeper,
+		scorumWrapperAccountKeeper,
+		scorumWrapperBankKeeper,
 		scopedTransferKeeper,
 	)
 	transferModule := transfer.NewAppModule(app.TransferKeeper)
@@ -462,7 +481,7 @@ func New(
 		app.IBCKeeper.ChannelKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
-		scorumwrapper.NewAccountKeeper(app.AccountKeeper, app.BankKeeper, app.ScorumKeeper),
+		scorumWrapperAccountKeeper,
 		scopedICAHostKeeper,
 		app.MsgServiceRouter(),
 	)
@@ -493,14 +512,6 @@ func New(
 		app.BankKeeper,
 	)
 
-	app.ScorumKeeper = scorumkeeper.NewKeeper(
-		appCodec,
-		keys[scorumtypes.StoreKey],
-		app.GetSubspace(scorumtypes.ModuleName),
-		app.AccountKeeper,
-		app.BankKeeper,
-		authtypes.FeeCollectorName,
-	)
 	scorumModule := scorum.NewAppModule(appCodec, app.ScorumKeeper, app.AccountKeeper, app.BankKeeper)
 
 	app.AviatrixKeeper = aviatrixkeeper.NewKeeper(
