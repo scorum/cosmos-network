@@ -6,7 +6,7 @@ import (
 	upgrade "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 )
 
-const Name = "v1.0.1"
+const Name = "v1.0.1 Scorum Upgrade"
 
 func Handler(
 	cfg module.Configurator,
