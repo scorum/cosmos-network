@@ -106,6 +106,8 @@ sed -i -e 's/"stake"/"nsp"/g' ${homed}/config/genesis.json
 sed -i 's/"\(inflation[^"]*\)": "[0-9.]\+",/"\1": "0",/g' ${homed}/config/genesis.json
 # set min_commission_rate to 1
 sed -i 's/"min_commission_rate": "[0-9.]\+"/"min_commission_rate": "1"/' ${homed}/config/genesis.json
+# set voting_period to 1 hour
+sed -i 's/"voting_period": "[0-9.]\+s"/"voting_period": "3600s"/' ${homed}/config/genesis.json
 
 cp ${homed}/config/genesis.json genesis.json
 
