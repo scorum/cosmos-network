@@ -5,7 +5,6 @@ import (
 
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
@@ -126,9 +125,9 @@ func SimulateMsgBurn(
 				}
 
 				txCtx := simulation.OperationInput{
-					R:             r,
-					App:           app,
-					TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+					R:   r,
+					App: app,
+					//TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
 					Cdc:           nil,
 					Msg:           msg,
 					MsgType:       msg.Type(),
@@ -177,9 +176,9 @@ func SimulateMsgMintGas(
 		}
 
 		txCtx := simulation.OperationInput{
-			R:             r,
-			App:           app,
-			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			R:   r,
+			App: app,
+			//TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),
@@ -222,9 +221,9 @@ func SimulateMsgConvertSCR2SP(
 		}
 
 		txCtx := simulation.OperationInput{
-			R:               r,
-			App:             app,
-			TxGen:           simapp.MakeTestEncodingConfig().TxConfig,
+			R:   r,
+			App: app,
+			//TxGen:           simapp.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         msg.Type(),
@@ -270,9 +269,9 @@ func SimulateMsgWithdrawSP(
 		}
 
 		txCtx := simulation.OperationInput{
-			R:               r,
-			App:             app,
-			TxGen:           simapp.MakeTestEncodingConfig().TxConfig,
+			R:   r,
+			App: app,
+			//TxGen:           simapp.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         msg.Type(),
@@ -322,9 +321,9 @@ func SimulateMsgStopSPWithdrawal(
 		}
 
 		txCtx := simulation.OperationInput{
-			R:             r,
-			App:           app,
-			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			R:   r,
+			App: app,
+			//TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),

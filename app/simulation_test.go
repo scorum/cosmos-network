@@ -9,20 +9,21 @@ import (
 	"os"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/testutil/sims"
+
+	dbm "github.com/cometbft/cometbft-db"
+	"github.com/cometbft/cometbft/libs/log"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/simapp/helpers"
 	"github.com/cosmos/cosmos-sdk/store"
+	"github.com/cosmos/cosmos-sdk/types/module/testutil"
 	simulationtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	"github.com/scorum/cosmos-network/app"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	dbm "github.com/tendermint/tm-db"
 )
 
 func init() {
-	simapp.GetSimulatorFlags()
+	sims.GetSimulatorFlags()
 }
 
 // interBlockCacheOpt returns a BaseApp option function that sets the persistent
@@ -32,7 +33,7 @@ func interBlockCacheOpt() func(*baseapp.BaseApp) {
 }
 
 func TestAppStateDeterminism(t *testing.T) {
-	config := simapp.NewConfigFromFlags()
+	config := sims.NewConfigFromFlags()
 	config.InitialBlockHeight = 1
 	config.ExportParamsPath = ""
 	config.OnOperation = false
@@ -40,7 +41,7 @@ func TestAppStateDeterminism(t *testing.T) {
 	config.NumBlocks = 250
 	config.BlockSize = 100
 	config.Commit = true
-	config.ChainID = helpers.SimAppChainID
+	config.ChainID = sims.SimAppChainID
 
 	numSeeds := 5
 	numTimesToRunPerSeed := 3
@@ -51,7 +52,7 @@ func TestAppStateDeterminism(t *testing.T) {
 
 		for j := 0; j < numTimesToRunPerSeed; j++ {
 			var logger log.Logger
-			if simapp.FlagVerboseValue {
+			if sims.FlagVerboseValue {
 				logger = log.TestingLogger()
 			} else {
 				logger = log.NewNopLogger()
@@ -64,10 +65,10 @@ func TestAppStateDeterminism(t *testing.T) {
 				nil,
 				true,
 				map[int64]bool{},
-				simapp.DefaultNodeHome,
-				simapp.FlagPeriodValue,
-				app.MakeEncodingConfig(),
-				simapp.EmptyAppOptions{},
+				sims.DefaultNodeHome,
+				sims.FlagPeriodValue,
+				testutil.TestEncodingConfig(),
+				sims.AppOptionsMap{},
 				interBlockCacheOpt(),
 			)
 
@@ -80,9 +81,9 @@ func TestAppStateDeterminism(t *testing.T) {
 				t,
 				os.Stdout,
 				app.BaseApp,
-				simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
+				sims.AppStateFn(app.AppCodec(), app.SimulationManager()),
 				simulationtypes.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
-				simapp.SimulationOperations(app, app.AppCodec(), config),
+				sims.SimulationOperations(app, app.AppCodec(), config),
 				app.ModuleAccountAddrs(),
 				config,
 				app.AppCodec(),
