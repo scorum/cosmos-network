@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/cometbft/cometbft/libs/os"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -12,7 +13,6 @@ import (
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 	"github.com/spf13/cobra"
-	"github.com/tendermint/tendermint/libs/os"
 )
 
 func CmdSubmitMintProposal() *cobra.Command {
