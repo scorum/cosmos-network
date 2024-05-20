@@ -7,8 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cosmos/cosmos-sdk/x/auth/posthandler"
-
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
 
@@ -153,8 +151,8 @@ var (
 	// and genesis verification.
 	ModuleBasics = module.NewBasicManager(
 		auth.AppModuleBasic{},
+		genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
 		authzmodule.AppModuleBasic{},
-		genutil.AppModuleBasic{},
 		bank.AppModuleBasic{},
 		capability.AppModuleBasic{},
 		staking.AppModuleBasic{},
@@ -311,7 +309,7 @@ func New(
 		authtypes.StoreKey, authz.ModuleName, banktypes.StoreKey, stakingtypes.StoreKey, crisistypes.StoreKey,
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey, govtypes.StoreKey,
 		paramstypes.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey, evidencetypes.StoreKey,
-		capabilitytypes.StoreKey, group.StoreKey, nft.StoreKey,
+		capabilitytypes.StoreKey, group.StoreKey, nft.StoreKey, consensusparamtypes.StoreKey,
 		// ibc
 		ibcexported.StoreKey, ibcfeetypes.StoreKey,
 		icahosttypes.StoreKey, icacontrollertypes.StoreKey,
@@ -337,6 +335,13 @@ func New(
 		tkeys:             tkeys,
 		memKeys:           memKeys,
 	}
+
+	app.ParamsKeeper = initParamsKeeper(
+		appCodec,
+		legacyAmino,
+		app.keys[paramstypes.StoreKey],
+		app.tkeys[paramstypes.TStoreKey],
+	)
 
 	// set the BaseApp's parameter store
 	app.ConsensusParamsKeeper = consensusparamkeeper.NewKeeper(
@@ -500,7 +505,8 @@ func New(
 	)
 
 	app.ICAHostKeeper = icahostkeeper.NewKeeper(
-		appCodec, keys[icahosttypes.StoreKey],
+		appCodec,
+		keys[icahosttypes.StoreKey],
 		app.GetSubspace(icahosttypes.SubModuleName),
 		app.IBCFeeKeeper,
 		app.IBCKeeper.ChannelKeeper,
@@ -578,11 +584,8 @@ func New(
 		govConfig,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	app.GovKeeper = *govKeeper.SetHooks(
-		govtypes.NewMultiGovHooks(
-		// register the governance hooks
-		),
-	)
+	govKeeper.SetLegacyRouter(govRouter)
+	app.GovKeeper = *govKeeper
 
 	/**** IBC Routing ****/
 
@@ -830,8 +833,6 @@ func New(
 	app.ScopedICAHostKeeper = scopedICAHostKeeper
 	app.ScopedICAControllerKeeper = scopedICAControllerKeeper
 
-	app.setPostHandler()
-
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	app.sm = module.NewSimulationManager(
 		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
@@ -858,17 +859,6 @@ func New(
 	app.sm.RegisterStoreDecoders()
 
 	return app
-}
-
-func (app *App) setPostHandler() {
-	postHandler, err := posthandler.NewPostHandler(
-		posthandler.HandlerOptions{},
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	app.SetPostHandler(postHandler)
 }
 
 // Name returns the name of the App

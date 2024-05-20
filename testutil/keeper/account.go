@@ -7,8 +7,9 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/nft"
-	typesparams "github.com/cosmos/cosmos-sdk/x/params/types"
 	scorumtypes "github.com/scorum/cosmos-network/x/scorum/types"
 )
 
@@ -18,23 +19,16 @@ func AccountKeeper(t testing.TB, ctx TestContext) keeper.AccountKeeper {
 
 	types.RegisterInterfaces(registry)
 
-	paramsSubspace := typesparams.NewSubspace(cdc,
-		codec.NewLegacyAmino(),
-		ctx.KVKeys[typesparams.StoreKey],
-		ctx.TKeys[typesparams.TStoreKey],
-		types.ModuleName,
-	)
-
 	k := keeper.NewAccountKeeper(
 		cdc,
 		ctx.KVKeys[types.StoreKey],
-		paramsSubspace,
 		types.ProtoBaseAccount,
 		map[string][]string{
 			scorumtypes.ModuleName: {types.Minter, types.Burner},
 			nft.ModuleName:         nil,
 		},
 		"scorum",
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
 	// Initialize params

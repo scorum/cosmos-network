@@ -6,6 +6,6 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 )
 
-func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
-	return []simtypes.ParamChange{}
+func ParamChanges(r *rand.Rand) []simtypes.LegacyParamChange {
+	return []simtypes.LegacyParamChange{}
 }

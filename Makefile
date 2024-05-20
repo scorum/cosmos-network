@@ -35,8 +35,8 @@ install: go.sum
 	@echo "DONE"
 
 
-OS := $(shell go env | grep GOOS | sed -E 's:.*="(.*)":\1:')
-ARCH := $(shell go env | grep GOARCH | sed -E 's:.*="(.*)":\1:')
+OS := $(shell go env | grep GOOS | sed -E "s:.*='(.*)':\1:")
+ARCH := $(shell go env | grep GOARCH | sed -E "s:.*='(.*)':\1:")
 
 .PHONY: build
 build:
@@ -161,7 +161,7 @@ local-init:
 	$(V)rm -rf test
 
 	@echo initalizing test chain
-	$(V)$(SCORUMD) init --staking-bond-denom nsp local-network
+	$(V)$(SCORUMD) init --default-denom nsp local-network
 
 	@echo adding key 'test'
 	$(V)$(SCORUMD) keys add test --keyring-backend test --keyring-dir test
