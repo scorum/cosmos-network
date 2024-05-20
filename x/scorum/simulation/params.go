@@ -10,9 +10,9 @@ import (
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
-func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
-	return []simtypes.ParamChange{
-		simulation.NewSimParamChange(types.ModuleName, string(types.KeyGasLimit),
+func ParamChanges(r *rand.Rand) []simtypes.LegacyParamChange {
+	return []simtypes.LegacyParamChange{
+		simulation.NewSimLegacyParamChange(types.ModuleName, string(types.KeyGasLimit),
 			func(r *rand.Rand) string {
 				return fmt.Sprintf(
 					`{"int": "%d"}`,
@@ -20,7 +20,7 @@ func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
 				)
 			},
 		),
-		simulation.NewSimParamChange(types.ModuleName, string(types.KeyGasUnconditionedAmount),
+		simulation.NewSimLegacyParamChange(types.ModuleName, string(types.KeyGasUnconditionedAmount),
 			func(r *rand.Rand) string {
 				return fmt.Sprintf(
 					`{"int": "%d"}`,
@@ -28,7 +28,7 @@ func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
 				)
 			},
 		),
-		simulation.NewSimParamChange(types.ModuleName, string(types.KeyGasAdjustCoefficient),
+		simulation.NewSimLegacyParamChange(types.ModuleName, string(types.KeyGasAdjustCoefficient),
 			func(r *rand.Rand) string {
 				return fmt.Sprintf(
 					`{"dec": "%s"}`,
@@ -36,7 +36,7 @@ func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
 				)
 			},
 		),
-		simulation.NewSimParamChange(types.ModuleName, string(types.KeySPWithdrawalTotalPeriods),
+		simulation.NewSimLegacyParamChange(types.ModuleName, string(types.KeySPWithdrawalTotalPeriods),
 			func(r *rand.Rand) string {
 				return fmt.Sprintf(
 					`%d`,
@@ -44,7 +44,7 @@ func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
 				)
 			},
 		),
-		simulation.NewSimParamChange(types.ModuleName, string(types.KeySPWithdrawalPeriodDurationSeconds),
+		simulation.NewSimLegacyParamChange(types.ModuleName, string(types.KeySPWithdrawalPeriodDurationSeconds),
 			func(r *rand.Rand) string {
 				return fmt.Sprintf(
 					`%d`,

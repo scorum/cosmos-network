@@ -5,7 +5,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
-	"golang.org/x/exp/slices"
 )
 
 var gasConsumedAddressesPrefix = []byte("gas_consumed")
@@ -75,7 +74,7 @@ func (k Keeper) GetAverageSPBalance(ctx sdk.Context) sdk.Dec {
 	supervisors := k.GetParams(ctx).Supervisors
 	total, size := sdk.ZeroDec(), int64(0)
 	k.bankKeeper.IterateAllBalances(ctx, func(addr sdk.AccAddress, coin sdk.Coin) (stop bool) {
-		if slices.Contains(supervisors, addr.String()) {
+		if contains(supervisors, addr.String()) {
 			return false
 		}
 

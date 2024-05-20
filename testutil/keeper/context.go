@@ -3,6 +3,8 @@ package keeper
 import (
 	"testing"
 
+	ibcexported "github.com/cosmos/ibc-go/v7/modules/core/exported"
+
 	ibcnfttransfertypes "github.com/bianjieai/nft-transfer/types"
 	tmdb "github.com/cometbft/cometbft-db"
 	"github.com/cometbft/cometbft/libs/log"
@@ -28,7 +30,6 @@ import (
 	icacontrollertypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/types"
 	icahosttypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/host/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
-	ibchost "github.com/cosmos/ibc-go/v7/modules/core/24-host"
 	aviatrixmoduletypes "github.com/scorum/cosmos-network/x/aviatrix/types"
 	scorumtypes "github.com/scorum/cosmos-network/x/scorum/types"
 	"github.com/stretchr/testify/require"
@@ -46,7 +47,7 @@ func GetContext(t testing.TB) TestContext {
 	keys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey, authz.ModuleName, banktypes.StoreKey, stakingtypes.StoreKey,
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey, govtypes.StoreKey,
-		paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey, evidencetypes.StoreKey,
+		paramstypes.StoreKey, ibcexported.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey, evidencetypes.StoreKey,
 		ibctransfertypes.StoreKey, icahosttypes.StoreKey, capabilitytypes.StoreKey, group.StoreKey,
 		icacontrollertypes.StoreKey, nft.StoreKey, scorumtypes.StoreKey, aviatrixmoduletypes.StoreKey,
 		ibcnfttransfertypes.StoreKey,
