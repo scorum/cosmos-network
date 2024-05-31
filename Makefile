@@ -9,7 +9,7 @@ COSMOS_PKG_VERSION := $(shell go list -m github.com/cosmos/cosmos-sdk | sed 's:.
 DOCKER := $(shell which docker)
 
 LINTER_NAME := golangci-lint
-LINTER_VERSION := v1.51.2
+LINTER_VERSION := v1.59.0
 
 CONTAINER_PROTO_VERSION=0.13.0
 CONTAINER_PROTO_IMAGE=ghcr.io/cosmos/proto-builder:$(CONTAINER_PROTO_VERSION)
