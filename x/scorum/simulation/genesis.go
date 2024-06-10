@@ -3,6 +3,8 @@ package simulation
 import (
 	"math/rand"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
@@ -22,6 +24,11 @@ func GenerateGenesisState(simState *module.SimulationState) {
 	}
 	scorumGenesis.Params.SpWithdrawalPeriodDurationSeconds = genSpWithdrawalPeriodDurationSeconds(simState.Rand)
 	scorumGenesis.Params.SpWithdrawalTotalPeriods = genSpWithdrawalTotalPeriods(simState.Rand)
+
+	if len(accs) > 0 {
+		scorumGenesis.Params.ValidatorsReward.PoolAddress = accs[0]
+		scorumGenesis.Params.ValidatorsReward.BlockReward = sdk.Coin{Amount: sdk.NewInt(1), Denom: types.SCRDenom}
+	}
 
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&scorumGenesis)
 }
