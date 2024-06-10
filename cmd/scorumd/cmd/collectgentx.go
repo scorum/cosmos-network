@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/scorum/cosmos-network/app"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/types"
@@ -18,7 +20,12 @@ import (
 )
 
 func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultNodeHome string) *cobra.Command {
-	cmd := genutilcli.CollectGenTxsCmd(genBalIterator, defaultNodeHome)
+	gentxModule, ok := app.ModuleBasics[genutiltypes.ModuleName].(genutil.AppModuleBasic)
+	if !ok {
+		panic(fmt.Errorf("expected %s module to be an instance of type %T", genutiltypes.ModuleName, genutil.AppModuleBasic{}))
+	}
+
+	cmd := genutilcli.CollectGenTxsCmd(genBalIterator, defaultNodeHome, gentxModule.GenTxValidator)
 
 	cmd.PreRunE = func(cmd *cobra.Command, args []string) error {
 		clientCtx := client.GetClientContextFromCmd(cmd)
@@ -31,10 +38,10 @@ func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultN
 		}
 
 		bankGenState := banktypes.GetGenesisStateFromAppState(cdc, appState)
-		bankGenState.Params.SendEnabled = append(
-			bankGenState.Params.SendEnabled,
-			&banktypes.SendEnabled{Denom: scorumtypes.SPDenom, Enabled: false},
-			&banktypes.SendEnabled{Denom: scorumtypes.GasDenom, Enabled: false},
+		bankGenState.SendEnabled = append(
+			bankGenState.SendEnabled,
+			banktypes.SendEnabled{Denom: scorumtypes.SPDenom, Enabled: false},
+			banktypes.SendEnabled{Denom: scorumtypes.GasDenom, Enabled: false},
 		)
 
 		bankGenStateBz, err := cdc.MarshalJSON(bankGenState)

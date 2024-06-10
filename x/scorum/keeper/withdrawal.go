@@ -5,10 +5,10 @@ import (
 	"encoding/binary"
 	"fmt"
 
+	"github.com/cometbft/cometbft/libs/json"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
-	"github.com/tendermint/tendermint/libs/json"
 )
 
 func (k Keeper) ListAllWithdrawals(ctx sdk.Context) []types.SPWithdrawal {

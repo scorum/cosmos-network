@@ -3,11 +3,11 @@ package keeper
 import (
 	"fmt"
 
+	"github.com/cometbft/cometbft/libs/log"
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
@@ -80,4 +80,14 @@ func (k Keeper) Burn(ctx sdk.Context, addr sdk.AccAddress, coin sdk.Coin) error 
 	}
 
 	return nil
+}
+
+func contains[T comparable](s []T, v T) bool {
+	for i := range s {
+		if s[i] == v {
+			return true
+		}
+	}
+
+	return false
 }

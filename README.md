@@ -58,6 +58,7 @@ rm -rf ~/.scorum
 To build project you should have:
 - go >= 1.19
 - protobuf
+- buf
 - golangci-lint
 
 ### Guide
@@ -82,7 +83,16 @@ make install-linter
 
 #### Generate proto
 ```shell
-make generate
+make generate-proto
+```
+
+#### Generate swagger
+To generate swagger you need:
+- buf
+- cloned to gopath github.com/cosmos/cosmos-sdk with correct version
+- go-swagger-merger
+```shell
+make generate-proto-swagger
 ```
 
 #### Run tests

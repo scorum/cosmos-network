@@ -11,11 +11,32 @@ definitions:
       that strive for the maximum ease of maintainability should be able to describe
       their state machine with a config object alone.
     properties:
+      golang_bindings:
+        description: |-
+          golang_bindings specifies explicit interface to implementation type bindings which
+          depinject uses to resolve interface inputs to provider functions.  The scope of this
+          field's configuration is global (not module specific).
+        items:
+          $ref: '#/definitions/cosmos.app.v1alpha1.GolangBinding'
+        type: array
       modules:
         description: modules are the module configurations for the app.
         items:
           $ref: '#/definitions/cosmos.app.v1alpha1.ModuleConfig'
         type: array
+    type: object
+  cosmos.app.v1alpha1.GolangBinding:
+    description: GolangBinding is an explicit interface type to implementing type
+      binding for dependency injection.
+    properties:
+      implementation:
+        title: implementation is the implementing type which will be supplied when
+          an input of type interface is requested
+        type: string
+      interface_type:
+        title: interface_type is the interface type which will be bound to a specific
+          implementation type
+        type: string
     type: object
   cosmos.app.v1alpha1.ModuleConfig:
     description: ModuleConfig is a module configuration for an app.
@@ -25,6 +46,14 @@ definitions:
         description: |-
           config is the config object for the module. Module config messages should
           define a ModuleDescriptor using the cosmos.app.v1alpha1.is_module extension.
+      golang_bindings:
+        description: |-
+          golang_bindings specifies explicit interface to implementation type bindings which
+          depinject uses to resolve interface inputs to provider functions.  The scope of this
+          field's configuration is module specific.
+        items:
+          $ref: '#/definitions/cosmos.app.v1alpha1.GolangBinding'
+        type: array
       name:
         description: |-
           name is the unique name of the module within the app. It should be a name
@@ -65,6 +94,23 @@ definitions:
         format: byte
         type: string
     type: object
+  cosmos.auth.v1beta1.BaseAccount:
+    description: |-
+      BaseAccount defines a base account type. It contains all the necessary fields
+      for basic account functionality. Any custom account type should extend this
+      type for additional functionality (e.g. vesting).
+    properties:
+      account_number:
+        format: uint64
+        type: string
+      address:
+        type: string
+      pub_key:
+        $ref: '#/definitions/google.protobuf.Any'
+      sequence:
+        format: uint64
+        type: string
+    type: object
   cosmos.auth.v1beta1.Bech32PrefixResponse:
     description: |-
       Bech32PrefixResponse is the response type for Bech32Prefix rpc method.
@@ -100,6 +146,16 @@ definitions:
         type: string
     title: QueryAccountAddressByIDResponse is the response type for AccountAddressByID
       rpc method
+    type: object
+  cosmos.auth.v1beta1.QueryAccountInfoResponse:
+    description: |-
+      QueryAccountInfoResponse is the Query/AccountInfo response type.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      info:
+        $ref: '#/definitions/cosmos.auth.v1beta1.BaseAccount'
+        description: info is the account info which is represented by BaseAccount.
     type: object
   cosmos.auth.v1beta1.QueryAccountResponse:
     description: QueryAccountResponse is the response type for the Query/Account RPC
@@ -219,6 +275,170 @@ definitions:
         $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
         description: pagination defines an pagination for the response.
     type: object
+  cosmos.autocli.v1.AppOptionsResponse:
+    description: AppOptionsResponse is the RemoteInfoService/AppOptions response type.
+    properties:
+      module_options:
+        additionalProperties:
+          $ref: '#/definitions/cosmos.autocli.v1.ModuleOptions'
+        description: module_options is a map of module name to autocli module options.
+        type: object
+    type: object
+  cosmos.autocli.v1.FlagOptions:
+    description: |-
+      FlagOptions are options for flags generated from rpc request fields.
+      By default, all request fields are configured as flags based on the
+      kebab-case name of the field. Fields can be turned into positional arguments
+      instead by using RpcCommandOptions.positional_args.
+    properties:
+      default_value:
+        description: default_value is the default value as text.
+        type: string
+      deprecated:
+        description: deprecated is the usage text to show if this flag is deprecated.
+        type: string
+      hidden:
+        title: hidden hides the flag from help/usage text
+        type: boolean
+      name:
+        description: name is an alternate name to use for the field flag.
+        type: string
+      no_opt_default_value:
+        description: default value is the default value as text if the flag is used
+          without any value.
+        type: string
+      shorthand:
+        description: shorthand is a one-letter abbreviated flag.
+        type: string
+      shorthand_deprecated:
+        description: shorthand_deprecated is the usage text to show if the shorthand
+          of this flag is deprecated.
+        type: string
+      usage:
+        description: usage is the help message.
+        type: string
+    type: object
+  cosmos.autocli.v1.ModuleOptions:
+    description: ModuleOptions describes the CLI options for a Cosmos SDK module.
+    properties:
+      query:
+        $ref: '#/definitions/cosmos.autocli.v1.ServiceCommandDescriptor'
+        description: query describes the tx command for the module.
+      tx:
+        $ref: '#/definitions/cosmos.autocli.v1.ServiceCommandDescriptor'
+        description: tx describes the tx command for the module.
+    type: object
+  cosmos.autocli.v1.PositionalArgDescriptor:
+    description: PositionalArgDescriptor describes a positional argument.
+    properties:
+      proto_field:
+        description: |-
+          proto_field specifies the proto field to use as the positional arg. Any
+          fields used as positional args will not have a flag generated.
+        type: string
+      varargs:
+        description: |-
+          varargs makes a positional parameter a varargs parameter. This can only be
+          applied to last positional parameter and the proto_field must a repeated
+          field.
+        type: boolean
+    type: object
+  cosmos.autocli.v1.RpcCommandOptions:
+    description: |-
+      RpcCommandOptions specifies options for commands generated from protobuf
+      rpc methods.
+    properties:
+      alias:
+        description: alias is an array of aliases that can be used instead of the
+          first word in Use.
+        items:
+          type: string
+        type: array
+      deprecated:
+        description: deprecated defines, if this command is deprecated and should
+          print this string when used.
+        type: string
+      example:
+        description: example is examples of how to use the command.
+        type: string
+      flag_options:
+        additionalProperties:
+          $ref: '#/definitions/cosmos.autocli.v1.FlagOptions'
+        description: |-
+          flag_options are options for flags generated from rpc request fields.
+          By default all request fields are configured as flags. They can
+          also be configured as positional args instead using positional_args.
+        type: object
+      long:
+        description: long is the long message shown in the 'help <this-command>' output.
+        type: string
+      positional_args:
+        description: positional_args specifies positional arguments for the command.
+        items:
+          $ref: '#/definitions/cosmos.autocli.v1.PositionalArgDescriptor'
+        type: array
+      rpc_method:
+        description: |-
+          rpc_method is short name of the protobuf rpc method that this command is
+          generated from.
+        type: string
+      short:
+        description: short is the short description shown in the 'help' output.
+        type: string
+      skip:
+        description: skip specifies whether to skip this rpc method when generating
+          commands.
+        type: boolean
+      suggest_for:
+        description: |-
+          suggest_for is an array of command names for which this command will be suggested -
+          similar to aliases but only suggests.
+        items:
+          type: string
+        type: array
+      use:
+        description: |-
+          use is the one-line usage method. It also allows specifying an alternate
+          name for the command as the first word of the usage text.
+
+          By default the name of an rpc command is the kebab-case short name of the
+          rpc method.
+        type: string
+      version:
+        description: |-
+          version defines the version for this command. If this value is non-empty and the command does not
+          define a "version" flag, a "version" boolean flag will be added to the command and, if specified,
+          will print content of the "Version" variable. A shorthand "v" flag will also be added if the
+          command does not define one.
+        type: string
+    type: object
+  cosmos.autocli.v1.ServiceCommandDescriptor:
+    description: ServiceCommandDescriptor describes a CLI command based on a protobuf
+      service.
+    properties:
+      rpc_command_options:
+        description: |-
+          rpc_command_options are options for commands generated from rpc methods.
+          If no options are specified for a given rpc method on the service, a
+          command will be generated for that method with the default options.
+        items:
+          $ref: '#/definitions/cosmos.autocli.v1.RpcCommandOptions'
+        type: array
+      service:
+        description: |-
+          service is the fully qualified name of the protobuf service to build
+          the command from. It can be left empty if sub_commands are used instead
+          which may be the case if a module provides multiple tx and/or query services.
+        type: string
+      sub_commands:
+        additionalProperties:
+          $ref: '#/definitions/cosmos.autocli.v1.ServiceCommandDescriptor'
+        description: |-
+          sub_commands is a map of optional sub-commands for this command based on
+          different protobuf services. The map key is used as the name of the
+          sub-command.
+        type: object
+    type: object
   cosmos.bank.v1beta1.DenomOwner:
     description: |-
       DenomOwner defines structure representing an account that owns or holds a
@@ -310,6 +530,12 @@ definitions:
       default_send_enabled:
         type: boolean
       send_enabled:
+        description: |-
+          Deprecated: Use of SendEnabled in params is deprecated.
+          For genesis, use the newly added send_enabled field in the genesis object.
+          Storage, lookup, and manipulation of this information is now in the keeper.
+
+          As of cosmos-sdk 0.47, this only exists for backwards compatibility of genesis files.
         items:
           $ref: '#/definitions/cosmos.bank.v1beta1.SendEnabled'
         type: array
@@ -381,6 +607,33 @@ definitions:
     properties:
       params:
         $ref: '#/definitions/cosmos.bank.v1beta1.Params'
+    type: object
+  cosmos.bank.v1beta1.QuerySendEnabledResponse:
+    description: |-
+      QuerySendEnabledResponse defines the RPC response of a SendEnable query.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        description: |-
+          pagination defines the pagination in the response. This field is only
+          populated if the denoms field in the request is empty.
+      send_enabled:
+        items:
+          $ref: '#/definitions/cosmos.bank.v1beta1.SendEnabled'
+        type: array
+    type: object
+  cosmos.bank.v1beta1.QuerySpendableBalanceByDenomResponse:
+    description: |-
+      QuerySpendableBalanceByDenomResponse defines the gRPC response structure for
+      querying an account's spendable balance for a specific denom.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      balance:
+        $ref: '#/definitions/cosmos.base.v1beta1.Coin'
+        description: balance is the balance of the coin.
     type: object
   cosmos.bank.v1beta1.QuerySpendableBalancesResponse:
     description: |-
@@ -655,8 +908,7 @@ definitions:
     type: object
   cosmos.base.tendermint.v1beta1.ABCIQueryResponse:
     description: |-
-      ABCIQueryResponse defines the response structure for the ABCIQuery gRPC
-      query.
+      ABCIQueryResponse defines the response structure for the ABCIQuery gRPC query.
 
       Note: This type is a duplicate of the ResponseQuery proto type defined in
       Tendermint.
@@ -700,8 +952,7 @@ definitions:
         $ref: '#/definitions/tendermint.types.Commit'
     type: object
   cosmos.base.tendermint.v1beta1.GetBlockByHeightResponse:
-    description: |-
-      GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight
+    description: GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight
       RPC method.
     properties:
       block:
@@ -714,9 +965,8 @@ definitions:
         title: 'Since: cosmos-sdk 0.47'
     type: object
   cosmos.base.tendermint.v1beta1.GetLatestBlockResponse:
-    description: |-
-      GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC
-      method.
+    description: GetLatestBlockResponse is the response type for the Query/GetLatestBlock
+      RPC method.
     properties:
       block:
         $ref: '#/definitions/tendermint.types.Block'
@@ -728,9 +978,8 @@ definitions:
         title: 'Since: cosmos-sdk 0.47'
     type: object
   cosmos.base.tendermint.v1beta1.GetLatestValidatorSetResponse:
-    description: |-
-      GetLatestValidatorSetResponse is the response type for the
-      Query/GetValidatorSetByHeight RPC method.
+    description: GetLatestValidatorSetResponse is the response type for the Query/GetValidatorSetByHeight
+      RPC method.
     properties:
       block_height:
         format: int64
@@ -744,9 +993,8 @@ definitions:
         type: array
     type: object
   cosmos.base.tendermint.v1beta1.GetNodeInfoResponse:
-    description: |-
-      GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC
-      method.
+    description: GetNodeInfoResponse is the response type for the Query/GetNodeInfo
+      RPC method.
     properties:
       application_version:
         $ref: '#/definitions/cosmos.base.tendermint.v1beta1.VersionInfo'
@@ -761,9 +1009,8 @@ definitions:
         type: boolean
     type: object
   cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightResponse:
-    description: |-
-      GetValidatorSetByHeightResponse is the response type for the
-      Query/GetValidatorSetByHeight RPC method.
+    description: GetValidatorSetByHeightResponse is the response type for the Query/GetValidatorSetByHeight
+      RPC method.
     properties:
       block_height:
         format: int64
@@ -843,11 +1090,10 @@ definitions:
   cosmos.base.tendermint.v1beta1.ProofOp:
     description: |-
       ProofOp defines an operation used for calculating Merkle root. The data could
-      be arbitrary format, providing nessecary data for example neighbouring node
+      be arbitrary format, providing necessary data for example neighbouring node
       hash.
 
-      Note: This type is a duplicate of the ProofOp proto type defined in
-      Tendermint.
+      Note: This type is a duplicate of the ProofOp proto type defined in Tendermint.
     properties:
       data:
         format: byte
@@ -862,8 +1108,7 @@ definitions:
     description: |-
       ProofOps is Merkle proof defined by the list of ProofOps.
 
-      Note: This type is a duplicate of the ProofOps proto type defined in
-      Tendermint.
+      Note: This type is a duplicate of the ProofOps proto type defined in Tendermint.
     properties:
       ops:
         items:
@@ -943,6 +1188,17 @@ definitions:
       int:
         type: string
     type: object
+  cosmos.consensus.v1.QueryParamsResponse:
+    description: QueryParamsResponse defines the response type for querying x/consensus
+      parameters.
+    properties:
+      params:
+        $ref: '#/definitions/tendermint.types.ConsensusParams'
+        description: |-
+          params are the tendermint consensus params stored in the consensus module.
+          Please note that `params.version` is not populated in this response, it is
+          tracked separately in the x/upgrade module.
+    type: object
   cosmos.crypto.multisig.v1beta1.CompactBitArray:
     description: |-
       CompactBitArray is an implementation of a space efficient bit array.
@@ -973,8 +1229,14 @@ definitions:
     description: Params defines the set of params for the distribution module.
     properties:
       base_proposer_reward:
+        description: |-
+          Deprecated: The base_proposer_reward field is deprecated and is no longer used
+          in the x/distribution module's reward mechanism.
         type: string
       bonus_proposer_reward:
+        description: |-
+          Deprecated: The bonus_proposer_reward field is deprecated and is no longer used
+          in the x/distribution module's reward mechanism.
         type: string
       community_tax:
         type: string
@@ -1051,10 +1313,28 @@ definitions:
     properties:
       commission:
         $ref: '#/definitions/cosmos.distribution.v1beta1.ValidatorAccumulatedCommission'
-        description: commission defines the commision the validator received.
+        description: commission defines the commission the validator received.
     title: |-
       QueryValidatorCommissionResponse is the response type for the
       Query/ValidatorCommission RPC method
+    type: object
+  cosmos.distribution.v1beta1.QueryValidatorDistributionInfoResponse:
+    description: QueryValidatorDistributionInfoResponse is the response type for the
+      Query/ValidatorDistributionInfo RPC method.
+    properties:
+      commission:
+        description: commission defines the commission the validator received.
+        items:
+          $ref: '#/definitions/cosmos.base.v1beta1.DecCoin'
+        type: array
+      operator_address:
+        description: operator_address defines the validator operator address.
+        type: string
+      self_bond_rewards:
+        description: self_bond_rewards defines the self delegations rewards.
+        items:
+          $ref: '#/definitions/cosmos.base.v1beta1.DecCoin'
+        type: array
     type: object
   cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsResponse:
     description: |-
@@ -1190,12 +1470,15 @@ definitions:
       proposal.
     properties:
       amount:
+        description: amount to be deposited by depositor.
         items:
           $ref: '#/definitions/cosmos.base.v1beta1.Coin'
         type: array
       depositor:
+        description: depositor defines the deposit addresses from the proposals.
         type: string
       proposal_id:
+        description: proposal_id defines the unique id of the proposal.
         format: uint64
         type: string
     type: object
@@ -1205,7 +1488,7 @@ definitions:
       max_deposit_period:
         description: |-
           Maximum period for Atom holders to deposit on a proposal. Initial value: 2
-           months.
+          months.
         type: string
       min_deposit:
         description: Minimum deposit for a proposal to enter voting period.
@@ -1213,10 +1496,58 @@ definitions:
           $ref: '#/definitions/cosmos.base.v1beta1.Coin'
         type: array
     type: object
+  cosmos.gov.v1.Params:
+    description: |-
+      Params defines the parameters for the x/gov module.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      burn_proposal_deposit_prevote:
+        title: burn deposits if the proposal does not enter voting period
+        type: boolean
+      burn_vote_quorum:
+        title: burn deposits if a proposal does not meet quorum
+        type: boolean
+      burn_vote_veto:
+        title: burn deposits if quorum with vote type no_veto is met
+        type: boolean
+      max_deposit_period:
+        description: |-
+          Maximum period for Atom holders to deposit on a proposal. Initial value: 2
+          months.
+        type: string
+      min_deposit:
+        description: Minimum deposit for a proposal to enter voting period.
+        items:
+          $ref: '#/definitions/cosmos.base.v1beta1.Coin'
+        type: array
+      min_initial_deposit_ratio:
+        description: The ratio representing the proportion of the deposit value that
+          must be paid at proposal submission.
+        type: string
+      quorum:
+        description: |-
+          Minimum percentage of total stake needed to vote for a result to be
+           considered valid.
+        type: string
+      threshold:
+        description: 'Minimum proportion of Yes votes for proposal to pass. Default
+          value: 0.5.'
+        type: string
+      veto_threshold:
+        description: |-
+          Minimum value of Veto votes to Total votes ratio for proposal to be
+           vetoed. Default value: 1/3.
+        type: string
+      voting_period:
+        description: Duration of the voting period.
+        type: string
+    type: object
   cosmos.gov.v1.Proposal:
     description: Proposal defines the core field members of a governance proposal.
     properties:
       deposit_end_time:
+        description: deposit_end_time is the end time for deposition.
         format: date-time
         type: string
       final_tally_result:
@@ -1226,28 +1557,48 @@ definitions:
           querying a proposal via gRPC, this field is not populated until the
           proposal's voting period has ended.
       id:
+        description: id defines the unique id of the proposal.
         format: uint64
         type: string
       messages:
+        description: messages are the arbitrary messages to be executed if the proposal
+          passes.
         items:
           $ref: '#/definitions/google.protobuf.Any'
         type: array
       metadata:
         description: metadata is any arbitrary metadata attached to the proposal.
         type: string
+      proposer:
+        description: 'Since: cosmos-sdk 0.47'
+        title: Proposer is the address of the proposal sumbitter
+        type: string
       status:
         $ref: '#/definitions/cosmos.gov.v1.ProposalStatus'
+        description: status defines the proposal status.
       submit_time:
+        description: submit_time is the time of proposal submission.
         format: date-time
         type: string
+      summary:
+        description: 'Since: cosmos-sdk 0.47'
+        title: summary is a short summary of the proposal
+        type: string
+      title:
+        description: 'Since: cosmos-sdk 0.47'
+        title: title is the title of the proposal
+        type: string
       total_deposit:
+        description: total_deposit is the total deposit on the proposal.
         items:
           $ref: '#/definitions/cosmos.base.v1beta1.Coin'
         type: array
       voting_end_time:
+        description: voting_end_time is the end time of voting on a proposal.
         format: date-time
         type: string
       voting_start_time:
+        description: voting_start_time is the starting time to vote on a proposal.
         format: date-time
         type: string
     type: object
@@ -1288,6 +1639,7 @@ definitions:
       RPC method.
     properties:
       deposits:
+        description: deposits defines the requested deposits.
         items:
           $ref: '#/definitions/cosmos.gov.v1.Deposit'
         type: array
@@ -1301,13 +1653,25 @@ definitions:
     properties:
       deposit_params:
         $ref: '#/definitions/cosmos.gov.v1.DepositParams'
-        description: deposit_params defines the parameters related to deposit.
+        description: |-
+          Deprecated: Prefer to use `params` instead.
+          deposit_params defines the parameters related to deposit.
+      params:
+        $ref: '#/definitions/cosmos.gov.v1.Params'
+        description: |-
+          params defines all the paramaters of x/gov module.
+
+          Since: cosmos-sdk 0.47
       tally_params:
         $ref: '#/definitions/cosmos.gov.v1.TallyParams'
-        description: tally_params defines the parameters related to tally.
+        description: |-
+          Deprecated: Prefer to use `params` instead.
+          tally_params defines the parameters related to tally.
       voting_params:
         $ref: '#/definitions/cosmos.gov.v1.VotingParams'
-        description: voting_params defines the parameters related to voting.
+        description: |-
+          Deprecated: Prefer to use `params` instead.
+          voting_params defines the parameters related to voting.
     type: object
   cosmos.gov.v1.QueryProposalResponse:
     description: QueryProposalResponse is the response type for the Query/Proposal
@@ -1315,6 +1679,7 @@ definitions:
     properties:
       proposal:
         $ref: '#/definitions/cosmos.gov.v1.Proposal'
+        description: proposal is the requested governance proposal.
     type: object
   cosmos.gov.v1.QueryProposalsResponse:
     description: |-
@@ -1325,6 +1690,7 @@ definitions:
         $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
         description: pagination defines the pagination in the response.
       proposals:
+        description: proposals defines all the requested governance proposals.
         items:
           $ref: '#/definitions/cosmos.gov.v1.Proposal'
         type: array
@@ -1342,7 +1708,7 @@ definitions:
     properties:
       vote:
         $ref: '#/definitions/cosmos.gov.v1.Vote'
-        description: vote defined the queried vote.
+        description: vote defines the queried vote.
     type: object
   cosmos.gov.v1.QueryVotesResponse:
     description: QueryVotesResponse is the response type for the Query/Votes RPC method.
@@ -1351,7 +1717,7 @@ definitions:
         $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
         description: pagination defines the pagination in the response.
       votes:
-        description: votes defined the queried votes.
+        description: votes defines the queried votes.
         items:
           $ref: '#/definitions/cosmos.gov.v1.Vote'
         type: array
@@ -1362,7 +1728,7 @@ definitions:
       quorum:
         description: |-
           Minimum percentage of total stake needed to vote for a result to be
-           considered valid.
+          considered valid.
         type: string
       threshold:
         description: 'Minimum proportion of Yes votes for proposal to pass. Default
@@ -1371,19 +1737,23 @@ definitions:
       veto_threshold:
         description: |-
           Minimum value of Veto votes to Total votes ratio for proposal to be
-           vetoed. Default value: 1/3.
+          vetoed. Default value: 1/3.
         type: string
     type: object
   cosmos.gov.v1.TallyResult:
     description: TallyResult defines a standard tally for a governance proposal.
     properties:
       abstain_count:
+        description: abstain_count is the number of abstain votes on a proposal.
         type: string
       no_count:
+        description: no_count is the number of no votes on a proposal.
         type: string
       no_with_veto_count:
+        description: no_with_veto_count is the number of no with veto votes on a proposal.
         type: string
       yes_count:
+        description: yes_count is the number of yes votes on a proposal.
         type: string
     type: object
   cosmos.gov.v1.Vote:
@@ -1395,13 +1765,16 @@ definitions:
         description: metadata is any  arbitrary metadata to attached to the vote.
         type: string
       options:
+        description: options is the weighted vote options.
         items:
           $ref: '#/definitions/cosmos.gov.v1.WeightedVoteOption'
         type: array
       proposal_id:
+        description: proposal_id defines the unique id of the proposal.
         format: uint64
         type: string
       voter:
+        description: voter is the voter address of the proposal.
         type: string
     type: object
   cosmos.gov.v1.VoteOption:
@@ -1425,7 +1798,7 @@ definitions:
     description: VotingParams defines the params for voting on governance proposals.
     properties:
       voting_period:
-        description: Length of the voting period.
+        description: Duration of the voting period.
         type: string
     type: object
   cosmos.gov.v1.WeightedVoteOption:
@@ -1433,7 +1806,10 @@ definitions:
     properties:
       option:
         $ref: '#/definitions/cosmos.gov.v1.VoteOption'
+        description: option defines the valid vote options, it must not contain duplicate
+          vote options.
       weight:
+        description: weight is the vote weight associated with the vote option.
         type: string
     type: object
   cosmos.gov.v1beta1.Deposit:
@@ -1442,12 +1818,15 @@ definitions:
       proposal.
     properties:
       amount:
+        description: amount to be deposited by depositor.
         items:
           $ref: '#/definitions/cosmos.base.v1beta1.Coin'
         type: array
       depositor:
+        description: depositor defines the deposit addresses from the proposals.
         type: string
       proposal_id:
+        description: proposal_id defines the unique id of the proposal.
         format: uint64
         type: string
     type: object
@@ -1457,7 +1836,7 @@ definitions:
       max_deposit_period:
         description: |-
           Maximum period for Atom holders to deposit on a proposal. Initial value: 2
-           months.
+          months.
         type: string
       min_deposit:
         description: Minimum deposit for a proposal to enter voting period.
@@ -1470,7 +1849,9 @@ definitions:
     properties:
       content:
         $ref: '#/definitions/google.protobuf.Any'
+        description: content is the proposal's content.
       deposit_end_time:
+        description: deposit_end_time is the end time for deposition.
         format: date-time
         type: string
       final_tally_result:
@@ -1480,21 +1861,27 @@ definitions:
           querying a proposal via gRPC, this field is not populated until the
           proposal's voting period has ended.
       proposal_id:
+        description: proposal_id defines the unique id of the proposal.
         format: uint64
         type: string
       status:
         $ref: '#/definitions/cosmos.gov.v1beta1.ProposalStatus'
+        description: status defines the proposal status.
       submit_time:
+        description: submit_time is the time of proposal submission.
         format: date-time
         type: string
       total_deposit:
+        description: total_deposit is the total deposit on the proposal.
         items:
           $ref: '#/definitions/cosmos.base.v1beta1.Coin'
         type: array
       voting_end_time:
+        description: voting_end_time is the end time of voting on a proposal.
         format: date-time
         type: string
       voting_start_time:
+        description: voting_start_time is the starting time to vote on a proposal.
         format: date-time
         type: string
     type: object
@@ -1535,6 +1922,7 @@ definitions:
       RPC method.
     properties:
       deposits:
+        description: deposits defines the requested deposits.
         items:
           $ref: '#/definitions/cosmos.gov.v1beta1.Deposit'
         type: array
@@ -1572,6 +1960,7 @@ definitions:
         $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
         description: pagination defines the pagination in the response.
       proposals:
+        description: proposals defines all the requested governance proposals.
         items:
           $ref: '#/definitions/cosmos.gov.v1beta1.Proposal'
         type: array
@@ -1589,7 +1978,7 @@ definitions:
     properties:
       vote:
         $ref: '#/definitions/cosmos.gov.v1beta1.Vote'
-        description: vote defined the queried vote.
+        description: vote defines the queried vote.
     type: object
   cosmos.gov.v1beta1.QueryVotesResponse:
     description: QueryVotesResponse is the response type for the Query/Votes RPC method.
@@ -1598,7 +1987,7 @@ definitions:
         $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
         description: pagination defines the pagination in the response.
       votes:
-        description: votes defined the queried votes.
+        description: votes defines the queried votes.
         items:
           $ref: '#/definitions/cosmos.gov.v1beta1.Vote'
         type: array
@@ -1609,7 +1998,7 @@ definitions:
       quorum:
         description: |-
           Minimum percentage of total stake needed to vote for a result to be
-           considered valid.
+          considered valid.
         format: byte
         type: string
       threshold:
@@ -1620,7 +2009,7 @@ definitions:
       veto_threshold:
         description: |-
           Minimum value of Veto votes to Total votes ratio for proposal to be
-           vetoed. Default value: 1/3.
+          vetoed. Default value: 1/3.
         format: byte
         type: string
     type: object
@@ -1628,12 +2017,16 @@ definitions:
     description: TallyResult defines a standard tally for a governance proposal.
     properties:
       abstain:
+        description: abstain is the number of abstain votes on a proposal.
         type: string
       "no":
+        description: no is the number of no votes on a proposal.
         type: string
       no_with_veto:
+        description: no_with_veto is the number of no with veto votes on a proposal.
         type: string
       "yes":
+        description: yes is the number of yes votes on a proposal.
         type: string
     type: object
   cosmos.gov.v1beta1.Vote:
@@ -1648,14 +2041,19 @@ definitions:
           if and only if `len(options) == 1` and that option has weight 1. In all
           other cases, this field will default to VOTE_OPTION_UNSPECIFIED.
       options:
+        description: |-
+          options is the weighted vote options.
+
+          Since: cosmos-sdk 0.43
         items:
           $ref: '#/definitions/cosmos.gov.v1beta1.WeightedVoteOption'
-        title: 'Since: cosmos-sdk 0.43'
         type: array
       proposal_id:
+        description: proposal_id defines the unique id of the proposal.
         format: uint64
         type: string
       voter:
+        description: voter is the voter address of the proposal.
         type: string
     type: object
   cosmos.gov.v1beta1.VoteOption:
@@ -1679,7 +2077,7 @@ definitions:
     description: VotingParams defines the params for voting on governance proposals.
     properties:
       voting_period:
-        description: Length of the voting period.
+        description: Duration of the voting period.
         type: string
     type: object
   cosmos.gov.v1beta1.WeightedVoteOption:
@@ -1690,7 +2088,10 @@ definitions:
     properties:
       option:
         $ref: '#/definitions/cosmos.gov.v1beta1.VoteOption'
+        description: option defines the valid vote options, it must not contain duplicate
+          vote options.
       weight:
+        description: weight is the vote weight associated with the vote option.
         type: string
     type: object
   cosmos.group.v1.GroupInfo:
@@ -1756,7 +2157,10 @@ definitions:
         format: uint64
         type: string
       metadata:
-        description: metadata is any arbitrary metadata to attached to the group policy.
+        title: |-
+          metadata is any arbitrary metadata attached to the group policy.
+          the recommended format of the metadata is to be found here:
+          https://docs.cosmos.network/v0.47/modules/group#decision-policy-1
         type: string
       version:
         description: |-
@@ -1831,7 +2235,10 @@ definitions:
           $ref: '#/definitions/google.protobuf.Any'
         type: array
       metadata:
-        description: metadata is any arbitrary metadata to attached to the proposal.
+        title: |-
+          metadata is any arbitrary metadata attached to the proposal.
+          the recommended format of the metadata is to be found here:
+          https://docs.cosmos.network/v0.47/modules/group#proposal-4
         type: string
       proposers:
         description: proposers are the account addresses of the proposers.
@@ -1846,10 +2253,18 @@ definitions:
         description: submit_time is a timestamp specifying when a proposal was submitted.
         format: date-time
         type: string
+      summary:
+        description: 'Since: cosmos-sdk 0.47'
+        title: summary is a short summary of the proposal
+        type: string
+      title:
+        description: 'Since: cosmos-sdk 0.47'
+        title: title is the title of the proposal
+        type: string
       voting_period_end:
         description: |-
           voting_period_end is the timestamp before which voting must be done.
-          Unless a successfull MsgExec is called before (to execute a proposal whose
+          Unless a successful MsgExec is called before (to execute a proposal whose
           tally is successful before the voting period ends), tallying will be done
           at this point, and the `final_tally_result`and `status` fields will be
           accordingly updated.
@@ -1899,7 +2314,7 @@ definitions:
     properties:
       info:
         $ref: '#/definitions/cosmos.group.v1.GroupInfo'
-        description: info is the GroupInfo for the group.
+        description: info is the GroupInfo of the group.
     type: object
   cosmos.group.v1.QueryGroupMembersResponse:
     description: QueryGroupMembersResponse is the Query/GroupMembersResponse response
@@ -1947,7 +2362,7 @@ definitions:
     properties:
       info:
         $ref: '#/definitions/cosmos.group.v1.GroupPolicyInfo'
-        description: info is the GroupPolicyInfo for the group policy.
+        description: info is the GroupPolicyInfo of the group policy.
     type: object
   cosmos.group.v1.QueryGroupsByAdminResponse:
     description: QueryGroupsByAdminResponse is the Query/GroupsByAdminResponse response
@@ -1968,6 +2383,21 @@ definitions:
     properties:
       groups:
         description: groups are the groups info with the provided group member.
+        items:
+          $ref: '#/definitions/cosmos.group.v1.GroupInfo'
+        type: array
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        description: pagination defines the pagination in the response.
+    type: object
+  cosmos.group.v1.QueryGroupsResponse:
+    description: |-
+      QueryGroupsResponse is the Query/Groups response type.
+
+      Since: cosmos-sdk 0.47.1
+    properties:
+      groups:
+        description: '`groups` is all the groups present in state.'
         items:
           $ref: '#/definitions/cosmos.group.v1.GroupInfo'
         type: array
@@ -2055,7 +2485,7 @@ definitions:
     description: Vote represents a vote for a proposal.
     properties:
       metadata:
-        description: metadata is any arbitrary metadata to attached to the vote.
+        description: metadata is any arbitrary metadata attached to the vote.
         type: string
       option:
         $ref: '#/definitions/cosmos.group.v1.VoteOption'
@@ -2091,7 +2521,7 @@ definitions:
     - VOTE_OPTION_NO_WITH_VETO
     type: string
   cosmos.mint.v1beta1.Params:
-    description: Params holds parameters for the mint module.
+    description: Params defines the parameters for the x/mint module.
     properties:
       blocks_per_year:
         format: uint64
@@ -2192,6 +2622,7 @@ definitions:
     properties:
       amount:
         format: uint64
+        title: amount is the number of all NFTs of a given class owned by the owner
         type: string
     title: QueryBalanceResponse is the response type for the Query/Balance RPC method
     type: object
@@ -2199,22 +2630,26 @@ definitions:
     properties:
       class:
         $ref: '#/definitions/cosmos.nft.v1beta1.Class'
+        description: class defines the class of the nft type.
     title: QueryClassResponse is the response type for the Query/Class RPC method
     type: object
   cosmos.nft.v1beta1.QueryClassesResponse:
     properties:
       classes:
+        description: class defines the class of the nft type.
         items:
           $ref: '#/definitions/cosmos.nft.v1beta1.Class'
         type: array
       pagination:
         $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        description: pagination defines the pagination in the response.
     title: QueryClassesResponse is the response type for the Query/Classes RPC method
     type: object
   cosmos.nft.v1beta1.QueryNFTResponse:
     properties:
       nft:
         $ref: '#/definitions/cosmos.nft.v1beta1.NFT'
+        title: owner is the owner address of the nft
     title: QueryNFTResponse is the response type for the Query/NFT RPC method
     type: object
   cosmos.nft.v1beta1.QueryNFTsResponse:
@@ -2222,14 +2657,17 @@ definitions:
       nfts:
         items:
           $ref: '#/definitions/cosmos.nft.v1beta1.NFT'
+        title: NFT defines the NFT
         type: array
       pagination:
         $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        description: pagination defines the pagination in the response.
     title: QueryNFTsResponse is the response type for the Query/NFTs RPC methods
     type: object
   cosmos.nft.v1beta1.QueryOwnerResponse:
     properties:
       owner:
+        title: owner is the owner address of the nft
         type: string
     title: QueryOwnerResponse is the response type for the Query/Owner RPC method
     type: object
@@ -2237,8 +2675,98 @@ definitions:
     properties:
       amount:
         format: uint64
+        title: amount is the number of all NFTs from the given class
         type: string
     title: QuerySupplyResponse is the response type for the Query/Supply RPC method
+    type: object
+  cosmos.orm.query.v1alpha1.GetResponse:
+    description: GetResponse is the Query/Get response type.
+    properties:
+      result:
+        $ref: '#/definitions/google.protobuf.Any'
+        description: |-
+          result is the result of the get query. If no value is found, the gRPC
+          status code NOT_FOUND will be returned.
+    type: object
+  cosmos.orm.query.v1alpha1.IndexValue:
+    description: IndexValue represents the value of a field in an ORM index expression.
+    properties:
+      bool:
+        description: bool specifies a value for a bool index field.
+        type: boolean
+      bytes:
+        description: bytes specifies a value for a bytes index field.
+        format: byte
+        type: string
+      duration:
+        description: duration specifies a value for a duration index field.
+        type: string
+      enum:
+        description: enum specifies a value for an enum index field.
+        type: string
+      int:
+        description: |-
+          int64 specifies a value for an int32, sfixed32, int64, or sfixed64
+          index field.
+        format: int64
+        type: string
+      str:
+        description: str specifies a value for a string index field.
+        type: string
+      timestamp:
+        description: timestamp specifies a value for a timestamp index field.
+        format: date-time
+        type: string
+      uint:
+        description: |-
+          uint specifies a value for an uint32, fixed32, uint64, or fixed64
+          index field.
+        format: uint64
+        type: string
+    type: object
+  cosmos.orm.query.v1alpha1.ListRequest.Prefix:
+    description: Prefix specifies the arguments to a prefix query.
+    properties:
+      values:
+        description: |-
+          values specifies the index values for the prefix query.
+          It is valid to special a partial prefix with fewer values than
+          the number of fields in the index.
+        items:
+          $ref: '#/definitions/cosmos.orm.query.v1alpha1.IndexValue'
+        type: array
+    type: object
+  cosmos.orm.query.v1alpha1.ListRequest.Range:
+    description: Range specifies the arguments to a range query.
+    properties:
+      end:
+        description: |-
+          end specifies the inclusive ending index values for the range query.
+          It is valid to provide fewer values than the number of fields in the
+          index.
+        items:
+          $ref: '#/definitions/cosmos.orm.query.v1alpha1.IndexValue'
+        type: array
+      start:
+        description: |-
+          start specifies the starting index values for the range query.
+          It is valid to provide fewer values than the number of fields in the
+          index.
+        items:
+          $ref: '#/definitions/cosmos.orm.query.v1alpha1.IndexValue'
+        type: array
+    type: object
+  cosmos.orm.query.v1alpha1.ListResponse:
+    description: ListResponse is the Query/List response type.
+    properties:
+      pagination:
+        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
+        description: pagination is the pagination response.
+      results:
+        description: results are the results of the query.
+        items:
+          $ref: '#/definitions/google.protobuf.Any'
+        type: array
     type: object
   cosmos.params.v1beta1.ParamChange:
     description: |-
@@ -2471,7 +2999,7 @@ definitions:
         type: array
     type: object
   cosmos.staking.v1beta1.Params:
-    description: Params defines the parameters for the staking module.
+    description: Params defines the parameters for the x/staking module.
     properties:
       bond_denom:
         description: bond_denom defines the bondable coin denomination.
@@ -2697,6 +3225,15 @@ definitions:
         description: shares_dst is the amount of destination-validator shares created
           by redelegation.
         type: string
+      unbonding_id:
+        format: uint64
+        title: Incrementing id that uniquely identifies this entry
+        type: string
+      unbonding_on_hold_ref_count:
+        format: int64
+        title: Strictly positive if this entry's unbonding has been stopped by external
+          modules
+        type: string
     type: object
   cosmos.staking.v1beta1.RedelegationEntryResponse:
     description: |-
@@ -2758,6 +3295,15 @@ definitions:
         description: initial_balance defines the tokens initially scheduled to receive
           at completion.
         type: string
+      unbonding_id:
+        format: uint64
+        title: Incrementing id that uniquely identifies this entry
+        type: string
+      unbonding_on_hold_ref_count:
+        format: int64
+        title: Strictly positive if this entry's unbonding has been stopped by external
+          modules
+        type: string
     type: object
   cosmos.staking.v1beta1.Validator:
     description: |-
@@ -2808,6 +3354,18 @@ definitions:
         description: unbonding_height defines, if unbonding, the height at which this
           validator has begun unbonding.
         format: int64
+        type: string
+      unbonding_ids:
+        items:
+          format: uint64
+          type: string
+        title: list of unbonding ids, each uniquely identifing an unbonding of this
+          validator
+        type: array
+      unbonding_on_hold_ref_count:
+        format: int64
+        title: strictly positive if this validator's unbonding has been stopped by
+          external modules
         type: string
       unbonding_time:
         description: unbonding_time defines, if unbonding, the min time for the validator
@@ -2897,8 +3455,8 @@ definitions:
       BroadcastMode specifies the broadcast mode for the TxService.Broadcast RPC method.
 
        - BROADCAST_MODE_UNSPECIFIED: zero-value for mode ordering
-       - BROADCAST_MODE_BLOCK: BROADCAST_MODE_BLOCK defines a tx broadcasting mode where the client waits for
-      the tx to be committed in a block.
+       - BROADCAST_MODE_BLOCK: DEPRECATED: use BROADCAST_MODE_SYNC instead,
+      BROADCAST_MODE_BLOCK is not supported by the SDK from v0.47.x onwards.
        - BROADCAST_MODE_SYNC: BROADCAST_MODE_SYNC defines a tx broadcasting mode where the client waits for
       a CheckTx execution response only.
        - BROADCAST_MODE_ASYNC: BROADCAST_MODE_ASYNC defines a tx broadcasting mode where the client returns
@@ -3195,6 +3753,94 @@ definitions:
           be processed by the chain
         type: string
     type: object
+  cosmos.tx.v1beta1.TxDecodeAminoRequest:
+    description: |-
+      TxDecodeAminoRequest is the request type for the Service.TxDecodeAmino
+      RPC method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      amino_binary:
+        format: byte
+        type: string
+    type: object
+  cosmos.tx.v1beta1.TxDecodeAminoResponse:
+    description: |-
+      TxDecodeAminoResponse is the response type for the Service.TxDecodeAmino
+      RPC method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      amino_json:
+        type: string
+    type: object
+  cosmos.tx.v1beta1.TxDecodeRequest:
+    description: |-
+      TxDecodeRequest is the request type for the Service.TxDecode
+      RPC method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      tx_bytes:
+        description: tx_bytes is the raw transaction.
+        format: byte
+        type: string
+    type: object
+  cosmos.tx.v1beta1.TxDecodeResponse:
+    description: |-
+      TxDecodeResponse is the response type for the
+      Service.TxDecode method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      tx:
+        $ref: '#/definitions/cosmos.tx.v1beta1.Tx'
+        description: tx is the decoded transaction.
+    type: object
+  cosmos.tx.v1beta1.TxEncodeAminoRequest:
+    description: |-
+      TxEncodeAminoRequest is the request type for the Service.TxEncodeAmino
+      RPC method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      amino_json:
+        type: string
+    type: object
+  cosmos.tx.v1beta1.TxEncodeAminoResponse:
+    description: |-
+      TxEncodeAminoResponse is the response type for the Service.TxEncodeAmino
+      RPC method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      amino_binary:
+        format: byte
+        type: string
+    type: object
+  cosmos.tx.v1beta1.TxEncodeRequest:
+    description: |-
+      TxEncodeRequest is the request type for the Service.TxEncode
+      RPC method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      tx:
+        $ref: '#/definitions/cosmos.tx.v1beta1.Tx'
+        description: tx is the transaction to encode.
+    type: object
+  cosmos.tx.v1beta1.TxEncodeResponse:
+    description: |-
+      TxEncodeResponse is the response type for the
+      Service.TxEncode method.
+
+      Since: cosmos-sdk 0.47
+    properties:
+      tx_bytes:
+        description: tx_bytes is the encoded transaction bytes.
+        format: byte
+        type: string
+    type: object
   cosmos.upgrade.v1beta1.ModuleVersion:
     description: |-
       ModuleVersion specifies a module and its consensus version.
@@ -3214,9 +3860,7 @@ definitions:
       occur.
     properties:
       height:
-        description: |-
-          The height at which the upgrade must be performed.
-          Only used if Time is not set.
+        description: The height at which the upgrade must be performed.
         format: int64
         type: string
       info:
@@ -3324,8 +3968,12 @@ definitions:
           if (any.is(Foo.class)) {
             foo = any.unpack(Foo.class);
           }
+          // or ...
+          if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+            foo = any.unpack(Foo.getDefaultInstance());
+          }
 
-      Example 3: Pack and unpack a message in Python.
+       Example 3: Pack and unpack a message in Python.
 
           foo = Foo(...)
           any = Any()
@@ -3335,7 +3983,7 @@ definitions:
             any.Unpack(foo)
             ...
 
-      Example 4: Pack and unpack a message in Go
+       Example 4: Pack and unpack a message in Go
 
            foo := &pb.Foo{...}
            any, err := anypb.New(foo)
@@ -3354,9 +4002,8 @@ definitions:
       in the type URL, for example "foo.bar.com/x/y.z" will yield type
       name "y.z".
 
-
       JSON
-
+      ====
       The JSON representation of an `Any` value uses the regular
       representation of the deserialized, embedded message, with an
       additional field `@type` which contains the type URL. Example:
@@ -3408,7 +4055,8 @@ definitions:
 
           Note: this functionality is not currently available in the official
           protobuf release, and it is not used for type URLs beginning with
-          type.googleapis.com.
+          type.googleapis.com. As of May 2023, there are no widely used type server
+          implementations and no plans to implement one.
 
           Schemes other than `http`, `https` (or the empty scheme) might be
           used with implementation specific semantics.
@@ -3432,539 +4080,6 @@ definitions:
         type: string
       message:
         type: string
-    type: object
-  ibc.applications.interchain_accounts.v1.QueryInterchainAccountAddressResponse:
-    properties:
-      interchain_account_address:
-        title: The corresponding interchain account address on the host chain
-        type: string
-    title: Query response for an interchain account address
-    type: object
-  ibc.applications.transfer.v1.DenomTrace:
-    description: |-
-      DenomTrace contains the base denomination for ICS20 fungible tokens and the
-      source tracing information path.
-    properties:
-      base_denom:
-        description: base denomination of the relayed fungible token.
-        type: string
-      path:
-        description: |-
-          path defines the chain of port/channel identifiers used for tracing the
-          source of the fungible token.
-        type: string
-    type: object
-  ibc.applications.transfer.v1.Params:
-    description: |-
-      Params defines the set of IBC transfer parameters.
-      NOTE: To prevent a single token from being transferred, set the
-      TransfersEnabled parameter to true and then set the bank module's SendEnabled
-      parameter for the denomination to false.
-    properties:
-      receive_enabled:
-        description: |-
-          receive_enabled enables or disables all cross-chain token transfers to this
-          chain.
-        type: boolean
-      send_enabled:
-        description: |-
-          send_enabled enables or disables all cross-chain token transfers from this
-          chain.
-        type: boolean
-    type: object
-  ibc.applications.transfer.v1.QueryDenomTraceResponse:
-    description: |-
-      QueryDenomTraceResponse is the response type for the Query/DenomTrace RPC
-      method.
-    properties:
-      denom_trace:
-        $ref: '#/definitions/ibc.applications.transfer.v1.DenomTrace'
-        description: denom_trace returns the requested denomination trace information.
-    type: object
-  ibc.applications.transfer.v1.QueryDenomTracesResponse:
-    description: |-
-      QueryConnectionsResponse is the response type for the Query/DenomTraces RPC
-      method.
-    properties:
-      denom_traces:
-        description: denom_traces returns all denominations trace information.
-        items:
-          $ref: '#/definitions/ibc.applications.transfer.v1.DenomTrace'
-        type: array
-      pagination:
-        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
-        description: pagination defines the pagination in the response.
-    type: object
-  ibc.applications.transfer.v1.QueryParamsResponse:
-    description: QueryParamsResponse is the response type for the Query/Params RPC
-      method.
-    properties:
-      params:
-        $ref: '#/definitions/ibc.applications.transfer.v1.Params'
-        description: params defines the parameters of the module.
-    type: object
-  ibc.core.channel.v1.Channel:
-    description: |-
-      Channel defines pipeline for exactly-once packet delivery between specific
-      modules on separate blockchains, which has at least one end capable of
-      sending packets and one end capable of receiving packets.
-    properties:
-      connection_hops:
-        items:
-          type: string
-        title: |-
-          list of connection identifiers, in order, along which packets sent on
-          this channel will travel
-        type: array
-      counterparty:
-        $ref: '#/definitions/ibc.core.channel.v1.Counterparty'
-        title: counterparty channel end
-      ordering:
-        $ref: '#/definitions/ibc.core.channel.v1.Order'
-        title: whether the channel is ordered or unordered
-      state:
-        $ref: '#/definitions/ibc.core.channel.v1.State'
-        title: current state of the channel end
-      version:
-        title: opaque channel version, which is agreed upon during the handshake
-        type: string
-    type: object
-  ibc.core.channel.v1.Counterparty:
-    properties:
-      channel_id:
-        title: channel end on the counterparty chain
-        type: string
-      port_id:
-        description: port on the counterparty chain which owns the other end of the
-          channel.
-        type: string
-    title: Counterparty defines a channel end counterparty
-    type: object
-  ibc.core.channel.v1.IdentifiedChannel:
-    description: |-
-      IdentifiedChannel defines a channel with additional port and channel
-      identifier fields.
-    properties:
-      channel_id:
-        title: channel identifier
-        type: string
-      connection_hops:
-        items:
-          type: string
-        title: |-
-          list of connection identifiers, in order, along which packets sent on
-          this channel will travel
-        type: array
-      counterparty:
-        $ref: '#/definitions/ibc.core.channel.v1.Counterparty'
-        title: counterparty channel end
-      ordering:
-        $ref: '#/definitions/ibc.core.channel.v1.Order'
-        title: whether the channel is ordered or unordered
-      port_id:
-        title: port identifier
-        type: string
-      state:
-        $ref: '#/definitions/ibc.core.channel.v1.State'
-        title: current state of the channel end
-      version:
-        title: opaque channel version, which is agreed upon during the handshake
-        type: string
-    type: object
-  ibc.core.channel.v1.Order:
-    default: ORDER_NONE_UNSPECIFIED
-    description: |-
-      - ORDER_NONE_UNSPECIFIED: zero-value for channel ordering
-       - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
-      which they were sent.
-       - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
-    enum:
-    - ORDER_NONE_UNSPECIFIED
-    - ORDER_UNORDERED
-    - ORDER_ORDERED
-    title: Order defines if a channel is ORDERED or UNORDERED
-    type: string
-  ibc.core.channel.v1.PacketState:
-    description: |-
-      PacketState defines the generic type necessary to retrieve and store
-      packet commitments, acknowledgements, and receipts.
-      Caller is responsible for knowing the context necessary to interpret this
-      state as a commitment, acknowledgement, or a receipt.
-    properties:
-      channel_id:
-        description: channel unique identifier.
-        type: string
-      data:
-        description: embedded data that represents packet state.
-        format: byte
-        type: string
-      port_id:
-        description: channel port identifier.
-        type: string
-      sequence:
-        description: packet sequence.
-        format: uint64
-        type: string
-    type: object
-  ibc.core.channel.v1.QueryChannelClientStateResponse:
-    properties:
-      identified_client_state:
-        $ref: '#/definitions/ibc.core.client.v1.IdentifiedClientState'
-        title: client state associated with the channel
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    title: |-
-      QueryChannelClientStateResponse is the Response type for the
-      Query/QueryChannelClientState RPC method
-    type: object
-  ibc.core.channel.v1.QueryChannelConsensusStateResponse:
-    properties:
-      client_id:
-        title: client ID associated with the consensus state
-        type: string
-      consensus_state:
-        $ref: '#/definitions/google.protobuf.Any'
-        title: consensus state associated with the channel
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    title: |-
-      QueryChannelClientStateResponse is the Response type for the
-      Query/QueryChannelClientState RPC method
-    type: object
-  ibc.core.channel.v1.QueryChannelResponse:
-    description: |-
-      QueryChannelResponse is the response type for the Query/Channel RPC method.
-      Besides the Channel end, it includes a proof and the height from which the
-      proof was retrieved.
-    properties:
-      channel:
-        $ref: '#/definitions/ibc.core.channel.v1.Channel'
-        title: channel associated with the request identifiers
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    type: object
-  ibc.core.channel.v1.QueryChannelsResponse:
-    description: QueryChannelsResponse is the response type for the Query/Channels
-      RPC method.
-    properties:
-      channels:
-        description: list of stored channels of the chain.
-        items:
-          $ref: '#/definitions/ibc.core.channel.v1.IdentifiedChannel'
-        type: array
-      height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: query block height
-      pagination:
-        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
-        title: pagination response
-    type: object
-  ibc.core.channel.v1.QueryConnectionChannelsResponse:
-    properties:
-      channels:
-        description: list of channels associated with a connection.
-        items:
-          $ref: '#/definitions/ibc.core.channel.v1.IdentifiedChannel'
-        type: array
-      height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: query block height
-      pagination:
-        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
-        title: pagination response
-    title: |-
-      QueryConnectionChannelsResponse is the Response type for the
-      Query/QueryConnectionChannels RPC method
-    type: object
-  ibc.core.channel.v1.QueryNextSequenceReceiveResponse:
-    properties:
-      next_sequence_receive:
-        format: uint64
-        title: next sequence receive number
-        type: string
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    title: |-
-      QuerySequenceResponse is the request type for the
-      Query/QueryNextSequenceReceiveResponse RPC method
-    type: object
-  ibc.core.channel.v1.QueryPacketAcknowledgementResponse:
-    properties:
-      acknowledgement:
-        format: byte
-        title: packet associated with the request fields
-        type: string
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    title: |-
-      QueryPacketAcknowledgementResponse defines the client query response for a
-      packet which also includes a proof and the height from which the
-      proof was retrieved
-    type: object
-  ibc.core.channel.v1.QueryPacketAcknowledgementsResponse:
-    properties:
-      acknowledgements:
-        items:
-          $ref: '#/definitions/ibc.core.channel.v1.PacketState'
-        type: array
-      height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: query block height
-      pagination:
-        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
-        title: pagination response
-    title: |-
-      QueryPacketAcknowledgemetsResponse is the request type for the
-      Query/QueryPacketAcknowledgements RPC method
-    type: object
-  ibc.core.channel.v1.QueryPacketCommitmentResponse:
-    properties:
-      commitment:
-        format: byte
-        title: packet associated with the request fields
-        type: string
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    title: |-
-      QueryPacketCommitmentResponse defines the client query response for a packet
-      which also includes a proof and the height from which the proof was
-      retrieved
-    type: object
-  ibc.core.channel.v1.QueryPacketCommitmentsResponse:
-    properties:
-      commitments:
-        items:
-          $ref: '#/definitions/ibc.core.channel.v1.PacketState'
-        type: array
-      height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: query block height
-      pagination:
-        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
-        title: pagination response
-    title: |-
-      QueryPacketCommitmentsResponse is the request type for the
-      Query/QueryPacketCommitments RPC method
-    type: object
-  ibc.core.channel.v1.QueryPacketReceiptResponse:
-    properties:
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-      received:
-        title: success flag for if receipt exists
-        type: boolean
-    title: |-
-      QueryPacketReceiptResponse defines the client query response for a packet receipt
-      which also includes a proof, and the height from which the proof was
-      retrieved
-    type: object
-  ibc.core.channel.v1.QueryUnreceivedAcksResponse:
-    properties:
-      height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: query block height
-      sequences:
-        items:
-          format: uint64
-          type: string
-        title: list of unreceived acknowledgement sequences
-        type: array
-    title: |-
-      QueryUnreceivedAcksResponse is the response type for the
-      Query/UnreceivedAcks RPC method
-    type: object
-  ibc.core.channel.v1.QueryUnreceivedPacketsResponse:
-    properties:
-      height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: query block height
-      sequences:
-        items:
-          format: uint64
-          type: string
-        title: list of unreceived packet sequences
-        type: array
-    title: |-
-      QueryUnreceivedPacketsResponse is the response type for the
-      Query/UnreceivedPacketCommitments RPC method
-    type: object
-  ibc.core.channel.v1.State:
-    default: STATE_UNINITIALIZED_UNSPECIFIED
-    description: |-
-      State defines if a channel is in one of the following states:
-      CLOSED, INIT, TRYOPEN, OPEN or UNINITIALIZED.
-
-       - STATE_UNINITIALIZED_UNSPECIFIED: Default State
-       - STATE_INIT: A channel has just started the opening handshake.
-       - STATE_TRYOPEN: A channel has acknowledged the handshake step on the counterparty chain.
-       - STATE_OPEN: A channel has completed the handshake. Open channels are
-      ready to send and receive packets.
-       - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
-      packets.
-    enum:
-    - STATE_UNINITIALIZED_UNSPECIFIED
-    - STATE_INIT
-    - STATE_TRYOPEN
-    - STATE_OPEN
-    - STATE_CLOSED
-    type: string
-  ibc.core.client.v1.ConsensusStateWithHeight:
-    description: ConsensusStateWithHeight defines a consensus state with an additional
-      height field.
-    properties:
-      consensus_state:
-        $ref: '#/definitions/google.protobuf.Any'
-        title: consensus state
-      height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: consensus state height
-    type: object
-  ibc.core.client.v1.Height:
-    description: |-
-      Normally the RevisionHeight is incremented at each height while keeping RevisionNumber
-      the same. However some consensus algorithms may choose to reset the
-      height in certain conditions e.g. hard forks, state-machine breaking changes
-      In these cases, the RevisionNumber is incremented so that height continues to
-      be monitonically increasing even as the RevisionHeight gets reset
-    properties:
-      revision_height:
-        format: uint64
-        title: the height within the given revision
-        type: string
-      revision_number:
-        format: uint64
-        title: the revision that the client is currently on
-        type: string
-    title: |-
-      Height is a monotonically increasing data type
-      that can be compared against another Height for the purposes of updating and
-      freezing clients
-    type: object
-  ibc.core.client.v1.IdentifiedClientState:
-    description: |-
-      IdentifiedClientState defines a client state with an additional client
-      identifier field.
-    properties:
-      client_id:
-        title: client identifier
-        type: string
-      client_state:
-        $ref: '#/definitions/google.protobuf.Any'
-        title: client state
-    type: object
-  ibc.core.client.v1.Params:
-    description: Params defines the set of IBC light client parameters.
-    properties:
-      allowed_clients:
-        description: allowed_clients defines the list of allowed client state types.
-        items:
-          type: string
-        type: array
-    type: object
-  ibc.core.client.v1.QueryClientParamsResponse:
-    description: QueryClientParamsResponse is the response type for the Query/ClientParams
-      RPC method.
-    properties:
-      params:
-        $ref: '#/definitions/ibc.core.client.v1.Params'
-        description: params defines the parameters of the module.
-    type: object
-  ibc.core.client.v1.QueryClientStateResponse:
-    description: |-
-      QueryClientStateResponse is the response type for the Query/ClientState RPC
-      method. Besides the client state, it includes a proof and the height from
-      which the proof was retrieved.
-    properties:
-      client_state:
-        $ref: '#/definitions/google.protobuf.Any'
-        title: client state associated with the request identifier
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    type: object
-  ibc.core.client.v1.QueryClientStatesResponse:
-    description: |-
-      QueryClientStatesResponse is the response type for the Query/ClientStates RPC
-      method.
-    properties:
-      client_states:
-        description: list of stored ClientStates of the chain.
-        items:
-          $ref: '#/definitions/ibc.core.client.v1.IdentifiedClientState'
-        type: array
-      pagination:
-        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
-        title: pagination response
-    type: object
-  ibc.core.client.v1.QueryConsensusStateResponse:
-    properties:
-      consensus_state:
-        $ref: '#/definitions/google.protobuf.Any'
-        title: consensus state associated with the client identifier at the given
-          height
-      proof:
-        format: byte
-        title: merkle proof of existence
-        type: string
-      proof_height:
-        $ref: '#/definitions/ibc.core.client.v1.Height'
-        title: height at which the proof was retrieved
-    title: |-
-      QueryConsensusStateResponse is the response type for the Query/ConsensusState
-      RPC method
-    type: object
-  ibc.core.client.v1.QueryConsensusStatesResponse:
-    properties:
-      consensus_states:
-        items:
-          $ref: '#/definitions/ibc.core.client.v1.ConsensusStateWithHeight'
-        title: consensus states associated with the identifier
-        type: array
-      pagination:
-        $ref: '#/definitions/cosmos.base.query.v1beta1.PageResponse'
-        title: pagination response
-    title: |-
-      QueryConsensusStatesResponse is the response type for the
-      Query/ConsensusStates RPC method
     type: object
   network.aviatrix.v1.Params:
     description: Params defines the parameters for the module.
@@ -4063,10 +4178,8 @@ definitions:
       index:
         type: boolean
       key:
-        format: byte
         type: string
       value:
-        format: byte
         type: string
     type: object
   tendermint.crypto.PublicKey:
@@ -4077,7 +4190,7 @@ definitions:
       secp256k1:
         format: byte
         type: string
-    title: PublicKey defines the keys available for use with Tendermint Validators
+    title: PublicKey defines the keys available for use with Validators
     type: object
   tendermint.p2p.DefaultNodeInfo:
     properties:
@@ -4147,6 +4260,22 @@ definitions:
     - BLOCK_ID_FLAG_NIL
     title: BlockIdFlag indicates which BlcokID the signature is for
     type: string
+  tendermint.types.BlockParams:
+    description: BlockParams contains limits on the block size.
+    properties:
+      max_bytes:
+        format: int64
+        title: |-
+          Max block size, in bytes.
+          Note: must be greater than 0
+        type: string
+      max_gas:
+        format: int64
+        title: |-
+          Max gas per block.
+          Note: must be greater or equal to -1
+        type: string
+    type: object
   tendermint.types.Commit:
     description: Commit contains the evidence that a block was committed by a set
       of validators.
@@ -4178,6 +4307,20 @@ definitions:
       validator_address:
         format: byte
         type: string
+    type: object
+  tendermint.types.ConsensusParams:
+    description: |-
+      ConsensusParams contains consensus critical parameters that determine the
+      validity of blocks.
+    properties:
+      block:
+        $ref: '#/definitions/tendermint.types.BlockParams'
+      evidence:
+        $ref: '#/definitions/tendermint.types.EvidenceParams'
+      validator:
+        $ref: '#/definitions/tendermint.types.ValidatorParams'
+      version:
+        $ref: '#/definitions/tendermint.types.VersionParams'
     type: object
   tendermint.types.Data:
     properties:
@@ -4224,8 +4367,35 @@ definitions:
           $ref: '#/definitions/tendermint.types.Evidence'
         type: array
     type: object
+  tendermint.types.EvidenceParams:
+    description: EvidenceParams determine how we handle evidence of malfeasance.
+    properties:
+      max_age_duration:
+        description: |-
+          Max age of evidence, in time.
+
+          It should correspond with an app's "unbonding period" or other similar
+          mechanism for handling [Nothing-At-Stake
+          attacks](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-is-the-nothing-at-stake-problem-and-how-can-it-be-fixed).
+        type: string
+      max_age_num_blocks:
+        description: |-
+          Max age of evidence, in blocks.
+
+          The basic formula for calculating this is: MaxAgeDuration / {average block
+          time}.
+        format: int64
+        type: string
+      max_bytes:
+        format: int64
+        title: |-
+          This sets the maximum size of total evidence in bytes that can be committed in a single block.
+          and should fall comfortably under the max block bytes.
+          Default is 1048576 or 1MB
+        type: string
+    type: object
   tendermint.types.Header:
-    description: Header defines the structure of a Tendermint block header.
+    description: Header defines the structure of a block header.
     properties:
       app_hash:
         format: byte
@@ -4343,6 +4513,16 @@ definitions:
         format: int64
         type: string
     type: object
+  tendermint.types.ValidatorParams:
+    description: |-
+      ValidatorParams restrict the public key types validators can use.
+      NOTE: uses ABCI pubkey naming, not Amino names.
+    properties:
+      pub_key_types:
+        items:
+          type: string
+        type: array
+    type: object
   tendermint.types.ValidatorSet:
     properties:
       proposer:
@@ -4354,6 +4534,13 @@ definitions:
         items:
           $ref: '#/definitions/tendermint.types.Validator'
         type: array
+    type: object
+  tendermint.types.VersionParams:
+    description: VersionParams contains the ABCI application version.
+    properties:
+      app:
+        format: uint64
+        type: string
     type: object
   tendermint.types.Vote:
     description: |-

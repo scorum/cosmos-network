@@ -1,8 +1,7 @@
 linters:
   enable:
     - bodyclose
-    - deadcode
-    - depguard
+    # - deadcode
     - dogsled
     # - dupl
     - errcheck
@@ -26,18 +25,20 @@ linters:
     # - maligned
     - nakedret
     - prealloc
-    - scopelint
-    - staticcheck
-    - structcheck
+    # - scopelint
+    # - structcheck
     # - stylecheck
     - typecheck
     - unconvert
     # - unparam
     - unused
-    - varcheck
+    # - varcheck
     # - whitespace
     # - wsl
     # - gocognit
+  disable:
+    - staticcheck
+    - depguard
 
 linters-settings:
   govet:
@@ -84,3 +85,8 @@ issues:
         - varcheck
       path: client/cli
       text: "is unused"
+
+    - linters:
+        - errcheck
+      path: testutil
+

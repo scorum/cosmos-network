@@ -6,9 +6,15 @@ COMMIT := $(shell git log -1 --format='%H')
 
 COSMOS_PKG_VERSION := $(shell go list -m github.com/cosmos/cosmos-sdk | sed 's:.* ::')
 
-LINTER_NAME := golangci-lint
-LINTER_VERSION := v1.51.2
+DOCKER := $(shell which docker)
 
+LINTER_NAME := golangci-lint
+LINTER_VERSION := v1.59.0
+
+CONTAINER_PROTO_VERSION=0.13.0
+CONTAINER_PROTO_IMAGE=ghcr.io/cosmos/proto-builder:$(CONTAINER_PROTO_VERSION)
+
+GOSRC :=  $(shell go env GOPATH)/src
 GOBIN := $(shell go env GOPATH)/bin
 
 OUT_DIR := ./build
@@ -22,7 +28,6 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=scorum \
 
 BUILD_FLAGS := -ldflags '$(ldflags)'
 
-
 .PHONY: install
 install: go.sum
 	@echo "Install $(BIN_MAIN_PKG)"
@@ -30,8 +35,8 @@ install: go.sum
 	@echo "DONE"
 
 
-OS := $(shell go env | grep GOOS | sed -E 's:.*="(.*)":\1:')
-ARCH := $(shell go env | grep GOARCH | sed -E 's:.*="(.*)":\1:')
+OS := $(shell go env | grep GOOS | sed -E "s:.*='(.*)':\1:")
+ARCH := $(shell go env | grep GOARCH | sed -E "s:.*='(.*)':\1:")
 
 .PHONY: build
 build:
@@ -97,41 +102,16 @@ generate: generate-proto generate-proto-swagger
 .PHONY: generate-proto
 generate-proto:
 	@echo "Generating Protobuf"
-	$(V) for proto_dir in $(wildcard ./proto/network/*/.) ; do \
-		protoc \
-        		-I "proto" \
-                -I "proto/3rdparty" \
-                --gocosmos_out=plugins=grpc,Mgoogle/protobuf/any.proto=github.com/cosmos/cosmos-sdk/codec/types:. \
-                --grpc-gateway_out=logtostderr=true,allow_colon_final_segments=true:. \
-        $$(find $$proto_dir -name '*.proto') ; \
-  	done
-	$(V) cp -rf ./github.com/scorum/cosmos-network/ ./
-	$(V) rm -rf ./github.com
+	$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(CONTAINER_PROTO_IMAGE) \
+		sh ./scripts/protocgen.sh;
 
 .PHONY: generate-proto-swagger
 generate-proto-swagger: SWAGGER_DIR := $(shell mktemp -d)
 generate-proto-swagger: SWAGGER_FILES := $$(find $(SWAGGER_DIR) -name "*.swagger.json")
+generate-proto-swagger: COSMOS_SDK_DIR := ${GOSRC}/github.com/cosmos/cosmos-sdk
 generate-proto-swagger:
 	@echo "Generating Protobuf Swagger"
-	$(V) for proto_file in $$(find ./proto \( -name 'query.proto' -o -name 'service.proto' \)) ; do \
-		protoc \
-				-I "proto" \
-				-I "proto/3rdparty" \
-				--swagger_out=$(SWAGGER_DIR) \
-				--swagger_opt=logtostderr=true --swagger_opt=fqn_for_swagger_name=true --swagger_opt=simple_operation_ids=true \
-		 $$proto_file ; \
-	done
-	$(V) go-swagger-merger -o ./docs/static/openapi.yml $(SWAGGER_FILES) ./docs/static/title.yaml
-
-.PHONY: proto-update-cosmos
-proto-update-cosmos: COSMOS_REPO := $(shell mktemp -d)
-proto-update-cosmos:
-	$(V)git clone --depth 1 --branch $(COSMOS_PKG_VERSION) git@github.com:cosmos/cosmos-sdk.git $(COSMOS_REPO)
-	$(V)rm -rf proto/3rdparty/cosmos/*
-	$(V)mv $(COSMOS_REPO)/proto/cosmos/* proto/3rdparty/cosmos/
-	$(V)rm -rf proto/3rdparty/tendermint/*
-	$(V)mv $(COSMOS_REPO)/proto/tendermint/* proto/3rdparty/tendermint/
-	@echo DONE
+	./scripts/protocgen-swagger-gen.sh
 
 .PHONY: install-proto
 install-proto: COSMOS_PROTO_REPO := $(shell mktemp -d)
@@ -181,7 +161,7 @@ local-init:
 	$(V)rm -rf test
 
 	@echo initalizing test chain
-	$(V)$(SCORUMD) init --staking-bond-denom nsp local-network
+	$(V)$(SCORUMD) init --default-denom nsp local-network
 
 	@echo adding key 'test'
 	$(V)$(SCORUMD) keys add test --keyring-backend test --keyring-dir test

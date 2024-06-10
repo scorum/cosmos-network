@@ -5,9 +5,9 @@ import (
 
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
@@ -128,7 +128,7 @@ func SimulateMsgBurn(
 				txCtx := simulation.OperationInput{
 					R:             r,
 					App:           app,
-					TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+					TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 					Cdc:           nil,
 					Msg:           msg,
 					MsgType:       msg.Type(),
@@ -179,7 +179,7 @@ func SimulateMsgMintGas(
 		txCtx := simulation.OperationInput{
 			R:             r,
 			App:           app,
-			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),
@@ -224,7 +224,7 @@ func SimulateMsgConvertSCR2SP(
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           simapp.MakeTestEncodingConfig().TxConfig,
+			TxGen:           moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         msg.Type(),
@@ -272,7 +272,7 @@ func SimulateMsgWithdrawSP(
 		txCtx := simulation.OperationInput{
 			R:               r,
 			App:             app,
-			TxGen:           simapp.MakeTestEncodingConfig().TxConfig,
+			TxGen:           moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
 			MsgType:         msg.Type(),
@@ -324,7 +324,7 @@ func SimulateMsgStopSPWithdrawal(
 		txCtx := simulation.OperationInput{
 			R:             r,
 			App:           app,
-			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),
