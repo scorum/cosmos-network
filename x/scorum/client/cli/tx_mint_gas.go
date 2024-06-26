@@ -3,10 +3,11 @@ package cli
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 
 	"github.com/scorum/cosmos-network/x/scorum/types"
@@ -23,7 +24,7 @@ func CmdMintGas() *cobra.Command {
 				return err
 			}
 
-			amount, ok := sdk.NewIntFromString(args[1])
+			amount, ok := math.NewIntFromString(args[1])
 			if !ok {
 				return fmt.Errorf("invalid amount")
 			}

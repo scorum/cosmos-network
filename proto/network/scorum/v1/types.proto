@@ -3,6 +3,8 @@ syntax = "proto3";
 package network.scorum.v1;
 
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
 
 import "cosmos/base/v1beta1/coin.proto";
 
@@ -14,7 +16,12 @@ message SPWithdrawal {
   string from = 2;
   string to = 3;
 
-  cosmos.base.v1beta1.IntProto total = 4 [(gogoproto.nullable) = false];
+  bytes total = 4 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
 
   uint32 period_duration_in_seconds = 5;
   uint32 total_periods = 6;

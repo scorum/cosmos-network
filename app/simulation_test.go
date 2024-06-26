@@ -13,10 +13,10 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/testutil/sims"
 
+	"cosmossdk.io/store"
 	dbm "github.com/cometbft/cometbft-db"
 	"github.com/cometbft/cometbft/libs/log"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/store"
 	simulationtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	"github.com/scorum/cosmos-network/app"

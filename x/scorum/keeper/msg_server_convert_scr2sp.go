@@ -17,7 +17,7 @@ func (m msgServer) ConvertSCR2SP(goCtx context.Context, msg *types.MsgConvertSCR
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid owner address: %s", err)
 	}
 
-	coin := sdk.NewCoin(types.SCRDenom, msg.Amount.Int)
+	coin := sdk.NewCoin(types.SCRDenom, msg.Amount)
 	if m.bankKeeper.GetBalance(ctx, owner, types.SCRDenom).IsLT(coin) {
 		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "balance is lower than requested exchange")
 	}

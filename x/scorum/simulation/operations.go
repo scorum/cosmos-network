@@ -46,27 +46,27 @@ func WeightedOperations(
 		weightMsgStopSPWithdrawal int
 	)
 
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgBurn, &weightMsgBurn, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgBurn, &weightMsgBurn, nil,
 		func(_ *rand.Rand) {
 			weightMsgBurn = defaultWeightMsgBurn
 		},
 	)
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMintGas, &weightMsgMintGas, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgMintGas, &weightMsgMintGas, nil,
 		func(_ *rand.Rand) {
 			weightMsgMintGas = defaultWeightMsgMintGas
 		},
 	)
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgConvertSCR2SP, &weightMsgConvertSCR2SP, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgConvertSCR2SP, &weightMsgConvertSCR2SP, nil,
 		func(_ *rand.Rand) {
 			weightMsgConvertSCR2SP = defaultWeightMsgConvertSCR2SP
 		},
 	)
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgWithdrawSP, &weightMsgWithdrawSP, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgWithdrawSP, &weightMsgWithdrawSP, nil,
 		func(_ *rand.Rand) {
 			weightMsgWithdrawSP = defaultWeightMsgWithdrawSP
 		},
 	)
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgStopSPWithdrawal, &weightMsgStopSPWithdrawal, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgStopSPWithdrawal, &weightMsgStopSPWithdrawal, nil,
 		func(_ *rand.Rand) {
 			weightMsgStopSPWithdrawal = defaultWeightMsgStopSPWithdrawal
 		},
@@ -119,10 +119,10 @@ func SimulateMsgBurn(
 		}
 
 		for _, b := range balances {
-			if b.Amount.GT(sdk.OneInt()) {
+			if b.Amount.GT(math.OneInt()) {
 				msg := &types.MsgBurn{
 					Supervisor: supervisor.Address.String(),
-					Amount:     sdk.NewCoin(b.Denom, sdk.OneInt()),
+					Amount:     sdk.NewCoin(b.Denom, math.OneInt()),
 				}
 
 				txCtx := simulation.OperationInput{
@@ -131,7 +131,6 @@ func SimulateMsgBurn(
 					TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 					Cdc:           nil,
 					Msg:           msg,
-					MsgType:       msg.Type(),
 					Context:       ctx,
 					SimAccount:    supervisor,
 					AccountKeeper: ak,
@@ -173,7 +172,7 @@ func SimulateMsgMintGas(
 		msg := &types.MsgMintGas{
 			Supervisor: supervisor.Address.String(),
 			Address:    addr.Address.String(),
-			Amount:     sdk.IntProto{Int: amount},
+			Amount:     amount,
 		}
 
 		txCtx := simulation.OperationInput{
@@ -182,7 +181,6 @@ func SimulateMsgMintGas(
 			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
-			MsgType:       msg.Type(),
 			Context:       ctx,
 			SimAccount:    supervisor,
 			AccountKeeper: ak,
@@ -218,7 +216,7 @@ func SimulateMsgConvertSCR2SP(
 
 		msg := &types.MsgConvertSCR2SP{
 			Owner:  owner.Address.String(),
-			Amount: sdk.IntProto{Int: amount},
+			Amount: amount,
 		}
 
 		txCtx := simulation.OperationInput{
@@ -227,7 +225,6 @@ func SimulateMsgConvertSCR2SP(
 			TxGen:           moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
-			MsgType:         msg.Type(),
 			Context:         ctx,
 			SimAccount:      owner,
 			AccountKeeper:   ak,
@@ -266,7 +263,7 @@ func SimulateMsgWithdrawSP(
 		msg := &types.MsgWithdrawSP{
 			Owner:     owner.Address.String(),
 			Recipient: recipient.Address.String(),
-			Amount:    sdk.IntProto{Int: amount},
+			Amount:    amount,
 		}
 
 		txCtx := simulation.OperationInput{
@@ -275,7 +272,6 @@ func SimulateMsgWithdrawSP(
 			TxGen:           moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:             nil,
 			Msg:             msg,
-			MsgType:         msg.Type(),
 			Context:         ctx,
 			SimAccount:      owner,
 			AccountKeeper:   ak,
@@ -327,7 +323,6 @@ func SimulateMsgStopSPWithdrawal(
 			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
-			MsgType:       msg.Type(),
 			Context:       ctx,
 			SimAccount:    simAcc,
 			AccountKeeper: ak,

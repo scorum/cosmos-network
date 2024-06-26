@@ -3,6 +3,7 @@ package simulation
 import (
 	"math/rand"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -27,7 +28,7 @@ func GenerateGenesisState(simState *module.SimulationState) {
 
 	if len(accs) > 0 {
 		scorumGenesis.Params.ValidatorsReward.PoolAddress = accs[0]
-		scorumGenesis.Params.ValidatorsReward.BlockReward = sdk.Coin{Amount: sdk.NewInt(1), Denom: types.SCRDenom}
+		scorumGenesis.Params.ValidatorsReward.BlockReward = sdk.Coin{Amount: math.NewInt(1), Denom: types.SCRDenom}
 	}
 
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&scorumGenesis)

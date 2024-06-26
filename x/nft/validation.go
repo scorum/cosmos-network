@@ -7,7 +7,7 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname reNFTID github.com/cosmos/cosmos-sdk/x/nft.reNFTID
+//go:linkname reNFTID cosmossdk.io/x/nft.reNFTID
 var reNFTID *regexp.Regexp
 
 func init() {

@@ -6,13 +6,13 @@ import (
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 
 	"cosmossdk.io/math"
+	nftkeeper "cosmossdk.io/x/nft/keeper"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	accountkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	nftkeeper "github.com/cosmos/cosmos-sdk/x/nft/keeper"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	"github.com/google/uuid"
 	"github.com/scorum/cosmos-network/x/aviatrix/types"
@@ -45,17 +45,17 @@ func WeightedOperations(
 		weightMsgAdjustPlaneExperience int
 	)
 
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgCreatePlane, &weightMsgCreatePlane, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgCreatePlane, &weightMsgCreatePlane, nil,
 		func(_ *rand.Rand) {
 			weightMsgCreatePlane = defaultWeightMsgCreatePlane
 		},
 	)
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgUpdatePlaneExperience, &weightMsgUpdatePlaneExperience, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgUpdatePlaneExperience, &weightMsgUpdatePlaneExperience, nil,
 		func(_ *rand.Rand) {
 			weightMsgUpdatePlaneExperience = defaultWeightMsgUpdatePlaneExperience
 		},
 	)
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgAdjustPlaneExperience, &weightMsgAdjustPlaneExperience, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgAdjustPlaneExperience, &weightMsgAdjustPlaneExperience, nil,
 		func(_ *rand.Rand) {
 			weightMsgAdjustPlaneExperience = defaultWeightMsgAdjustPlaneExperience
 		},
@@ -121,7 +121,6 @@ func SimulateMsgCreatePlane(
 			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
-			MsgType:       msg.Type(),
 			Context:       ctx,
 			SimAccount:    supervisorAcc,
 			AccountKeeper: ak,
@@ -179,7 +178,6 @@ func SimulateMsgUpdatePlaneExperience(
 			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
-			MsgType:       msg.Type(),
 			Context:       ctx,
 			SimAccount:    supervisorAcc,
 			AccountKeeper: ak,
@@ -237,7 +235,6 @@ func SimulateMsgAdjustPlaneExperience(
 			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
-			MsgType:       msg.Type(),
 			Context:       ctx,
 			SimAccount:    supervisorAcc,
 			AccountKeeper: ak,

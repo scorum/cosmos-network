@@ -1,7 +1,8 @@
 package keeper
 
 import (
-	"github.com/cosmos/cosmos-sdk/store/prefix"
+	"cosmossdk.io/math"
+	"cosmossdk.io/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
@@ -15,34 +16,34 @@ func (k Keeper) SetAddressToRestoreGas(ctx sdk.Context, addr sdk.AccAddress) {
 	s.Set(addr.Bytes(), []byte{})
 }
 
-func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSPBalance sdk.Dec, params types.Params) {
+func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSPBalance math.LegacyDec, params types.Params) {
 	s := prefix.NewStore(ctx.KVStore(k.storeKey), gasConsumedAddressesPrefix)
 
 	gasBalance := k.bankKeeper.GetBalance(ctx, addr, types.GasDenom).Amount
 	spBalance := k.bankKeeper.GetBalance(ctx, addr, types.SPDenom).Amount
 
 	if gasBalance.IsNil() {
-		gasBalance = sdk.ZeroInt()
+		gasBalance = math.ZeroInt()
 	}
 	if spBalance.IsNil() {
-		spBalance = sdk.ZeroInt()
+		spBalance = math.ZeroInt()
 	}
 
-	if gasBalance.GTE(params.GasLimit.Int) {
+	if gasBalance.GTE(params.GasLimit) {
 		s.Delete(addr)
 	}
 
 	gasAdjust := calculateGasAdjustAmount(
-		sdk.NewDecFromInt(spBalance),
-		sdk.NewDecFromInt(params.GasLimit.Int),
-		sdk.NewDecFromInt(params.GasUnconditionedAmount.Int),
+		math.LegacyNewDecFromInt(spBalance),
+		math.LegacyNewDecFromInt(params.GasLimit),
+		math.LegacyNewDecFromInt(params.GasUnconditionedAmount),
 		avgSPBalance,
-		params.GasAdjustCoefficient.Dec,
+		params.GasAdjustCoefficient,
 	).RoundInt()
 
 	// do not overflow gasLimit
-	if gasBalance.Add(gasAdjust).GT(params.GasLimit.Int) {
-		gasAdjust = params.GasLimit.Int.Sub(gasBalance)
+	if gasBalance.Add(gasAdjust).GT(params.GasLimit) {
+		gasAdjust = params.GasLimit.Sub(gasBalance)
 	}
 
 	if gasAdjust.IsPositive() {
@@ -63,16 +64,16 @@ func (k Keeper) RestoreGas(ctx sdk.Context) {
 	}
 }
 
-func calculateGasAdjustAmount(spBalance, gasLimit, gasUnconditionedAmount, avgSPBalance, gasAdjustCoefficient sdk.Dec) sdk.Dec {
+func calculateGasAdjustAmount(spBalance, gasLimit, gasUnconditionedAmount, avgSPBalance, gasAdjustCoefficient math.LegacyDec) math.LegacyDec {
 	//                                           spBalance
 	// adjustAmount = gasUnconditionedAmount + ------------- * GasLimit * GasAdjustCoefficient
 	//                                          avgSPBalance
 	return gasUnconditionedAmount.Add(spBalance.Quo(avgSPBalance).Mul(gasLimit).Mul(gasAdjustCoefficient))
 }
 
-func (k Keeper) GetAverageSPBalance(ctx sdk.Context) sdk.Dec {
+func (k Keeper) GetAverageSPBalance(ctx sdk.Context) math.LegacyDec {
 	supervisors := k.GetParams(ctx).Supervisors
-	total, size := sdk.ZeroDec(), int64(0)
+	total, size := math.LegacyZeroDec(), int64(0)
 	k.bankKeeper.IterateAllBalances(ctx, func(addr sdk.AccAddress, coin sdk.Coin) (stop bool) {
 		if contains(supervisors, addr.String()) {
 			return false
@@ -83,7 +84,7 @@ func (k Keeper) GetAverageSPBalance(ctx sdk.Context) sdk.Dec {
 		}
 
 		if coin.Denom == types.SPDenom {
-			total = total.Add(sdk.NewDecFromInt(coin.Amount))
+			total = total.Add(math.LegacyNewDecFromInt(coin.Amount))
 			size++
 		}
 
@@ -91,7 +92,7 @@ func (k Keeper) GetAverageSPBalance(ctx sdk.Context) sdk.Dec {
 	})
 
 	if size == 0 {
-		return sdk.NewDec(1)
+		return math.LegacyNewDec(1)
 	}
 
 	return total.QuoInt64(size)

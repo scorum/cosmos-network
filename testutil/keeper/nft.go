@@ -3,10 +3,10 @@ package keeper
 import (
 	"testing"
 
+	"cosmossdk.io/x/nft"
+	"cosmossdk.io/x/nft/keeper"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/x/nft"
-	"github.com/cosmos/cosmos-sdk/x/nft/keeper"
 )
 
 func NftKeeper(t testing.TB, ctx TestContext) keeper.Keeper {

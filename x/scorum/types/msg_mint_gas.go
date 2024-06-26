@@ -15,7 +15,7 @@ func NewMsgMintGas(supervisor string, address string, amount math.Int) *MsgMintG
 	return &MsgMintGas{
 		Supervisor: supervisor,
 		Address:    address,
-		Amount:     sdk.IntProto{Int: amount},
+		Amount:     amount,
 	}
 }
 
@@ -41,7 +41,7 @@ func (msg *MsgMintGas) GetSignBytes() []byte {
 }
 
 func (msg *MsgMintGas) ValidateBasic() error {
-	if !msg.Amount.Int.IsPositive() {
+	if !msg.Amount.IsPositive() {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid amount (must be positive)")
 	}
 

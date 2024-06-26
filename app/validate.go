@@ -1,3 +1,3 @@
 package app
 
-import _ "github.com/scorum/cosmos-network/x/nft"
+import _ "cosmossdk.io/x/nft"

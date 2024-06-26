@@ -24,7 +24,7 @@ func (m msgServer) WithdrawSP(goCtx context.Context, msg *types.MsgWithdrawSP) (
 	}
 
 	reservedSP := m.getReservedSP(ctx, owner)
-	if balance := m.bankKeeper.GetBalance(ctx, owner, types.SPDenom).Amount; reservedSP.Add(msg.Amount.Int).GT(balance) {
+	if balance := m.bankKeeper.GetBalance(ctx, owner, types.SPDenom).Amount; reservedSP.Add(msg.Amount).GT(balance) {
 		return nil, errorsmod.Wrapf(
 			sdkerrors.ErrInvalidRequest,
 			"insufficient balance: reserved %s, total %s, requested %s",
@@ -57,14 +57,14 @@ func (m msgServer) WithdrawSP(goCtx context.Context, msg *types.MsgWithdrawSP) (
 }
 
 func (m msgServer) getReservedSP(ctx sdk.Context, owner sdk.AccAddress) sdkmath.Int {
-	total := sdk.ZeroInt()
+	total := sdkmath.ZeroInt()
 
 	for _, w := range m.Keeper.ListWithdrawals(ctx, owner) {
 		if !w.IsActive {
 			continue
 		}
 
-		total = total.Add(w.Total.Int.Sub(w.WithdrownByPeriod(w.ProcessedPeriod)))
+		total = total.Add(w.Total.Sub(w.WithdrownByPeriod(w.ProcessedPeriod)))
 	}
 
 	return total

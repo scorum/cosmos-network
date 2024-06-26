@@ -17,13 +17,13 @@ const (
 	OpWeightMintProposal = "op_weight_mint_proposal"
 )
 
-func ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+func ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalMsg {
 	var (
 		defaultWeightMintProposal = 5
 	)
 
-	return []simtypes.WeightedProposalContent{
-		simulation.NewWeightedProposalContent(
+	return []simtypes.WeightedProposalMsg{
+		simulation.NewWeightedProposalMsg(
 			OpWeightMintProposal,
 			defaultWeightMintProposal,
 			SimulateMintProposalContent(),
@@ -31,10 +31,10 @@ func ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalConte
 	}
 }
 
-func SimulateMintProposalContent() simtypes.ContentSimulatorFn {
+func SimulateMintProposalContent() simtypes.MsgSimulatorFn {
 	numProposals := 0
 
-	return func(r *rand.Rand, _ sdk.Context, accounts []simtypes.Account) simtypes.Content {
+	return func(r *rand.Rand, _ sdk.Context, accounts []simtypes.Account) sdk.Msg {
 		title := fmt.Sprintf("title from SimulateMintProposalContent-%d", numProposals)
 		desc := fmt.Sprintf("desc from SimulateMintProposalContent-%d. Random short desc: %s",
 			numProposals, simtypes.RandStringOfLength(r, 20))

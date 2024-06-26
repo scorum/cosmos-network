@@ -2,6 +2,7 @@ package ante
 
 import (
 	errorsmod "cosmossdk.io/errors"
+	circuitante "cosmossdk.io/x/circuit/ante"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
@@ -13,6 +14,7 @@ type HandlerOptions struct {
 	ScorumKeeper  ScorumKeeper
 	AccountKeeper AccountKeeper
 	BankKeeper    BankKeeper
+	CircuitKeeper circuitante.CircuitBreaker
 }
 
 func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
@@ -34,7 +36,8 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 
 	anteDecorators := []sdk.AnteDecorator{
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
-		NewZeroGasTxDecorator(options.ScorumKeeper),
+		circuitante.NewCircuitBreakerDecorator(options.CircuitKeeper),
+		NewZeroGasTxDecorator(options.AccountKeeper, options.ScorumKeeper),
 		NewTrackGasConsumedDecorator(options.AccountKeeper, options.BankKeeper, options.ScorumKeeper),
 		ante.NewExtensionOptionsDecorator(options.ExtensionOptionChecker),
 		ante.NewValidateBasicDecorator(),

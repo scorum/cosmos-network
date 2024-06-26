@@ -32,7 +32,7 @@ func (d CheckAddressesDecorator) AnteHandle(
 	for _, msg := range tx.GetMsgs() {
 		for _, addr := range extractAddresses(msg) {
 			if !d.ak.HasAccount(ctx, addr) {
-				if err := d.sk.Mint(ctx, addr, sdk.NewCoin(scorumtypes.GasDenom, d.sk.GetParams(ctx).GasLimit.Int)); err != nil {
+				if err := d.sk.Mint(ctx, addr, sdk.NewCoin(scorumtypes.GasDenom, d.sk.GetParams(ctx).GasLimit)); err != nil {
 					return sdk.Context{}, errorsmod.Wrap(sdkerrors.ErrPanic, fmt.Sprintf("failed to mint gas to new account: %s", err.Error()))
 				}
 			}

@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	sdkmath "cosmossdk.io/math"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"gopkg.in/yaml.v2"
@@ -30,17 +30,17 @@ func ParamKeyTable() paramtypes.KeyTable {
 // NewParams creates a new Params instance
 func NewParams(
 	supervisors []string,
-	gasLimit sdkmath.Int,
-	gasUnconditionedAmount sdkmath.Int,
-	gasAdjustCoefficient sdk.Dec,
+	gasLimit math.Int,
+	gasUnconditionedAmount math.Int,
+	gasAdjustCoefficient math.LegacyDec,
 	spWithdrawalTotalPeriods uint,
 	spWithdrawalPeriodDuration uint,
 ) Params {
 	return Params{
 		Supervisors:                       supervisors,
-		GasLimit:                          sdk.IntProto{Int: gasLimit},
-		GasUnconditionedAmount:            sdk.IntProto{Int: gasUnconditionedAmount},
-		GasAdjustCoefficient:              sdk.DecProto{Dec: gasAdjustCoefficient},
+		GasLimit:                          gasLimit,
+		GasUnconditionedAmount:            gasUnconditionedAmount,
+		GasAdjustCoefficient:              gasAdjustCoefficient,
 		SpWithdrawalTotalPeriods:          uint32(spWithdrawalTotalPeriods),
 		SpWithdrawalPeriodDurationSeconds: uint32(spWithdrawalPeriodDuration),
 	}
@@ -50,16 +50,16 @@ func NewParams(
 func DefaultParams() Params {
 	return Params{
 		Supervisors:                       nil,
-		GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000000)},
-		GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(15000)},
-		GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
+		GasLimit:                          math.NewInt(1000000),
+		GasUnconditionedAmount:            math.NewInt(15000),
+		GasAdjustCoefficient:              math.LegacyNewDec(1),
 		SpWithdrawalTotalPeriods:          52,
 		SpWithdrawalPeriodDurationSeconds: 7 * 24 * 60 * 60, // 52 weeks
 		ValidatorsReward: ValidatorsRewardParams{
 			PoolAddress: "",
 			BlockReward: sdk.Coin{
 				Denom:  SPDenom,
-				Amount: sdk.ZeroInt(),
+				Amount: math.ZeroInt(),
 			},
 		},
 	}

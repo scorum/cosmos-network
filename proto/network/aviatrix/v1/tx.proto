@@ -2,12 +2,15 @@ syntax = "proto3";
 
 package network.aviatrix.v1;
 
+import "cosmos_proto/cosmos.proto";
 import "cosmos/msg/v1/msg.proto";
 
 option go_package = "github.com/scorum/cosmos-network/x/aviatrix/types";
 
 // Msg defines the Msg service.
 service Msg {
+  option (cosmos.msg.v1.service) = true;
+
   rpc CreatePlane(MsgCreatePlane) returns (MsgCreatePlaneResponse);
   rpc UpdatePlaneExperience(MsgUpdatePlaneExperience) returns (MsgUpdatePlaneExperienceResponse);
   rpc AdjustPlaneExperience(MsgAdjustPlaneExperience) returns (MsgAdjustPlaneExperienceResponse);

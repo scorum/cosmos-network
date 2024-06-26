@@ -15,7 +15,7 @@ func NewMsgWithdrawSP(owner, recipient string, amount sdkmath.Int) *MsgWithdrawS
 	return &MsgWithdrawSP{
 		Owner:     owner,
 		Recipient: recipient,
-		Amount:    sdk.IntProto{Int: amount},
+		Amount:    amount,
 	}
 }
 
@@ -49,7 +49,7 @@ func (msg *MsgWithdrawSP) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid recipient address (%s)", err)
 	}
 
-	if !msg.Amount.Int.IsPositive() {
+	if !msg.Amount.IsPositive() {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid amount (must be positive)")
 	}
 

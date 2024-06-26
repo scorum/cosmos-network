@@ -14,7 +14,7 @@ var _ sdk.Msg = &MsgConvertSCR2SP{}
 func NewMsgConvertSCR2SP(owner string, amount sdkmath.Int) *MsgConvertSCR2SP {
 	return &MsgConvertSCR2SP{
 		Owner:  owner,
-		Amount: sdk.IntProto{Int: amount},
+		Amount: amount,
 	}
 }
 
@@ -44,7 +44,7 @@ func (msg *MsgConvertSCR2SP) ValidateBasic() error {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid owner address (%s)", err)
 	}
 
-	if !msg.Amount.Int.IsPositive() {
+	if !msg.Amount.IsPositive() {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid amount (must be positive)")
 	}
 

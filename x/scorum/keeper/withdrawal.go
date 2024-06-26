@@ -5,8 +5,8 @@ import (
 	"encoding/binary"
 	"fmt"
 
+	"cosmossdk.io/store/prefix"
 	"github.com/cometbft/cometbft/libs/json"
-	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
