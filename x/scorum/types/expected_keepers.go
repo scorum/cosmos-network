@@ -3,6 +3,8 @@ package types
 import (
 	"context"
 
+	"cosmossdk.io/core/address"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -22,5 +24,6 @@ type AccountKeeper interface {
 	GetAccount(context.Context, sdk.AccAddress) sdk.AccountI
 	HasAccount(ctx context.Context, addr sdk.AccAddress) bool
 
-	GetModuleAccount(ctx context.Context, moduleName string) sdk.ModuleAccountI
+	GetModuleAddress(name string) sdk.AccAddress
+	AddressCodec() address.Codec
 }

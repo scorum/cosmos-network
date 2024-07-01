@@ -12,18 +12,21 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestProposal_Mint(t *testing.T) {
+func TestMsgServer_Mint(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
 	addr := sample.AccAddress()
 	coin := sdk.NewCoin(types.SCRDenom, math.NewInt(1000))
 
-	require.NoError(t, keeper.HandleMintProposal(ctx.Context, set.keeper, &types.MintProposal{
-		Title:       "test",
+	s := keeper.NewMsgServer(set.keeper)
+
+	_, err := s.Mint(ctx.Context, &types.MsgMint{
+		Authority:   "gov",
 		Description: "test description",
 		Recipient:   addr.String(),
 		Amount:      coin,
-	}))
+	})
+	require.NoError(t, err)
 
 	require.True(t, coin.Equal(set.bankKeeper.GetBalance(ctx.Context, addr, types.SCRDenom)))
 }

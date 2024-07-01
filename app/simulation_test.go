@@ -13,9 +13,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/testutil/sims"
 
+	"cosmossdk.io/log"
 	"cosmossdk.io/store"
-	dbm "github.com/cometbft/cometbft-db"
-	"github.com/cometbft/cometbft/libs/log"
+	db "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	simulationtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
@@ -56,12 +56,12 @@ func TestAppStateDeterminism(t *testing.T) {
 		for j := 0; j < numTimesToRunPerSeed; j++ {
 			var logger log.Logger
 			if sim.FlagVerboseValue {
-				logger = log.TestingLogger()
+				logger = log.NewTestLogger(t)
 			} else {
 				logger = log.NewNopLogger()
 			}
 
-			db := dbm.NewMemDB()
+			db := db.NewMemDB()
 			simapp := app.New(
 				logger,
 				db,

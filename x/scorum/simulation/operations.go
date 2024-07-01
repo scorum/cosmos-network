@@ -18,18 +18,23 @@ import (
 
 // nolint
 const (
+	TypeMsgBurn          = "scorum/MsgBurn"
 	opWeightMsgBurn      = "op_weight_msg_burn"
 	defaultWeightMsgBurn = 10
 
+	TypeMsgMintGas          = "scorum/MsgMintGas"
 	opWeightMsgMintGas      = "op_weight_msg_mint_gas"
 	defaultWeightMsgMintGas = 10
 
+	TypeMsgConvertSCR2SP          = "scorum/MsgConvertSCR2SP"
 	opWeightMsgConvertSCR2SP      = "op_weight_msg_convert_scr_2_sp"
 	defaultWeightMsgConvertSCR2SP = 10
 
+	TypeMsgWithdrawSP          = "scorum/MsgWithdrawSP"
 	opWeightMsgWithdrawSP      = "op_weight_msg_withdraw_sp"
 	defaultWeightMsgWithdrawSP = 90
 
+	TypeMsgStopSPWithdrawal          = "scorum/MsgStopSPWithdrawal"
 	opWeightMsgStopSPWithdrawal      = "op_weight_msg_stop_sp_withdrawal"
 	defaultWeightMsgStopSPWithdrawal = 10
 )
@@ -105,17 +110,17 @@ func SimulateMsgBurn(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "accounts are empty"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "accounts are empty"), nil, nil
 		}
 
 		supervisor := accs[0]
 		if !k.IsSupervisor(ctx, supervisor.Address.String()) {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "first acc is not a supervisor"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "first acc is not a supervisor"), nil, nil
 		}
 
 		balances := bk.GetAllBalances(ctx, supervisor.Address)
 		if len(balances) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "empty balance"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "empty balance"), nil, nil
 		}
 
 		for _, b := range balances {
@@ -142,7 +147,7 @@ func SimulateMsgBurn(
 			}
 		}
 
-		return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "empty balance"), nil, nil
+		return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "empty balance"), nil, nil
 	}
 }
 
@@ -155,18 +160,18 @@ func SimulateMsgMintGas(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "accounts are empty"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "accounts are empty"), nil, nil
 		}
 
 		supervisor := accs[0]
 		if !k.IsSupervisor(ctx, supervisor.Address.String()) {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "first acc is not a supervisor"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "first acc is not a supervisor"), nil, nil
 		}
 
 		addr, _ := simtypes.RandomAcc(r, accs)
 		amount, err := simtypes.RandPositiveInt(r, math.NewInt(1000000))
 		if err != nil {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgMintGas, "failed to rand int"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgMintGas, "failed to rand int"), nil, nil
 		}
 
 		msg := &types.MsgMintGas{
@@ -201,13 +206,13 @@ func SimulateMsgConvertSCR2SP(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgConvertSCR2SP, "accounts are empty"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgConvertSCR2SP, "accounts are empty"), nil, nil
 		}
 
 		owner, _ := simtypes.RandomAcc(r, accs)
 		amount, err := simtypes.RandPositiveInt(r, math.NewInt(10000))
 		if err != nil {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgConvertSCR2SP, "failed to rand int"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgConvertSCR2SP, "failed to rand int"), nil, nil
 		}
 
 		if err := k.Mint(ctx, owner.Address, sdk.NewCoin(types.SCRDenom, amount)); err != nil {
@@ -246,14 +251,14 @@ func SimulateMsgWithdrawSP(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgWithdrawSP, "accounts are empty"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgWithdrawSP, "accounts are empty"), nil, nil
 		}
 
 		owner, _ := simtypes.RandomAcc(r, accs)
 		recipient, _ := simtypes.RandomAcc(r, accs)
 		amount, err := simtypes.RandPositiveInt(r, math.NewInt(10000))
 		if err != nil {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgWithdrawSP, "failed to rand int"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgWithdrawSP, "failed to rand int"), nil, nil
 		}
 
 		if err := k.Mint(ctx, owner.Address, sdk.NewCoin(types.SPDenom, amount)); err != nil {
@@ -293,14 +298,14 @@ func SimulateMsgStopSPWithdrawal(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgStopSPWithdrawal, "accounts are empty"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgStopSPWithdrawal, "accounts are empty"), nil, nil
 		}
 
 		withdrawals := slice.Filter(k.ListAllWithdrawals(ctx), func(v types.SPWithdrawal) bool {
 			return v.IsActive
 		})
 		if len(withdrawals) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgStopSPWithdrawal, "no withdrawals to stop"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgStopSPWithdrawal, "no withdrawals to stop"), nil, nil
 		}
 		withdrawalToStop := withdrawals[0]
 		if len(withdrawals) > 1 {

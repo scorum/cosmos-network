@@ -1,46 +1,45 @@
 package simulation
 
 import (
-	"fmt"
 	"math/rand"
+
+	"github.com/cosmos/cosmos-sdk/types/address"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
-// nolint
 const (
-	OpWeightMintProposal = "op_weight_mint_proposal"
+	opWeightMintProposal = "op_weight_mint_proposal"
+	defaultWeightMsgMint = 10
 )
 
-func ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalMsg {
-	var (
-		defaultWeightMintProposal = 5
-	)
-
+// ProposalMsgs defines the module weighted proposals' contents
+func ProposalMsgs() []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
 		simulation.NewWeightedProposalMsg(
-			OpWeightMintProposal,
-			defaultWeightMintProposal,
-			SimulateMintProposalContent(),
+			opWeightMintProposal,
+			defaultWeightMsgMint,
+			SimulateMsgMint,
 		),
 	}
 }
 
-func SimulateMintProposalContent() simtypes.MsgSimulatorFn {
-	numProposals := 0
+// SimulateMsgUpdateParams returns a random MsgUpdateParams
+func SimulateMsgMint(r *rand.Rand, _ sdk.Context, accounts []simtypes.Account) sdk.Msg {
+	// use the default gov module account address as authority
+	var authority sdk.AccAddress = address.Module("gov")
 
-	return func(r *rand.Rand, _ sdk.Context, accounts []simtypes.Account) sdk.Msg {
-		title := fmt.Sprintf("title from SimulateMintProposalContent-%d", numProposals)
-		desc := fmt.Sprintf("desc from SimulateMintProposalContent-%d. Random short desc: %s",
-			numProposals, simtypes.RandStringOfLength(r, 20))
-		recipient, _ := simtypes.RandomAcc(r, accounts)
-		amount := sdk.NewCoin(types.SCRDenom, simtypes.RandomAmount(r, math.NewInt(10000000)))
-		numProposals++
-		return types.NewMintProposal(title, desc, recipient.Address, amount)
+	recipient, _ := simtypes.RandomAcc(r, accounts)
+	amount, _ := simtypes.RandPositiveInt(r, math.NewInt(10000000))
+
+	return &types.MsgMint{
+		Authority:   authority.String(),
+		Description: simtypes.RandStringOfLength(r, 20),
+		Recipient:   recipient.Address.String(),
+		Amount:      sdk.NewCoin(types.SCRDenom, amount),
 	}
 }

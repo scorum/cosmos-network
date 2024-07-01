@@ -8,12 +8,12 @@ import (
 )
 
 func (k Keeper) PrepareValidatorsReward(ctx sdk.Context) {
-	feeCollector := k.accountKeeper.GetModuleAccount(ctx, k.feeCollectorName)
+	feeCollectorAddr := k.accountKeeper.GetModuleAddress(k.feeCollectorName)
 
 	ctx.Logger().Debug("burn collected gas from fee_collector")
-	b := k.bankKeeper.GetBalance(ctx, feeCollector.GetAddress(), types.GasDenom)
+	b := k.bankKeeper.GetBalance(ctx, feeCollectorAddr, types.GasDenom)
 	if b.IsPositive() {
-		if err := k.Burn(ctx, feeCollector.GetAddress(), b); err != nil {
+		if err := k.Burn(ctx, feeCollectorAddr, b); err != nil {
 			panic(fmt.Errorf("failed to burn gas coins: %w", err))
 		}
 	}
@@ -46,7 +46,7 @@ func (k Keeper) PrepareValidatorsReward(ctx sdk.Context) {
 		return
 	}
 
-	if err := k.bankKeeper.SendCoins(ctx, poolAddress, feeCollector.GetAddress(), sdk.NewCoins(blockReward)); err != nil {
+	if err := k.bankKeeper.SendCoins(ctx, poolAddress, feeCollectorAddr, sdk.NewCoins(blockReward)); err != nil {
 		panic(fmt.Errorf("failed to send coins from validators reward pool to fee_collector: %w", err))
 	}
 
