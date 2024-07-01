@@ -168,6 +168,7 @@ var (
 		}),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
+		circuit.AppModuleBasic{},
 		slashing.AppModuleBasic{},
 		feegrantmodule.AppModuleBasic{},
 		groupmodule.AppModuleBasic{},

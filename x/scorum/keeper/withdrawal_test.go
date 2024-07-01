@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/google/uuid"
@@ -28,7 +30,7 @@ func TestKeeper_GetSPWithdrawal(t *testing.T) {
 		Id:                      id,
 		From:                    addr.String(),
 		To:                      addr.String(),
-		Total:                   sdk.IntProto{Int: sdk.NewInt(50)},
+		Total:                   math.NewInt(50),
 		PeriodDurationInSeconds: 5,
 		TotalPeriods:            10,
 		ProcessedPeriod:         1,
@@ -60,7 +62,7 @@ func TestKeeper_ListWithdrawals(t *testing.T) {
 			Id:                      uuid.New().String(),
 			From:                    addr.String(),
 			To:                      addr.String(),
-			Total:                   sdk.IntProto{Int: sdk.NewInt(50)},
+			Total:                   math.NewInt(50),
 			PeriodDurationInSeconds: 5,
 			TotalPeriods:            10,
 			ProcessedPeriod:         1,
@@ -71,7 +73,7 @@ func TestKeeper_ListWithdrawals(t *testing.T) {
 			Id:                      uuid.New().String(),
 			From:                    addr.String(),
 			To:                      addr.String(),
-			Total:                   sdk.IntProto{Int: sdk.NewInt(50)},
+			Total:                   math.NewInt(50),
 			PeriodDurationInSeconds: 5,
 			TotalPeriods:            10,
 			ProcessedPeriod:         1,
@@ -104,7 +106,7 @@ func TestKeeper_ListAllWithdrawals(t *testing.T) {
 			Id:                      uuid.New().String(),
 			From:                    addr1.String(),
 			To:                      addr1.String(),
-			Total:                   sdk.IntProto{Int: sdk.NewInt(50)},
+			Total:                   math.NewInt(50),
 			PeriodDurationInSeconds: 5,
 			TotalPeriods:            10,
 			ProcessedPeriod:         1,
@@ -115,7 +117,7 @@ func TestKeeper_ListAllWithdrawals(t *testing.T) {
 			Id:                      uuid.New().String(),
 			From:                    addr2.String(),
 			To:                      addr2.String(),
-			Total:                   sdk.IntProto{Int: sdk.NewInt(50)},
+			Total:                   math.NewInt(50),
 			PeriodDurationInSeconds: 5,
 			TotalPeriods:            10,
 			ProcessedPeriod:         1,
@@ -150,7 +152,7 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 		Id:                      id1,
 		From:                    addr1.String(),
 		To:                      addr1.String(),
-		Total:                   sdk.IntProto{Int: sdk.NewInt(500)},
+		Total:                   math.NewInt(500),
 		PeriodDurationInSeconds: 5,
 		TotalPeriods:            10,
 		ProcessedPeriod:         0,
@@ -161,7 +163,7 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 		Id:                      id2,
 		From:                    addr2.String(),
 		To:                      addr2.String(),
-		Total:                   sdk.IntProto{Int: sdk.NewInt(500)},
+		Total:                   math.NewInt(500),
 		PeriodDurationInSeconds: 5,
 		TotalPeriods:            10,
 		ProcessedPeriod:         0,
@@ -172,7 +174,7 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 		Id:                      id3,
 		From:                    addr3.String(),
 		To:                      addr3.String(),
-		Total:                   sdk.IntProto{Int: sdk.NewInt(500)},
+		Total:                   math.NewInt(500),
 		PeriodDurationInSeconds: 5,
 		TotalPeriods:            10,
 		ProcessedPeriod:         0,
@@ -183,7 +185,7 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 		Id:                      uuid.NewString(),
 		From:                    addr3.String(),
 		To:                      addr3.String(),
-		Total:                   sdk.IntProto{Int: sdk.NewInt(500)},
+		Total:                   math.NewInt(500),
 		PeriodDurationInSeconds: 5,
 		TotalPeriods:            10,
 		ProcessedPeriod:         0,
@@ -194,7 +196,7 @@ func TestKeeper_WithdrawSP(t *testing.T) {
 		Id:                      id4,
 		From:                    addr4.String(),
 		To:                      addr4.String(),
-		Total:                   sdk.IntProto{Int: sdk.NewInt(10)},
+		Total:                   math.NewInt(10),
 		PeriodDurationInSeconds: 5,
 		TotalPeriods:            3,
 		ProcessedPeriod:         0,

@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/scorum/cosmos-network/testutil/sample"
@@ -14,7 +16,7 @@ import (
 func TestKeeper_getAverageSPBalance(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
-	require.True(t, sdk.NewDec(1).Equal(set.keeper.GetAverageSPBalance(ctx.Context)))
+	require.True(t, math.LegacyNewDec(1).Equal(set.keeper.GetAverageSPBalance(ctx.Context)))
 
 	set.bankKeeper.InitGenesis(ctx.Context, &banktypes.GenesisState{
 		Params: banktypes.DefaultParams(),
@@ -28,7 +30,7 @@ func TestKeeper_getAverageSPBalance(t *testing.T) {
 		},
 	})
 
-	exp := sdk.NewDec(21).QuoInt64(6)
+	exp := math.LegacyNewDec(21).QuoInt64(6)
 	act := set.keeper.GetAverageSPBalance(ctx.Context)
 	require.True(t, exp.Equal(act))
 }

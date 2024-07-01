@@ -11,6 +11,9 @@ import (
 )
 
 func main() {
+	// Set config
+	app.InitSDKConfig()
+
 	rootCmd := cmd.NewRootCmd()
 	if err := svrcmd.Execute(rootCmd, "", app.DefaultNodeHome); err != nil {
 		fmt.Fprintln(rootCmd.OutOrStderr(), err)

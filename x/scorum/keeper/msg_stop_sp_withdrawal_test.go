@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/testutil/sample"
 	"github.com/scorum/cosmos-network/x/scorum/keeper"
@@ -16,12 +18,12 @@ func TestMsgServer_StopWithdrawalSp(t *testing.T) {
 	s := keeper.NewMsgServer(set.keeper)
 
 	addr := sample.AccAddress()
-	require.NoError(t, set.keeper.Mint(ctx.Context, addr, sdk.NewCoin(types.SPDenom, sdk.NewInt(100))))
+	require.NoError(t, set.keeper.Mint(ctx.Context, addr, sdk.NewCoin(types.SPDenom, math.NewInt(100))))
 
 	resp, err := s.WithdrawSP(ctx, &types.MsgWithdrawSP{
 		Owner:     addr.String(),
 		Recipient: addr.String(),
-		Amount:    sdk.IntProto{Int: sdk.NewInt(50)},
+		Amount:    math.NewInt(50),
 	})
 	require.NoError(t, err)
 	require.NotEmpty(t, resp.WithdrawalId)

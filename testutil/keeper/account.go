@@ -3,9 +3,16 @@ package keeper
 import (
 	"testing"
 
-	"cosmossdk.io/x/nft"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/cosmos/cosmos-sdk/codec/address"
+	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"cosmossdk.io/x/nft"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -21,18 +28,19 @@ func AccountKeeper(t testing.TB, ctx TestContext) keeper.AccountKeeper {
 
 	k := keeper.NewAccountKeeper(
 		cdc,
-		ctx.KVKeys[types.StoreKey],
+		runtime.NewKVStoreService(ctx.KVKeys[types.StoreKey]),
 		types.ProtoBaseAccount,
 		map[string][]string{
 			scorumtypes.ModuleName: {types.Minter, types.Burner},
 			nft.ModuleName:         nil,
 		},
-		"scorum",
+		address.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
+		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
 	// Initialize params
-	k.SetParams(ctx.Context, types.DefaultParams())
+	require.NoError(t, k.Params.Set(ctx.Context, types.DefaultParams()))
 
 	return k
 }

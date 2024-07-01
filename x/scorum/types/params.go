@@ -119,12 +119,12 @@ func (p Params) String() string {
 }
 
 func validateGasLimit(i interface{}) error {
-	s, ok := i.(sdk.IntProto)
+	s, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if s.Int.IsZero() || s.Int.IsNegative() {
+	if s.IsZero() || s.IsNegative() {
 		return fmt.Errorf("must be positive")
 	}
 
@@ -132,12 +132,12 @@ func validateGasLimit(i interface{}) error {
 }
 
 func validateGasUnconditionedAmount(i interface{}) error {
-	s, ok := i.(sdk.IntProto)
+	s, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if s.Int.IsNegative() {
+	if s.IsNegative() {
 		return fmt.Errorf("must not be negative")
 	}
 
@@ -145,12 +145,12 @@ func validateGasUnconditionedAmount(i interface{}) error {
 }
 
 func validateGasAdjustCoefficient(i interface{}) error {
-	s, ok := i.(sdk.DecProto)
+	s, ok := i.(math.LegacyDec)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if s.Dec.IsZero() || s.Dec.IsNegative() {
+	if s.IsZero() || s.IsNegative() {
 		return fmt.Errorf("must be positive")
 	}
 

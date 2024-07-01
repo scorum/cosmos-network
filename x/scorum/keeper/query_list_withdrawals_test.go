@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/uuid"
 	"github.com/scorum/cosmos-network/testutil/sample"
@@ -21,7 +23,7 @@ func TestQuery_QueryWithdrawals(t *testing.T) {
 		Id:                      uuid.NewString(),
 		From:                    addr.String(),
 		To:                      addr.String(),
-		Total:                   sdk.IntProto{Int: sdk.NewInt(50)},
+		Total:                   math.NewInt(50),
 		PeriodDurationInSeconds: 5,
 		TotalPeriods:            10,
 		ProcessedPeriod:         1,

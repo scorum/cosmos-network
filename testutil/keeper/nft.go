@@ -3,6 +3,8 @@ package keeper
 import (
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/runtime"
+
 	"cosmossdk.io/x/nft"
 	"cosmossdk.io/x/nft/keeper"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -15,7 +17,12 @@ func NftKeeper(t testing.TB, ctx TestContext) keeper.Keeper {
 
 	nft.RegisterInterfaces(registry)
 
-	k := keeper.NewKeeper(ctx.KVKeys[nft.StoreKey], cdc, AccountKeeper(t, ctx), BankKeeper(t, ctx))
+	k := keeper.NewKeeper(
+		runtime.NewKVStoreService(ctx.KVKeys[nft.StoreKey]),
+		cdc,
+		AccountKeeper(t, ctx),
+		BankKeeper(t, ctx),
+	)
 
 	return k
 }

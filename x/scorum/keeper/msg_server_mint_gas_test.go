@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/testutil/sample"
 	"github.com/scorum/cosmos-network/x/scorum/keeper"
@@ -13,7 +15,7 @@ import (
 func TestMsgServer_MintGas(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
-	coin := sdk.NewCoin(types.GasDenom, sdk.NewInt(1000))
+	coin := sdk.NewCoin(types.GasDenom, math.NewInt(1000))
 
 	s := keeper.NewMsgServer(set.keeper)
 
@@ -24,7 +26,7 @@ func TestMsgServer_MintGas(t *testing.T) {
 	_, err := s.MintGas(ctx, &types.MsgMintGas{
 		Supervisor: set.supervisor.String(),
 		Address:    set.supervisor.String(),
-		Amount:     sdk.IntProto{Int: sdk.NewInt(10000000)},
+		Amount:     math.NewInt(10000000),
 	})
 	require.NoError(t, err)
 
@@ -35,7 +37,7 @@ func TestMsgServer_MintGas_NotSupervisor(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
 	addr := sample.AccAddress()
-	coin := sdk.NewCoin(types.GasDenom, sdk.NewInt(1000))
+	coin := sdk.NewCoin(types.GasDenom, math.NewInt(1000))
 
 	s := keeper.NewMsgServer(set.keeper)
 
@@ -46,7 +48,7 @@ func TestMsgServer_MintGas_NotSupervisor(t *testing.T) {
 	_, err := s.MintGas(ctx, &types.MsgMintGas{
 		Supervisor: addr.String(),
 		Address:    set.supervisor.String(),
-		Amount:     sdk.IntProto{Int: sdk.NewInt(10000000)},
+		Amount:     math.NewInt(10000000),
 	})
 	require.Error(t, err)
 }

@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/testutil/sample"
 	"github.com/scorum/cosmos-network/x/scorum/keeper"
@@ -16,19 +18,19 @@ func TestMsgServer_WithdrawSP(t *testing.T) {
 	s := keeper.NewMsgServer(set.keeper)
 
 	addr := sample.AccAddress()
-	require.NoError(t, set.keeper.Mint(ctx.Context, addr, sdk.NewCoin(types.SPDenom, sdk.NewInt(100))))
+	require.NoError(t, set.keeper.Mint(ctx.Context, addr, sdk.NewCoin(types.SPDenom, math.NewInt(100))))
 
 	_, err := s.WithdrawSP(ctx, &types.MsgWithdrawSP{
 		Owner:     addr.String(),
 		Recipient: addr.String(),
-		Amount:    sdk.IntProto{Int: sdk.NewInt(101)},
+		Amount:    math.NewInt(101),
 	})
 	require.Error(t, err)
 
 	resp, err := s.WithdrawSP(ctx, &types.MsgWithdrawSP{
 		Owner:     addr.String(),
 		Recipient: addr.String(),
-		Amount:    sdk.IntProto{Int: sdk.NewInt(50)},
+		Amount:    math.NewInt(50),
 	})
 	require.NoError(t, err)
 	require.NotEmpty(t, resp.WithdrawalId)
@@ -36,7 +38,7 @@ func TestMsgServer_WithdrawSP(t *testing.T) {
 	_, err = s.WithdrawSP(ctx, &types.MsgWithdrawSP{
 		Owner:     addr.String(),
 		Recipient: addr.String(),
-		Amount:    sdk.IntProto{Int: sdk.NewInt(51)},
+		Amount:    math.NewInt(51),
 	})
 	require.Error(t, err)
 
@@ -44,7 +46,7 @@ func TestMsgServer_WithdrawSP(t *testing.T) {
 	resp, err = s.WithdrawSP(ctx.WithTxBytes([]byte("123")), &types.MsgWithdrawSP{
 		Owner:     addr.String(),
 		Recipient: addr.String(),
-		Amount:    sdk.IntProto{Int: sdk.NewInt(45)},
+		Amount:    math.NewInt(45),
 	})
 	require.NoError(t, err)
 	require.NotEmpty(t, resp.WithdrawalId)

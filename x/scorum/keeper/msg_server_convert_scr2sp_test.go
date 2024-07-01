@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/x/scorum/keeper"
 	"github.com/scorum/cosmos-network/x/scorum/types"
@@ -12,7 +14,7 @@ import (
 func TestMsgServer_ConvertSCR2SP(t *testing.T) {
 	set, ctx := setupKeeper(t)
 
-	coin := sdk.NewCoin(types.SCRDenom, sdk.NewInt(1000))
+	coin := sdk.NewCoin(types.SCRDenom, math.NewInt(1000))
 
 	s := keeper.NewMsgServer(set.keeper)
 
@@ -23,7 +25,7 @@ func TestMsgServer_ConvertSCR2SP(t *testing.T) {
 
 	_, err := s.ConvertSCR2SP(ctx, &types.MsgConvertSCR2SP{
 		Owner:  set.supervisor.String(),
-		Amount: sdk.IntProto{Int: sdk.NewInt(300)},
+		Amount: math.NewInt(300),
 	})
 	require.NoError(t, err)
 
