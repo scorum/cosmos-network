@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"math/rand"
 
+	"cosmossdk.io/core/address"
+
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
@@ -39,10 +41,11 @@ var (
 // AppModuleBasic implements the AppModuleBasic interface that defines the independent methods a Cosmos SDK module needs to implement.
 type AppModuleBasic struct {
 	cdc codec.BinaryCodec
+	ac  address.Codec
 }
 
-func NewAppModuleBasic(cdc codec.BinaryCodec) AppModuleBasic {
-	return AppModuleBasic{cdc: cdc}
+func NewAppModuleBasic(cdc codec.BinaryCodec, ac address.Codec) AppModuleBasic {
+	return AppModuleBasic{cdc: cdc, ac: ac}
 }
 
 // Name returns the name of the module as a string
@@ -83,7 +86,7 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 
 // GetTxCmd returns the root Tx command for the module. The subcommands of this root command are used by end-users to generate new transactions containing messages defined in the module
 func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
+	return cli.GetTxCmd(a.ac)
 }
 
 // GetQueryCmd returns the root query command for the module. The subcommands of this root command are used by end-users to generate new queries to the subset of the state defined by the module
@@ -106,12 +109,13 @@ type AppModule struct {
 
 func NewAppModule(
 	cdc codec.Codec,
+	ac address.Codec,
 	keeper keeper.Keeper,
 	accountKeeper accountkeeper.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
 ) AppModule {
 	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
+		AppModuleBasic: NewAppModuleBasic(cdc, ac),
 		keeper:         keeper,
 		accountKeeper:  accountKeeper,
 		bankKeeper:     bankKeeper,

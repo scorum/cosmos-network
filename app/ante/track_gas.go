@@ -49,7 +49,6 @@ func (d TrackGasConsumedDecorator) AnteHandle(
 		}
 
 		d.sk.SetAddressToRestoreGas(ctx, addr.GetAddress())
-
 	}
 
 	return next(ctx, tx, simulate)

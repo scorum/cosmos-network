@@ -3,6 +3,8 @@ package cli
 import (
 	"fmt"
 
+	addresscodec "cosmossdk.io/core/address"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
 
@@ -11,7 +13,7 @@ import (
 )
 
 // GetTxCmd returns the transaction commands for this module
-func GetTxCmd() *cobra.Command {
+func GetTxCmd(ac addresscodec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      fmt.Sprintf("%s transactions subcommands", types.ModuleName),
@@ -24,13 +26,13 @@ func GetTxCmd() *cobra.Command {
 		CmdConvertSCR2SP(),
 		CmdWithdrawSP(),
 		CmdStopSPWithdrawal(),
-		GetSupervisorTxCmd(),
+		GetSupervisorTxCmd(ac),
 	)
 
 	return cmd
 }
 
-func GetSupervisorTxCmd() *cobra.Command {
+func GetSupervisorTxCmd(ac addresscodec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                        "admin",
 		Short:                      "Supervisor transactions subcommands",
@@ -42,6 +44,7 @@ func GetSupervisorTxCmd() *cobra.Command {
 	cmd.AddCommand(
 		CmdBurn(),
 		CmdMintGas(),
+		CmdSubmitMintProposal(ac),
 	)
 
 	return cmd

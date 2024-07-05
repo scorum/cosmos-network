@@ -681,7 +681,7 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
 		ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper),
-		scorum.NewAppModule(appCodec, app.ScorumKeeper, app.AccountKeeper, app.BankKeeper),
+		scorum.NewAppModule(appCodec, app.AccountKeeper.AddressCodec(), app.ScorumKeeper, app.AccountKeeper, app.BankKeeper),
 		aviatrix.NewAppModule(appCodec, app.AviatrixKeeper, app.ScorumKeeper, app.NftKeeper, app.AccountKeeper, app.BankKeeper),
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
 	)
@@ -1069,7 +1069,7 @@ func (app *App) SimulationManager() *module.SimulationManager {
 }
 
 func (app *App) setupUpgradeHandlers() {
-	app.UpgradeKeeper.SetUpgradeHandler(v120.Name, v120.Handler(app.configurator, app.mm))
+	app.UpgradeKeeper.SetUpgradeHandler(v120.Name, v120.Handler(app.configurator, app.mm, app.cdc, app.GetSubspace(scorumtypes.ModuleName)))
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {

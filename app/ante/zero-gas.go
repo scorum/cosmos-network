@@ -49,7 +49,7 @@ func (d ZeroGasTxDecorator) AnteHandle(
 			return ctx, err
 		}
 
-		if d.sk.IsSupervisor(ctx.WithGasMeter(NewFixedGasMeter(0, ctx.GasMeter().Limit())), v.String()) {
+		if d.sk.IsSupervisor(ctx.WithGasMeter(NewFixedGasMeter(0, ctx.GasMeter().Limit())), v.GetAddress().String()) {
 			return next(
 				ctx.
 					WithGasMeter(NewFixedGasMeter(0, ctx.GasMeter().Limit())).
