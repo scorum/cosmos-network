@@ -385,7 +385,7 @@ func New(
 		appCodec,
 		keys[stakingtypes.StoreKey],
 		app.AccountKeeper,
-		app.BankKeeper,
+		scorumwrapper.NewStakingBankKeeper(app.BankKeeper, &app.ScorumKeeper), // used to prevent burning on slashing.
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
