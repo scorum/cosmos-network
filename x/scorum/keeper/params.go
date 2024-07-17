@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"slices"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
@@ -18,5 +20,5 @@ func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 }
 
 func (k Keeper) IsSupervisor(ctx sdk.Context, addr string) bool {
-	return contains(k.GetParams(ctx).Supervisors, addr)
+	return slices.Contains(k.GetParams(ctx).Supervisors, addr)
 }

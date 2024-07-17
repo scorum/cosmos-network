@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"slices"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -74,7 +76,7 @@ func (k Keeper) GetAverageSPBalance(ctx sdk.Context) sdk.Dec {
 	supervisors := k.GetParams(ctx).Supervisors
 	total, size := sdk.ZeroDec(), int64(0)
 	k.bankKeeper.IterateAllBalances(ctx, func(addr sdk.AccAddress, coin sdk.Coin) (stop bool) {
-		if contains(supervisors, addr.String()) {
+		if slices.Contains(supervisors, addr.String()) {
 			return false
 		}
 
