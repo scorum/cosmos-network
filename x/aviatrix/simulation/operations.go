@@ -3,9 +3,10 @@ package simulation
 import (
 	"math/rand"
 
+	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
+
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
@@ -117,7 +118,7 @@ func SimulateMsgCreatePlane(
 		txCtx := simulation.OperationInput{
 			R:             r,
 			App:           app,
-			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),
@@ -175,7 +176,7 @@ func SimulateMsgUpdatePlaneExperience(
 		txCtx := simulation.OperationInput{
 			R:             r,
 			App:           app,
-			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),
@@ -233,7 +234,7 @@ func SimulateMsgAdjustPlaneExperience(
 		txCtx := simulation.OperationInput{
 			R:             r,
 			App:           app,
-			TxGen:         simapp.MakeTestEncodingConfig().TxConfig,
+			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
 			MsgType:       msg.Type(),

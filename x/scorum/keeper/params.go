@@ -1,9 +1,10 @@
 package keeper
 
 import (
+	"slices"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
-	"golang.org/x/exp/slices"
 )
 
 // GetParams get all parameters as types.Params

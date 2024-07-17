@@ -9,20 +9,24 @@ import (
 	"os"
 	"testing"
 
+	"github.com/scorum/cosmos-network/app/sim"
+
+	"github.com/cosmos/cosmos-sdk/testutil/sims"
+
+	dbm "github.com/cometbft/cometbft-db"
+	"github.com/cometbft/cometbft/libs/log"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/simapp/helpers"
 	"github.com/cosmos/cosmos-sdk/store"
 	simulationtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	"github.com/scorum/cosmos-network/app"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	dbm "github.com/tendermint/tm-db"
 )
 
+const ChainID = "scorum"
+
 func init() {
-	simapp.GetSimulatorFlags()
+	sim.GetSimulatorFlags()
 }
 
 // interBlockCacheOpt returns a BaseApp option function that sets the persistent
@@ -32,7 +36,7 @@ func interBlockCacheOpt() func(*baseapp.BaseApp) {
 }
 
 func TestAppStateDeterminism(t *testing.T) {
-	config := simapp.NewConfigFromFlags()
+	config := sim.NewConfigFromFlags()
 	config.InitialBlockHeight = 1
 	config.ExportParamsPath = ""
 	config.OnOperation = false
@@ -40,7 +44,7 @@ func TestAppStateDeterminism(t *testing.T) {
 	config.NumBlocks = 250
 	config.BlockSize = 100
 	config.Commit = true
-	config.ChainID = helpers.SimAppChainID
+	config.ChainID = ChainID
 
 	numSeeds := 5
 	numTimesToRunPerSeed := 3
@@ -51,24 +55,24 @@ func TestAppStateDeterminism(t *testing.T) {
 
 		for j := 0; j < numTimesToRunPerSeed; j++ {
 			var logger log.Logger
-			if simapp.FlagVerboseValue {
+			if sim.FlagVerboseValue {
 				logger = log.TestingLogger()
 			} else {
 				logger = log.NewNopLogger()
 			}
 
 			db := dbm.NewMemDB()
-			app := app.New(
+			simapp := app.New(
 				logger,
 				db,
 				nil,
 				true,
 				map[int64]bool{},
-				simapp.DefaultNodeHome,
-				simapp.FlagPeriodValue,
-				app.MakeEncodingConfig(),
-				simapp.EmptyAppOptions{},
+				app.DefaultNodeHome,
+				sim.FlagPeriodValue,
+				sims.AppOptionsMap{},
 				interBlockCacheOpt(),
+				baseapp.SetChainID(ChainID),
 			)
 
 			fmt.Printf(
@@ -79,21 +83,17 @@ func TestAppStateDeterminism(t *testing.T) {
 			_, _, err := simulation.SimulateFromSeed(
 				t,
 				os.Stdout,
-				app.BaseApp,
-				simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
+				simapp.BaseApp,
+				sims.AppStateFn(simapp.AppCodec(), simapp.SimulationManager(), app.NewDefaultGenesisState(simapp.AppCodec())),
 				simulationtypes.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
-				simapp.SimulationOperations(app, app.AppCodec(), config),
-				app.ModuleAccountAddrs(),
+				sims.SimulationOperations(simapp, simapp.AppCodec(), config),
+				simapp.ModuleAccountAddrs(),
 				config,
-				app.AppCodec(),
+				simapp.AppCodec(),
 			)
 			require.NoError(t, err)
 
-			if config.Commit {
-				PrintStats(db)
-			}
-
-			appHash := app.LastCommitID().Hash
+			appHash := simapp.LastCommitID().Hash
 			appHashList[j] = appHash
 
 			if j != 0 {
@@ -104,11 +104,4 @@ func TestAppStateDeterminism(t *testing.T) {
 			}
 		}
 	}
-}
-
-// PrintStats prints the corresponding statistics from the app DB.
-func PrintStats(db dbm.DB) {
-	fmt.Println("\nLevelDB Stats")
-	fmt.Println(db.Stats()["leveldb.stats"])
-	fmt.Println("LevelDB cached block size", db.Stats()["leveldb.cachedblock"])
 }

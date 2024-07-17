@@ -1,11 +1,12 @@
 package keeper
 
 import (
+	"slices"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
-	"golang.org/x/exp/slices"
 )
 
 var gasConsumedAddressesPrefix = []byte("gas_consumed")
