@@ -12,7 +12,6 @@ option go_package = "github.com/scorum/cosmos-network/x/scorum/types";
 // GenesisState defines the scorum module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
-  repeated SPWithdrawal sp_withdrawals = 2 [(gogoproto.nullable) = false];
-  repeated string restore_gas_addresses = 3;
+  repeated string restore_gas_addresses = 2;
 }
 

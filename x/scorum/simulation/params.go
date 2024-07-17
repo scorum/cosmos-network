@@ -36,21 +36,5 @@ func ParamChanges(r *rand.Rand) []simtypes.LegacyParamChange {
 				)
 			},
 		),
-		simulation.NewSimLegacyParamChange(types.ModuleName, string(types.KeySPWithdrawalTotalPeriods),
-			func(r *rand.Rand) string {
-				return fmt.Sprintf(
-					`%d`,
-					genSpWithdrawalTotalPeriods(r),
-				)
-			},
-		),
-		simulation.NewSimLegacyParamChange(types.ModuleName, string(types.KeySPWithdrawalPeriodDurationSeconds),
-			func(r *rand.Rand) string {
-				return fmt.Sprintf(
-					`%d`,
-					genSpWithdrawalPeriodDurationSeconds(r),
-				)
-			},
-		),
 	}
 }

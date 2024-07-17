@@ -538,6 +538,7 @@ func New(
 		app.GetSubspace(scorumtypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
+		app.StakingKeeper,
 		authtypes.FeeCollectorName,
 	)
 
@@ -1041,7 +1042,17 @@ func (app *App) setupUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(v101.Name, v101.Handler(app.configurator, app.mm))
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v110.Name,
-		v110.Handler(app.configurator, app.mm, app.ParamsKeeper, &app.ConsensusParamsKeeper),
+		v110.Handler(
+			app.configurator,
+			app.mm,
+			app.cdc,
+			app.GetSubspace(scorumtypes.ModuleName),
+			app.ParamsKeeper,
+			&app.ConsensusParamsKeeper,
+			app.ScorumKeeper,
+			app.BankKeeper,
+			app.StakingKeeper,
+		),
 	)
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()

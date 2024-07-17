@@ -12,11 +12,6 @@ import (
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
-var (
-	withdrawalPrefix        = []byte("withdrawal_owner")
-	withdrawalTimeIdxPrefix = []byte("withdrawal_time")
-)
-
 type (
 	Keeper struct {
 		cdc        codec.BinaryCodec
@@ -24,6 +19,7 @@ type (
 		paramstore paramtypes.Subspace
 
 		bankKeeper    types.BankKeeper
+		stakingKeeper types.StakingKeeper
 		accountKeeper types.AccountKeeper
 
 		feeCollectorName string
@@ -36,6 +32,7 @@ func NewKeeper(
 	ps paramtypes.Subspace,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	stakingKeeper types.StakingKeeper,
 	feeCollectorName string,
 ) Keeper {
 	// set KeyTable if it has not already been set
@@ -50,6 +47,7 @@ func NewKeeper(
 
 		bankKeeper:       bankKeeper,
 		accountKeeper:    accountKeeper,
+		stakingKeeper:    stakingKeeper,
 		feeCollectorName: feeCollectorName,
 	}
 }

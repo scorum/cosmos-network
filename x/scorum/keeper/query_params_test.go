@@ -19,7 +19,6 @@ func TestQuery_GetParams(t *testing.T) {
 		sdk.NewInt(1000),
 		sdk.NewInt(500),
 		sdk.NewDec(1),
-		1, 1,
 	)
 	params.ValidatorsReward = types.ValidatorsRewardParams{
 		PoolAddress: "",

@@ -3,6 +3,7 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type BankKeeper interface {
@@ -22,4 +23,9 @@ type AccountKeeper interface {
 	HasAccount(ctx sdk.Context, addr sdk.AccAddress) bool
 
 	GetModuleAccount(ctx sdk.Context, moduleName string) types.ModuleAccountI
+}
+
+type StakingKeeper interface {
+	GetAllDelegatorDelegations(ctx sdk.Context, delegator sdk.AccAddress) []stakingtypes.Delegation
+	GetAllDelegations(ctx sdk.Context) []stakingtypes.Delegation
 }

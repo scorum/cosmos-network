@@ -11,41 +11,9 @@ import "cosmos/base/v1beta1/coin.proto";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc ConvertSCR2SP(MsgConvertSCR2SP) returns (MsgConvertSCR2SPResponse);
-
-  rpc WithdrawSP(MsgWithdrawSP) returns (MsgWithdrawSPResponse);
-  rpc StopSPWithdrawal(MsgStopSPWithdrawal) returns (MsgStopSPWithdrawalResponse);
-
   rpc Burn(MsgBurn) returns (MsgBurnResponse);
   rpc MintGas(MsgMintGas) returns (MsgMintGasResponse);
 }
-
-message MsgConvertSCR2SP {
-  option (cosmos.msg.v1.signer) = "owner";
-
-  string owner = 1;
-  cosmos.base.v1beta1.IntProto amount = 2 [(gogoproto.nullable) = false];
-}
-message MsgConvertSCR2SPResponse {}
-
-message MsgWithdrawSP {
-  option (cosmos.msg.v1.signer) = "owner";
-
-  string owner = 1;
-  string recipient = 2;
-  cosmos.base.v1beta1.IntProto amount = 3 [(gogoproto.nullable) = false];
-}
-message MsgWithdrawSPResponse {
-  string withdrawal_id = 1;
-}
-
-message MsgStopSPWithdrawal {
-  option (cosmos.msg.v1.signer) = "owner";
-
-  string owner = 1;
-  string id = 2;
-}
-message MsgStopSPWithdrawalResponse {}
 
 message MsgBurn {
   option (cosmos.msg.v1.signer) = "supervisor";

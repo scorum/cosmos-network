@@ -88,12 +88,10 @@ func TestMsgServer_AdjustPlaneExperience(t *testing.T) {
 
 			set, ctx := setupKeeper(t)
 			set.scorumKeeper.SetParams(ctx.Context, scorumtypes.Params{
-				Supervisors:                       []string{supervisorAddr.String()},
-				GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000)},
-				GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(500)},
-				GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
-				SpWithdrawalTotalPeriods:          52,
-				SpWithdrawalPeriodDurationSeconds: 1,
+				Supervisors:            []string{supervisorAddr.String()},
+				GasLimit:               sdk.IntProto{Int: sdk.NewInt(1000)},
+				GasUnconditionedAmount: sdk.IntProto{Int: sdk.NewInt(500)},
+				GasAdjustCoefficient:   sdk.DecProto{Dec: sdk.NewDec(1)},
 			})
 
 			s := keeper.NewMsgServerImpl(set.keeper)
