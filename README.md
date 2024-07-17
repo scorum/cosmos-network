@@ -9,8 +9,8 @@
     <img alt="Cosmos Version: v0.46.11" src="https://img.shields.io/badge/cosmos_sdk-v0.46.11-blueviolet" />
   </a>
 
-  <img alt="Mainnet Version: v1.0.0" src="https://img.shields.io/badge/mainnet-v1.0.0-green" />
-  <img alt="Candidate Version: v1.0.0" src="https://img.shields.io/badge/candidate-v1.0.0-blue" />
+  <img alt="Mainnet Version: v1.0.3" src="https://img.shields.io/badge/mainnet-v1.0.3-green" />
+  <img alt="Candidate Version: v1.1.0" src="https://img.shields.io/badge/candidate-v1.1.0-blue" />
 </div>
 
 # Introducing Scorum Cosmos Network
