@@ -61,8 +61,21 @@ func (k Keeper) Mint(ctx sdk.Context, addr sdk.AccAddress, coin sdk.Coin) error 
 		return fmt.Errorf("failed to mint: %w", err)
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr, sdk.NewCoins(coin)); err != nil {
-		return fmt.Errorf("failed to send minted coins: %w", err)
+	if k.bankKeeper.BlockedAddr(addr) {
+		for name, acc := range k.accountKeeper.GetModulePermissions() {
+			if acc.GetAddress().Equals(addr) {
+				if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, types.ModuleName, name, sdk.NewCoins(coin)); err != nil {
+					return fmt.Errorf("failed to send minted coins: %w", err)
+				}
+
+				return nil
+			}
+		}
+		return fmt.Errorf("%s is not a module and restricted to receive coins", addr)
+	} else {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr, sdk.NewCoins(coin)); err != nil {
+			return fmt.Errorf("failed to send minted coins: %w", err)
+		}
 	}
 
 	return nil

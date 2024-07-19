@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	scorumkeeper "github.com/scorum/cosmos-network/x/scorum/keeper"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -19,29 +18,29 @@ import (
 	upgrade "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 )
 
-const Name = "v110"
+const Name = "v1.1.0"
 
 func Handler(
 	cfg module.Configurator,
 	mm *module.Manager,
 	cdc *codec.LegacyAmino,
-	ps paramtypes.Subspace,
+	scorumParamSpace paramtypes.Subspace,
+	stakingParamSpace paramtypes.Subspace,
 	pk paramskeeper.Keeper,
 	cpk *consensusparamkeeper.Keeper,
 	sk scorumkeeper.Keeper,
 	bk bankkeeper.Keeper,
-	stk *stakingkeeper.Keeper,
 ) func(ctx sdk.Context, _ upgrade.Plan, _ module.VersionMap) (module.VersionMap, error) {
 	return func(ctx sdk.Context, _ upgrade.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		baseAppLegacySS := pk.Subspace(baseapp.Paramspace).
 			WithKeyTable(paramstypes.ConsensusParamsKeyTable())
 		baseapp.MigrateParams(ctx, baseAppLegacySS, cpk)
 
-		if err := migrateScorumParams(ctx, cdc, ps); err != nil {
+		if err := migrateScorumParams(ctx, cdc, scorumParamSpace); err != nil {
 			return nil, fmt.Errorf("fialed to migrate scorum params: %w", err)
 		}
 
-		if err := convertSP(ctx, bk, sk, stk); err != nil {
+		if err := convertSP(ctx, bk, sk, stakingParamSpace); err != nil {
 			return nil, fmt.Errorf("fialed to convert sp denom to scr: %w", err)
 		}
 

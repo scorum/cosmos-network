@@ -1047,11 +1047,11 @@ func (app *App) setupUpgradeHandlers() {
 			app.mm,
 			app.cdc,
 			app.GetSubspace(scorumtypes.ModuleName),
+			app.GetSubspace(stakingtypes.ModuleName),
 			app.ParamsKeeper,
 			&app.ConsensusParamsKeeper,
 			app.ScorumKeeper,
 			app.BankKeeper,
-			app.StakingKeeper,
 		),
 	)
 

@@ -3,7 +3,9 @@ package v110
 import (
 	"fmt"
 
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	scorumtypes "github.com/scorum/cosmos-network/x/scorum/types"
 
@@ -12,7 +14,7 @@ import (
 	scorumkeeper "github.com/scorum/cosmos-network/x/scorum/keeper"
 )
 
-func convertSP(ctx sdk.Context, bk bankkeeper.Keeper, sk scorumkeeper.Keeper, stk *stakingkeeper.Keeper) error {
+func convertSP(ctx sdk.Context, bk bankkeeper.Keeper, sk scorumkeeper.Keeper, ps paramtypes.Subspace) error {
 	var err error
 	bk.IterateAllBalances(ctx, func(address sdk.AccAddress, coin sdk.Coin) (stop bool) {
 		if coin.Denom != "nsp" {
@@ -36,11 +38,10 @@ func convertSP(ctx sdk.Context, bk bankkeeper.Keeper, sk scorumkeeper.Keeper, st
 		return err
 	}
 
-	stakingParams := stk.GetParams(ctx)
+	var stakingParams stakingtypes.Params
+	ps.GetParamSet(ctx, &stakingParams)
 	stakingParams.BondDenom = scorumtypes.SCRDenom
-	if err := stk.SetParams(ctx, stakingParams); err != nil {
-		return fmt.Errorf("failed to set params: %w", err)
-	}
+	ps.SetParamSet(ctx, &stakingParams)
 
 	return nil
 }
