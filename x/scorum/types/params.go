@@ -12,14 +12,12 @@ import (
 var _ paramtypes.ParamSet = (*Params)(nil)
 
 var (
-	KeySupervisors                       = []byte("Supervisors")
-	KeyGasLimit                          = []byte("GasLimit")
-	KeyGasAdjustCoefficient              = []byte("GasAdjustCoefficient")
-	KeyGasUnconditionedAmount            = []byte("GasUnconditionedAmount")
-	KeySPWithdrawalTotalPeriods          = []byte("SPWithdrawalTotalPeriods")
-	KeySPWithdrawalPeriodDurationSeconds = []byte("SPWithdrawalPeriodDurationSeconds")
-	KeyValidatorsRewardPoolAddress       = []byte("ValidatorsRewardPoolAddress")
-	KeyValidatorsRewardPoolBlockReward   = []byte("ValidatorsRewardPoolBlockReward")
+	KeySupervisors                     = []byte("Supervisors")
+	KeyGasLimit                        = []byte("GasLimit")
+	KeyGasAdjustCoefficient            = []byte("GasAdjustCoefficient")
+	KeyGasUnconditionedAmount          = []byte("GasUnconditionedAmount")
+	KeyValidatorsRewardPoolAddress     = []byte("ValidatorsRewardPoolAddress")
+	KeyValidatorsRewardPoolBlockReward = []byte("ValidatorsRewardPoolBlockReward")
 )
 
 // ParamKeyTable the param key table for launch module
@@ -33,32 +31,26 @@ func NewParams(
 	gasLimit sdkmath.Int,
 	gasUnconditionedAmount sdkmath.Int,
 	gasAdjustCoefficient sdk.Dec,
-	spWithdrawalTotalPeriods uint,
-	spWithdrawalPeriodDuration uint,
 ) Params {
 	return Params{
-		Supervisors:                       supervisors,
-		GasLimit:                          sdk.IntProto{Int: gasLimit},
-		GasUnconditionedAmount:            sdk.IntProto{Int: gasUnconditionedAmount},
-		GasAdjustCoefficient:              sdk.DecProto{Dec: gasAdjustCoefficient},
-		SpWithdrawalTotalPeriods:          uint32(spWithdrawalTotalPeriods),
-		SpWithdrawalPeriodDurationSeconds: uint32(spWithdrawalPeriodDuration),
+		Supervisors:            supervisors,
+		GasLimit:               sdk.IntProto{Int: gasLimit},
+		GasUnconditionedAmount: sdk.IntProto{Int: gasUnconditionedAmount},
+		GasAdjustCoefficient:   sdk.DecProto{Dec: gasAdjustCoefficient},
 	}
 }
 
 // DefaultParams returns a default set of parameters
 func DefaultParams() Params {
 	return Params{
-		Supervisors:                       nil,
-		GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000000)},
-		GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(15000)},
-		GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
-		SpWithdrawalTotalPeriods:          52,
-		SpWithdrawalPeriodDurationSeconds: 7 * 24 * 60 * 60, // 52 weeks
+		Supervisors:            nil,
+		GasLimit:               sdk.IntProto{Int: sdk.NewInt(1000000)},
+		GasUnconditionedAmount: sdk.IntProto{Int: sdk.NewInt(15000)},
+		GasAdjustCoefficient:   sdk.DecProto{Dec: sdk.NewDec(1)},
 		ValidatorsReward: ValidatorsRewardParams{
 			PoolAddress: "",
 			BlockReward: sdk.Coin{
-				Denom:  SPDenom,
+				Denom:  SCRDenom,
 				Amount: sdk.ZeroInt(),
 			},
 		},
@@ -72,8 +64,6 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyGasLimit, &p.GasLimit, validateGasLimit),
 		paramtypes.NewParamSetPair(KeyGasUnconditionedAmount, &p.GasUnconditionedAmount, validateGasUnconditionedAmount),
 		paramtypes.NewParamSetPair(KeyGasAdjustCoefficient, &p.GasAdjustCoefficient, validateGasAdjustCoefficient),
-		paramtypes.NewParamSetPair(KeySPWithdrawalTotalPeriods, &p.SpWithdrawalTotalPeriods, validateSPWithdrawalTotalPeriods),
-		paramtypes.NewParamSetPair(KeySPWithdrawalPeriodDurationSeconds, &p.SpWithdrawalPeriodDurationSeconds, validateSPWithdrawalPeriodDurationSeconds),
 		paramtypes.NewParamSetPair(KeyValidatorsRewardPoolAddress, &p.ValidatorsReward.PoolAddress, validateValidatorsRewardPoolAddress),
 		paramtypes.NewParamSetPair(KeyValidatorsRewardPoolBlockReward, &p.ValidatorsReward.BlockReward, validateValidatorsRewardBlockReward),
 	}
@@ -91,14 +81,6 @@ func (p Params) Validate() error {
 
 	if err := validateGasAdjustCoefficient(p.GasAdjustCoefficient); err != nil {
 		return fmt.Errorf("invalid gasAdjustCoefficient: %w", err)
-	}
-
-	if err := validateSPWithdrawalTotalPeriods(p.SpWithdrawalTotalPeriods); err != nil {
-		return fmt.Errorf("invalid spWithdrawalTotalPeriods: %w", err)
-	}
-
-	if err := validateSPWithdrawalPeriodDurationSeconds(p.SpWithdrawalPeriodDurationSeconds); err != nil {
-		return fmt.Errorf("invalid spWithdrawalPeriodDurationSeconds: %w", err)
 	}
 
 	if err := validateValidatorsRewardPoolAddress(p.ValidatorsReward.PoolAddress); err != nil {
@@ -171,32 +153,6 @@ func validateSupervisors(i interface{}) error {
 		if err := sdk.VerifyAddressFormat(addr); err != nil {
 			return fmt.Errorf("invalid address %d", i+1)
 		}
-	}
-
-	return nil
-}
-
-func validateSPWithdrawalTotalPeriods(i interface{}) error {
-	v, ok := i.(uint32)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v == 0 {
-		return fmt.Errorf("can not be zero")
-	}
-
-	return nil
-}
-
-func validateSPWithdrawalPeriodDurationSeconds(i interface{}) error {
-	v, ok := i.(uint32)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v == 0 {
-		return fmt.Errorf("can not be zero")
 	}
 
 	return nil

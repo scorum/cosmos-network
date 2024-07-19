@@ -3,6 +3,8 @@ package keeper
 import (
 	"testing"
 
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -18,14 +20,15 @@ func AccountKeeper(t testing.TB, ctx TestContext) keeper.AccountKeeper {
 	cdc := codec.NewProtoCodec(registry)
 
 	types.RegisterInterfaces(registry)
-
 	k := keeper.NewAccountKeeper(
 		cdc,
 		ctx.KVKeys[types.StoreKey],
 		types.ProtoBaseAccount,
 		map[string][]string{
-			scorumtypes.ModuleName: {types.Minter, types.Burner},
-			nft.ModuleName:         nil,
+			scorumtypes.ModuleName:         {types.Minter, types.Burner},
+			nft.ModuleName:                 nil,
+			stakingtypes.BondedPoolName:    {types.Burner, types.Staking},
+			stakingtypes.NotBondedPoolName: {types.Burner, types.Staking},
 		},
 		"scorum",
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),

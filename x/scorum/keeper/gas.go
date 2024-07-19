@@ -5,7 +5,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
@@ -17,17 +16,20 @@ func (k Keeper) SetAddressToRestoreGas(ctx sdk.Context, addr sdk.AccAddress) {
 	s.Set(addr.Bytes(), []byte{})
 }
 
-func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSPBalance sdk.Dec, params types.Params) {
+func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgStakedBalance sdk.Dec, params types.Params) {
 	s := prefix.NewStore(ctx.KVStore(k.storeKey), gasConsumedAddressesPrefix)
 
 	gasBalance := k.bankKeeper.GetBalance(ctx, addr, types.GasDenom).Amount
-	spBalance := k.bankKeeper.GetBalance(ctx, addr, types.SPDenom).Amount
+	stakedBalance := sdk.NewInt(0)
+	for _, delegation := range k.stakingKeeper.GetAllDelegatorDelegations(ctx, addr) {
+		stakedBalance = stakedBalance.Add(delegation.Shares.RoundInt())
+	}
 
 	if gasBalance.IsNil() {
 		gasBalance = sdk.ZeroInt()
 	}
-	if spBalance.IsNil() {
-		spBalance = sdk.ZeroInt()
+	if stakedBalance.IsNil() {
+		stakedBalance = sdk.ZeroInt()
 	}
 
 	if gasBalance.GTE(params.GasLimit.Int) {
@@ -35,10 +37,10 @@ func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSP
 	}
 
 	gasAdjust := calculateGasAdjustAmount(
-		sdk.NewDecFromInt(spBalance),
+		sdk.NewDecFromInt(stakedBalance),
 		sdk.NewDecFromInt(params.GasLimit.Int),
 		sdk.NewDecFromInt(params.GasUnconditionedAmount.Int),
-		avgSPBalance,
+		avgStakedBalance,
 		params.GasAdjustCoefficient.Dec,
 	).RoundInt()
 
@@ -59,38 +61,31 @@ func (k Keeper) RestoreGas(ctx sdk.Context) {
 	it := s.Iterator(nil, nil)
 	defer it.Close()
 
-	avgSPBalance, params := k.GetAverageSPBalance(ctx), k.GetParams(ctx)
+	avgStakedBalance, params := k.GetAverageStakedBalance(ctx), k.GetParams(ctx)
 	for ; it.Valid(); it.Next() {
-		k.RestoreGasForAddress(ctx, it.Key(), avgSPBalance, params)
+		k.RestoreGasForAddress(ctx, it.Key(), avgStakedBalance, params)
 	}
 }
 
-func calculateGasAdjustAmount(spBalance, gasLimit, gasUnconditionedAmount, avgSPBalance, gasAdjustCoefficient sdk.Dec) sdk.Dec {
-	//                                           spBalance
-	// adjustAmount = gasUnconditionedAmount + ------------- * GasLimit * GasAdjustCoefficient
-	//                                          avgSPBalance
-	return gasUnconditionedAmount.Add(spBalance.Quo(avgSPBalance).Mul(gasLimit).Mul(gasAdjustCoefficient))
+func calculateGasAdjustAmount(stakedBalance, gasLimit, gasUnconditionedAmount, avgStakedBalance, gasAdjustCoefficient sdk.Dec) sdk.Dec {
+	//                                          stakedBalance
+	// adjustAmount = gasUnconditionedAmount + ------------------ * GasLimit * GasAdjustCoefficient
+	//                                          avgStakedBalance
+	return gasUnconditionedAmount.Add(stakedBalance.Quo(avgStakedBalance).Mul(gasLimit).Mul(gasAdjustCoefficient))
 }
 
-func (k Keeper) GetAverageSPBalance(ctx sdk.Context) sdk.Dec {
+func (k Keeper) GetAverageStakedBalance(ctx sdk.Context) sdk.Dec {
 	supervisors := k.GetParams(ctx).Supervisors
 	total, size := sdk.ZeroDec(), int64(0)
-	k.bankKeeper.IterateAllBalances(ctx, func(addr sdk.AccAddress, coin sdk.Coin) (stop bool) {
-		if slices.Contains(supervisors, addr.String()) {
-			return false
+
+	for _, delegation := range k.stakingKeeper.GetAllDelegations(ctx) {
+		if slices.Contains(supervisors, delegation.DelegatorAddress) {
+			continue
 		}
 
-		if _, ok := k.accountKeeper.GetAccount(ctx, addr).(authtypes.ModuleAccountI); ok {
-			return false
-		}
-
-		if coin.Denom == types.SPDenom {
-			total = total.Add(sdk.NewDecFromInt(coin.Amount))
-			size++
-		}
-
-		return false
-	})
+		total = total.Add(delegation.Shares)
+		size++
+	}
 
 	if size == 0 {
 		return sdk.NewDec(1)

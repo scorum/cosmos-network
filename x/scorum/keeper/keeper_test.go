@@ -31,12 +31,10 @@ func setupKeeper(t testing.TB) (keeperSet, testutil.TestContext) {
 	}
 
 	set.keeper.SetParams(ctx.Context, types.Params{
-		Supervisors:                       []string{set.supervisor.String()},
-		GasLimit:                          sdk.IntProto{Int: sdk.NewInt(1000)},
-		GasUnconditionedAmount:            sdk.IntProto{Int: sdk.NewInt(500)},
-		GasAdjustCoefficient:              sdk.DecProto{Dec: sdk.NewDec(1)},
-		SpWithdrawalTotalPeriods:          52,
-		SpWithdrawalPeriodDurationSeconds: 7 * 24 * 60 * 60,
+		Supervisors:            []string{set.supervisor.String()},
+		GasLimit:               sdk.IntProto{Int: sdk.NewInt(1000)},
+		GasUnconditionedAmount: sdk.IntProto{Int: sdk.NewInt(500)},
+		GasAdjustCoefficient:   sdk.DecProto{Dec: sdk.NewDec(1)},
 	})
 
 	return set, ctx

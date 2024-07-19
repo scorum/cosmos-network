@@ -20,7 +20,6 @@ func TestInitGenesis(t *testing.T) {
 	scorum.InitGenesis(ctx.Context, k, genesisState)
 	require.Equal(t, &types.GenesisState{
 		Params:              types.DefaultParams(),
-		SpWithdrawals:       []types.SPWithdrawal{},
 		RestoreGasAddresses: ([]string)(nil),
 	}, scorum.ExportGenesis(ctx.Context, k))
 }

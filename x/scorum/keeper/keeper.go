@@ -12,11 +12,6 @@ import (
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
-var (
-	withdrawalPrefix        = []byte("withdrawal_owner")
-	withdrawalTimeIdxPrefix = []byte("withdrawal_time")
-)
-
 type (
 	Keeper struct {
 		cdc        codec.BinaryCodec
@@ -24,6 +19,7 @@ type (
 		paramstore paramtypes.Subspace
 
 		bankKeeper    types.BankKeeper
+		stakingKeeper types.StakingKeeper
 		accountKeeper types.AccountKeeper
 
 		feeCollectorName string
@@ -36,6 +32,7 @@ func NewKeeper(
 	ps paramtypes.Subspace,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	stakingKeeper types.StakingKeeper,
 	feeCollectorName string,
 ) Keeper {
 	// set KeyTable if it has not already been set
@@ -50,6 +47,7 @@ func NewKeeper(
 
 		bankKeeper:       bankKeeper,
 		accountKeeper:    accountKeeper,
+		stakingKeeper:    stakingKeeper,
 		feeCollectorName: feeCollectorName,
 	}
 }
@@ -63,8 +61,21 @@ func (k Keeper) Mint(ctx sdk.Context, addr sdk.AccAddress, coin sdk.Coin) error 
 		return fmt.Errorf("failed to mint: %w", err)
 	}
 
-	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr, sdk.NewCoins(coin)); err != nil {
-		return fmt.Errorf("failed to send minted coins: %w", err)
+	if k.bankKeeper.BlockedAddr(addr) {
+		for name, acc := range k.accountKeeper.GetModulePermissions() {
+			if acc.GetAddress().Equals(addr) {
+				if err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, types.ModuleName, name, sdk.NewCoins(coin)); err != nil {
+					return fmt.Errorf("failed to send minted coins: %w", err)
+				}
+
+				return nil
+			}
+		}
+		return fmt.Errorf("%s is not a module and restricted to receive coins", addr)
+	} else {
+		if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr, sdk.NewCoins(coin)); err != nil {
+			return fmt.Errorf("failed to send minted coins: %w", err)
+		}
 	}
 
 	return nil

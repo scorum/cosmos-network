@@ -31,7 +31,6 @@ func BankKeeper(t testing.TB, ctx TestContext) keeper.Keeper {
 	// Initialize params
 	k.SetParams(ctx.Context, types.Params{
 		SendEnabled: []*types.SendEnabled{
-			{Denom: scorumtypes.SPDenom, Enabled: false},
 			{Denom: scorumtypes.GasDenom, Enabled: false},
 		},
 		DefaultSendEnabled: true,

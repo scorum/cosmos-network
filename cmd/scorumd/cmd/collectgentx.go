@@ -40,7 +40,6 @@ func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultN
 		bankGenState := banktypes.GetGenesisStateFromAppState(cdc, appState)
 		bankGenState.SendEnabled = append(
 			bankGenState.SendEnabled,
-			banktypes.SendEnabled{Denom: scorumtypes.SPDenom, Enabled: false},
 			banktypes.SendEnabled{Denom: scorumtypes.GasDenom, Enabled: false},
 		)
 
@@ -65,7 +64,7 @@ func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultN
 
 		mintGenState := minttypes.DefaultGenesisState()
 		mintGenState.Params = minttypes.Params{
-			MintDenom:           scorumtypes.SPDenom,
+			MintDenom:           scorumtypes.SCRDenom,
 			InflationRateChange: types.ZeroDec(),
 			InflationMax:        types.ZeroDec(),
 			InflationMin:        types.ZeroDec(),

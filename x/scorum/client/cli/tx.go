@@ -21,9 +21,6 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		CmdConvertSCR2SP(),
-		CmdWithdrawSP(),
-		CmdStopSPWithdrawal(),
 		GetSupervisorTxCmd(),
 	)
 

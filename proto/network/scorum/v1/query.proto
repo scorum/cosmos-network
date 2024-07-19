@@ -15,10 +15,6 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/scorum/params";
   }
-
-  rpc ListWithdrawals(QueryWithdrawalsRequest) returns (QueryWithdrawalsResponse) {
-    option (google.api.http).get = "/scorum/withdrawals";
-  }
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -28,12 +24,4 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
-}
-
-message QueryWithdrawalsRequest {
-  string owner = 1;
-}
-
-message QueryWithdrawalsResponse {
-  repeated SPWithdrawal withdrawals = 1 [(gogoproto.nullable) = false];
 }
