@@ -1,5 +1,5 @@
 ARG ALPINE_VERSION=3.17
-ARG GOLANG_VERSION=1.19.2
+ARG GOLANG_VERSION=1.22.5
 
 FROM golang:${GOLANG_VERSION} AS build-env
 WORKDIR /go/src/github.com/scorum/cosmos-network/
