@@ -44,7 +44,7 @@ func convertSP(
 	stakingParams := stk.GetParams(ctx)
 	stakingParams.BondDenom = scorumtypes.SCRDenom
 	if err := stk.SetParams(ctx, stakingParams); err != nil {
-		return fmt.Errorf("failed to set mint params: %w", err)
+		return fmt.Errorf("failed to set staking params: %w", err)
 	}
 
 	govParams := gk.GetParams(ctx)

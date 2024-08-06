@@ -39,6 +39,11 @@ func Handler(
 			WithKeyTable(paramstypes.ConsensusParamsKeyTable())
 		baseapp.MigrateParams(ctx, baseAppLegacySS, cpk)
 
+		migrationMap, err := mm.RunMigrations(ctx, cfg, fromVM)
+		if err != nil {
+			return nil, err
+		}
+
 		if err := migrateScorumParams(ctx, cdc, scorumParamSpace); err != nil {
 			return nil, fmt.Errorf("fialed to migrate scorum params: %w", err)
 		}
@@ -47,6 +52,6 @@ func Handler(
 			return nil, fmt.Errorf("fialed to convert sp denom to scr: %w", err)
 		}
 
-		return mm.RunMigrations(ctx, cfg, fromVM)
+		return migrationMap, nil
 	}
 }
