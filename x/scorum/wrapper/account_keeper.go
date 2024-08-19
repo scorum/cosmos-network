@@ -30,9 +30,11 @@ func NewAccountKeeper(ak accountkeeper.AccountKeeper, bk bankkeeper.Keeper, sk s
 
 func (k AccountKeeper) SetAccount(ctx sdk.Context, acc types.AccountI) {
 	hasAccount := k.AccountKeeper.HasAccount(ctx, acc.GetAddress())
-	// must be set before minting to avoid recursion (BankKeeper calls SetAccount if it's not created yet)
-	k.AccountKeeper.SetAccount(ctx, acc)
+
 	if !hasAccount {
+		// must be set before minting to avoid recursion (BankKeeper calls SetAccount if it's not created yet)
+		k.AccountKeeper.SetAccount(ctx, acc)
+
 		if err := k.sk.Mint(ctx, acc.GetAddress(), sdk.NewCoin(scorumtypes.GasDenom, k.sk.GetParams(ctx).GasLimit.Int)); err != nil {
 			panic(fmt.Sprintf("failed to mint gas to new account: %s", err.Error()))
 		}
