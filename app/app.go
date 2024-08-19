@@ -473,6 +473,17 @@ func New(
 		app.BankKeeper,
 	)
 
+	// create before wrappers
+	app.ScorumKeeper = scorumkeeper.NewKeeper(
+		appCodec,
+		keys[scorumtypes.StoreKey],
+		app.GetSubspace(scorumtypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.StakingKeeper,
+		authtypes.FeeCollectorName,
+	)
+
 	// create keeper wrappers to mint gas
 	scorumWrapperAccountKeeper := scorumwrapper.NewAccountKeeper(app.AccountKeeper, app.BankKeeper, app.ScorumKeeper)
 	scorumWrapperBankKeeper := bankkeeper.NewBaseKeeper(
@@ -530,16 +541,6 @@ func New(
 		appCodec,
 		app.AccountKeeper,
 		app.BankKeeper,
-	)
-
-	app.ScorumKeeper = scorumkeeper.NewKeeper(
-		appCodec,
-		keys[scorumtypes.StoreKey],
-		app.GetSubspace(scorumtypes.ModuleName),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.StakingKeeper,
-		authtypes.FeeCollectorName,
 	)
 
 	app.AviatrixKeeper = aviatrixkeeper.NewKeeper(
@@ -663,6 +664,7 @@ func New(
 		nftmodule.NewAppModule(appCodec, app.NftKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
+		ibctransfer.NewAppModule(app.IBCTransferKeeper),
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
 		ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper),
 		scorum.NewAppModule(appCodec, app.ScorumKeeper, app.AccountKeeper, app.BankKeeper),
@@ -1085,7 +1087,7 @@ func GetKeys() map[string]*storetypes.KVStoreKey {
 		paramstypes.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey, evidencetypes.StoreKey,
 		capabilitytypes.StoreKey, group.StoreKey, nft.StoreKey, consensusparamtypes.StoreKey,
 		// ibc
-		ibcexported.StoreKey, ibcfeetypes.StoreKey,
+		ibcexported.StoreKey, ibcfeetypes.StoreKey, ibctransfertypes.StoreKey,
 		icahosttypes.StoreKey, icacontrollertypes.StoreKey,
 		// scorum
 		scorumtypes.StoreKey, aviatrixtypes.StoreKey,
