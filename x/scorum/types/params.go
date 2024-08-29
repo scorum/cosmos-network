@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	sdkmath "cosmossdk.io/math"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"gopkg.in/yaml.v2"
@@ -28,15 +28,15 @@ func ParamKeyTable() paramtypes.KeyTable {
 // NewParams creates a new Params instance
 func NewParams(
 	supervisors []string,
-	gasLimit sdkmath.Int,
-	gasUnconditionedAmount sdkmath.Int,
-	gasAdjustCoefficient sdk.Dec,
+	gasLimit math.Int,
+	gasUnconditionedAmount math.Int,
+	gasAdjustCoefficient math.LegacyDec,
 ) Params {
 	return Params{
 		Supervisors:            supervisors,
-		GasLimit:               sdk.IntProto{Int: gasLimit},
-		GasUnconditionedAmount: sdk.IntProto{Int: gasUnconditionedAmount},
-		GasAdjustCoefficient:   sdk.DecProto{Dec: gasAdjustCoefficient},
+		GasLimit:               gasLimit,
+		GasUnconditionedAmount: gasUnconditionedAmount,
+		GasAdjustCoefficient:   gasAdjustCoefficient,
 	}
 }
 
@@ -44,14 +44,14 @@ func NewParams(
 func DefaultParams() Params {
 	return Params{
 		Supervisors:            nil,
-		GasLimit:               sdk.IntProto{Int: sdk.NewInt(1000000)},
-		GasUnconditionedAmount: sdk.IntProto{Int: sdk.NewInt(15000)},
-		GasAdjustCoefficient:   sdk.DecProto{Dec: sdk.NewDec(1)},
+		GasLimit:               math.NewInt(1000000),
+		GasUnconditionedAmount: math.NewInt(15000),
+		GasAdjustCoefficient:   math.LegacyNewDec(1),
 		ValidatorsReward: ValidatorsRewardParams{
 			PoolAddress: "",
 			BlockReward: sdk.Coin{
 				Denom:  SCRDenom,
-				Amount: sdk.ZeroInt(),
+				Amount: math.ZeroInt(),
 			},
 		},
 	}
@@ -101,12 +101,12 @@ func (p Params) String() string {
 }
 
 func validateGasLimit(i interface{}) error {
-	s, ok := i.(sdk.IntProto)
+	s, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if s.Int.IsZero() || s.Int.IsNegative() {
+	if s.IsZero() || s.IsNegative() {
 		return fmt.Errorf("must be positive")
 	}
 
@@ -114,12 +114,12 @@ func validateGasLimit(i interface{}) error {
 }
 
 func validateGasUnconditionedAmount(i interface{}) error {
-	s, ok := i.(sdk.IntProto)
+	s, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if s.Int.IsNegative() {
+	if s.IsNegative() {
 		return fmt.Errorf("must not be negative")
 	}
 
@@ -127,12 +127,12 @@ func validateGasUnconditionedAmount(i interface{}) error {
 }
 
 func validateGasAdjustCoefficient(i interface{}) error {
-	s, ok := i.(sdk.DecProto)
+	s, ok := i.(math.LegacyDec)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if s.Dec.IsZero() || s.Dec.IsNegative() {
+	if s.IsZero() || s.IsNegative() {
 		return fmt.Errorf("must be positive")
 	}
 

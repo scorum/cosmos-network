@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"cosmossdk.io/math"
+
 	"github.com/scorum/cosmos-network/app"
+	appparams "github.com/scorum/cosmos-network/app/params"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
@@ -19,13 +21,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultNodeHome string) *cobra.Command {
+func CollectGenTxsCmd(
+	encodingConfig appparams.EncodingConfig,
+	genBalIterator banktypes.GenesisBalancesIterator,
+	defaultNodeHome string,
+) *cobra.Command {
 	gentxModule, ok := app.ModuleBasics[genutiltypes.ModuleName].(genutil.AppModuleBasic)
 	if !ok {
 		panic(fmt.Errorf("expected %s module to be an instance of type %T", genutiltypes.ModuleName, genutil.AppModuleBasic{}))
 	}
 
-	cmd := genutilcli.CollectGenTxsCmd(genBalIterator, defaultNodeHome, gentxModule.GenTxValidator)
+	cmd := genutilcli.CollectGenTxsCmd(
+		genBalIterator,
+		defaultNodeHome,
+		gentxModule.GenTxValidator,
+		encodingConfig.TxConfig.SigningContext().ValidatorAddressCodec(),
+	)
 
 	cmd.PreRunE = func(cmd *cobra.Command, args []string) error {
 		clientCtx := client.GetClientContextFromCmd(cmd)
@@ -51,7 +62,7 @@ func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultN
 
 		distrGenState := distrtypes.DefaultGenesisState()
 		distrGenState.Params = distrtypes.Params{
-			CommunityTax:        types.ZeroDec(),
+			CommunityTax:        math.LegacyZeroDec(),
 			BaseProposerReward:  distrGenState.Params.BaseProposerReward,
 			BonusProposerReward: distrGenState.Params.BonusProposerReward,
 			WithdrawAddrEnabled: true,
@@ -65,9 +76,9 @@ func CollectGenTxsCmd(genBalIterator banktypes.GenesisBalancesIterator, defaultN
 		mintGenState := minttypes.DefaultGenesisState()
 		mintGenState.Params = minttypes.Params{
 			MintDenom:           scorumtypes.SCRDenom,
-			InflationRateChange: types.ZeroDec(),
-			InflationMax:        types.ZeroDec(),
-			InflationMin:        types.ZeroDec(),
+			InflationRateChange: math.LegacyZeroDec(),
+			InflationMax:        math.LegacyZeroDec(),
+			InflationMin:        math.LegacyZeroDec(),
 			GoalBonded:          mintGenState.Params.GoalBonded,
 			BlocksPerYear:       mintGenState.Params.BlocksPerYear,
 		}

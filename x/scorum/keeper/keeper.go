@@ -3,9 +3,11 @@ package keeper
 import (
 	"fmt"
 
-	"github.com/cometbft/cometbft/libs/log"
+	"cosmossdk.io/x/nft"
+
+	"cosmossdk.io/log"
+	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
@@ -23,6 +25,7 @@ type (
 		accountKeeper types.AccountKeeper
 
 		feeCollectorName string
+		authority        string
 	}
 )
 
@@ -34,10 +37,16 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
 	feeCollectorName string,
+	authority string,
 ) Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
 		ps = ps.WithKeyTable(types.ParamKeyTable())
+	}
+
+	// ensure nft module account is set
+	if addr := accountKeeper.GetModuleAddress(nft.ModuleName); addr == nil {
+		panic("the nft module account has not been set")
 	}
 
 	return Keeper{
@@ -49,6 +58,7 @@ func NewKeeper(
 		accountKeeper:    accountKeeper,
 		stakingKeeper:    stakingKeeper,
 		feeCollectorName: feeCollectorName,
+		authority:        authority,
 	}
 }
 

@@ -3,6 +3,8 @@ syntax = "proto3";
 package network.scorum.v1;
 
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
 
 import "cosmos/base/v1beta1/coin.proto";
 

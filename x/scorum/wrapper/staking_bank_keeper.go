@@ -1,6 +1,8 @@
 package wrap
 
 import (
+	"context"
+
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/mikluke/co-pilot/slice"
 	scorumkeeper "github.com/scorum/cosmos-network/x/scorum/keeper"
@@ -23,17 +25,18 @@ func NewStakingBankKeeper(bk bankkeeper.Keeper, sk *scorumkeeper.Keeper) bankkee
 	}
 }
 
-func (k StakingBankKeeper) BurnCoins(ctx sdk.Context, moduleName string, amt sdk.Coins) error {
+func (k StakingBankKeeper) BurnCoins(ctx context.Context, moduleName string, amt sdk.Coins) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if !slice.Contains([]string{stakingtypes.BondedPoolName, stakingtypes.NotBondedPoolName}, moduleName) {
 		return k.Keeper.BurnCoins(ctx, moduleName, amt)
 	}
 
-	pool := k.sk.GetParams(ctx).ValidatorsReward.PoolAddress
+	pool := k.sk.GetParams(sdkCtx).ValidatorsReward.PoolAddress
 	if pool != "" {
-		ctx.Logger().Info("send slashed coins to validators reward pool")
+		sdkCtx.Logger().Info("send slashed coins to validators reward pool")
 		return k.SendCoinsFromModuleToAccount(ctx, moduleName, sdk.MustAccAddressFromBech32(pool), amt)
 	}
 
-	ctx.Logger().Error("staking module requested coins burning, but there is no pool to transfer it")
+	sdkCtx.Logger().Error("staking module requested coins burning, but there is no pool to transfer it")
 	return k.Keeper.BurnCoins(ctx, moduleName, amt)
 }

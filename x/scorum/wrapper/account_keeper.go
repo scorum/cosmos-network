@@ -1,9 +1,8 @@
 package wrap
 
 import (
+	"context"
 	"fmt"
-
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	accountkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -28,14 +27,18 @@ func NewAccountKeeper(ak accountkeeper.AccountKeeper, bk bankkeeper.Keeper, sk s
 	}
 }
 
-func (k AccountKeeper) SetAccount(ctx sdk.Context, acc types.AccountI) {
+func (k AccountKeeper) SetAccount(ctx context.Context, acc sdk.AccountI) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	hasAccount := k.AccountKeeper.HasAccount(ctx, acc.GetAddress())
 
 	if !hasAccount {
 		// must be set before minting to avoid recursion (BankKeeper calls SetAccount if it's not created yet)
 		k.AccountKeeper.SetAccount(ctx, acc)
 
-		if err := k.sk.Mint(ctx, acc.GetAddress(), sdk.NewCoin(scorumtypes.GasDenom, k.sk.GetParams(ctx).GasLimit.Int)); err != nil {
+		if err := k.sk.Mint(
+			sdkCtx, acc.GetAddress(),
+			sdk.NewCoin(scorumtypes.GasDenom, k.sk.GetParams(sdkCtx).GasLimit),
+		); err != nil {
 			panic(fmt.Sprintf("failed to mint gas to new account: %s", err.Error()))
 		}
 	}

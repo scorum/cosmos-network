@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"math/rand"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
+
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	"github.com/scorum/cosmos-network/x/scorum/types"
@@ -32,7 +33,7 @@ func ParamChanges(r *rand.Rand) []simtypes.LegacyParamChange {
 			func(r *rand.Rand) string {
 				return fmt.Sprintf(
 					`{"dec": "%s"}`,
-					sdk.NewDecWithPrec(int64(simtypes.RandIntBetween(r, 1, 2000)), 3),
+					math.LegacyNewDecWithPrec(int64(simtypes.RandIntBetween(r, 1, 2000)), 3),
 				)
 			},
 		),

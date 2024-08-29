@@ -2,97 +2,76 @@ package cli
 
 import (
 	"fmt"
-	"strings"
 
-	"github.com/cometbft/cometbft/libs/os"
+	"github.com/cosmos/cosmos-sdk/types/address"
+
+	addresscodec "cosmossdk.io/core/address"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/version"
-	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	"github.com/cosmos/cosmos-sdk/x/gov/client/cli"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 	"github.com/spf13/cobra"
 )
 
-func CmdSubmitMintProposal() *cobra.Command {
+const (
+	FlagAuthority = "authority"
+)
+
+// CmdSubmitMintProposal implements a command handler for submitting a mint proposal transaction.
+func CmdSubmitMintProposal(ac addresscodec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "mint [proposal-file]",
-		Args:  cobra.ExactArgs(1),
+		Use:   "mint [receiver] [coin] [flags]",
+		Args:  cobra.ExactArgs(2),
 		Short: "Submit a mint proposal",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Submit a mint proposal along with an initial deposit.
-The proposal details must be supplied via a JSON file.
-Example:
-$ %s tx gov submit-proposal mint <path/to/proposal.json> --from=<key_or_address>
-Where proposal.json contains:
-{
-  "title": "Mint burned on old blockchain coins",
-  "description": "Emission in the modern blockchain!",
-  "recipient": "scorum16rlsek5yak6avnjpuatw6psxg246nzlwruaet5",
-  "amount": 
-  	{
-			"denom": "nscr",
-			"amount": "100000000000"
-	},
-  "deposit": "1000scr"
-}
-`,
-				version.AppName,
-			),
-		),
+		Long:  "Submit a mint proposal along with an initial deposit.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
-			proposal, err := ParseMintProposalJSON(clientCtx.LegacyAmino, args[0])
+
+			proposal, err := cli.ReadGovPropFlags(clientCtx, cmd.Flags())
 			if err != nil {
 				return err
 			}
 
-			from := clientCtx.GetFromAddress()
-			content := types.NewMintProposal(
-				proposal.Title, proposal.Description, proposal.Recipient, proposal.Amount,
-			)
-
-			deposit, err := sdk.ParseCoinsNormalized(proposal.Deposit)
+			recipient := args[0]
+			coin, err := sdk.ParseCoinNormalized(args[1])
 			if err != nil {
-				return err
+				return fmt.Errorf("invalid coin: %w", err)
 			}
 
-			msg, err := govv1beta1.NewMsgSubmitProposal(content, deposit, from)
-			if err != nil {
-				return err
+			authority, _ := cmd.Flags().GetString(FlagAuthority)
+			if authority != "" {
+				if _, err = ac.StringToBytes(authority); err != nil {
+					return fmt.Errorf("invalid authority address: %w", err)
+				}
+			} else {
+				authority = sdk.AccAddress(address.Module("gov")).String()
 			}
 
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+			if err := proposal.SetMsgs([]sdk.Msg{
+				&types.MsgMint{
+					Authority: authority,
+					Recipient: recipient,
+					Amount:    coin,
+				},
+			}); err != nil {
+				return fmt.Errorf("failed to create submit upgrade proposal message: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), proposal)
 		},
 	}
 
+	cmd.Flags().String(FlagAuthority, "", "The address of the upgrade module authority (defaults to gov)")
+
+	// add common proposal flags
+	flags.AddTxFlagsToCmd(cmd)
+	cli.AddGovPropFlagsToCmd(cmd)
+	cmd.MarkFlagRequired(cli.FlagTitle)
+
 	return cmd
-}
-
-type MintProposalJSON struct {
-	Title       string `json:"title" yaml:"title"`
-	Description string `json:"description" yaml:"description"`
-	Deposit     string `json:"deposit" yaml:"deposit"`
-
-	Recipient sdk.AccAddress `json:"recipient" yaml:"recipient"`
-	Amount    sdk.Coin       `json:"amount" yaml:"amount"`
-}
-
-func ParseMintProposalJSON(cdc *codec.LegacyAmino, proposalFile string) (MintProposalJSON, error) {
-	proposal := MintProposalJSON{}
-
-	contents, err := os.ReadFile(proposalFile)
-	if err != nil {
-		return proposal, err
-	}
-
-	if err := cdc.UnmarshalJSON(contents, &proposal); err != nil {
-		return proposal, err
-	}
-
-	return proposal, nil
 }

@@ -3,7 +3,8 @@ package types_test
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
+
 	"github.com/scorum/cosmos-network/testutil/sample"
 	"github.com/scorum/cosmos-network/x/scorum/types"
 	"github.com/stretchr/testify/require"
@@ -25,9 +26,9 @@ func TestGenesisState_Validate(t *testing.T) {
 			genState: &types.GenesisState{
 				Params: types.NewParams(
 					[]string{sample.AccAddress().String()},
-					sdk.NewInt(1000),
-					sdk.NewInt(500),
-					sdk.NewDec(1),
+					math.NewInt(1000),
+					math.NewInt(500),
+					math.LegacyNewDec(1),
 				),
 			},
 			valid: true,

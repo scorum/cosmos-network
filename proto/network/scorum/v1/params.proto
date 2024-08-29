@@ -3,6 +3,8 @@ syntax = "proto3";
 package network.scorum.v1;
 
 import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
 
 import "cosmos/base/v1beta1/coin.proto";
 
@@ -14,9 +16,24 @@ message Params {
 
   repeated string supervisors = 1;
 
-  cosmos.base.v1beta1.IntProto gas_limit = 2 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.IntProto gas_unconditioned_amount = 3 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.DecProto gas_adjust_coefficient = 4 [(gogoproto.nullable) = false];
+  bytes gas_limit = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  bytes gas_unconditioned_amount = 3 [
+    (cosmos_proto.scalar)  = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
+  bytes gas_adjust_coefficient = 4 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable)   = false,
+    (amino.dont_omitempty) = true
+  ];
 
   ValidatorsRewardParams validators_reward = 5 [(gogoproto.nullable) = false];
 }

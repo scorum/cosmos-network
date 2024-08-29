@@ -17,9 +17,11 @@ import (
 
 // nolint
 const (
+	TypeMsgBurn          = "scorum/MsgBurn"
 	opWeightMsgBurn      = "op_weight_msg_burn"
 	defaultWeightMsgBurn = 10
 
+	TypeMsgMintGas          = "scorum/MsgMintGas"
 	opWeightMsgMintGas      = "op_weight_msg_mint_gas"
 	defaultWeightMsgMintGas = 10
 )
@@ -33,12 +35,12 @@ func WeightedOperations(
 		weightMsgMintGas int
 	)
 
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgBurn, &weightMsgBurn, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgBurn, &weightMsgBurn, nil,
 		func(_ *rand.Rand) {
 			weightMsgBurn = defaultWeightMsgBurn
 		},
 	)
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMintGas, &weightMsgMintGas, nil,
+	simState.AppParams.GetOrGenerate(opWeightMsgMintGas, &weightMsgMintGas, nil,
 		func(_ *rand.Rand) {
 			weightMsgMintGas = defaultWeightMsgMintGas
 		},
@@ -65,24 +67,24 @@ func SimulateMsgBurn(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "accounts are empty"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "accounts are empty"), nil, nil
 		}
 
 		supervisor := accs[0]
 		if !k.IsSupervisor(ctx, supervisor.Address.String()) {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "first acc is not a supervisor"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "first acc is not a supervisor"), nil, nil
 		}
 
 		balances := bk.GetAllBalances(ctx, supervisor.Address)
 		if len(balances) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "empty balance"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "empty balance"), nil, nil
 		}
 
 		for _, b := range balances {
-			if b.Amount.GT(sdk.OneInt()) {
+			if b.Amount.GT(math.OneInt()) {
 				msg := &types.MsgBurn{
 					Supervisor: supervisor.Address.String(),
-					Amount:     sdk.NewCoin(b.Denom, sdk.OneInt()),
+					Amount:     sdk.NewCoin(b.Denom, math.OneInt()),
 				}
 
 				txCtx := simulation.OperationInput{
@@ -91,7 +93,6 @@ func SimulateMsgBurn(
 					TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 					Cdc:           nil,
 					Msg:           msg,
-					MsgType:       msg.Type(),
 					Context:       ctx,
 					SimAccount:    supervisor,
 					AccountKeeper: ak,
@@ -103,7 +104,7 @@ func SimulateMsgBurn(
 			}
 		}
 
-		return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "empty balance"), nil, nil
+		return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "empty balance"), nil, nil
 	}
 }
 
@@ -116,24 +117,24 @@ func SimulateMsgMintGas(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "accounts are empty"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "accounts are empty"), nil, nil
 		}
 
 		supervisor := accs[0]
 		if !k.IsSupervisor(ctx, supervisor.Address.String()) {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgBurn, "first acc is not a supervisor"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgBurn, "first acc is not a supervisor"), nil, nil
 		}
 
 		addr, _ := simtypes.RandomAcc(r, accs)
 		amount, err := simtypes.RandPositiveInt(r, math.NewInt(1000000))
 		if err != nil {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgMintGas, "failed to rand int"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, TypeMsgMintGas, "failed to rand int"), nil, nil
 		}
 
 		msg := &types.MsgMintGas{
 			Supervisor: supervisor.Address.String(),
 			Address:    addr.Address.String(),
-			Amount:     sdk.IntProto{Int: amount},
+			Amount:     amount,
 		}
 
 		txCtx := simulation.OperationInput{
@@ -142,7 +143,6 @@ func SimulateMsgMintGas(
 			TxGen:         moduletestutil.MakeTestEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           msg,
-			MsgType:       msg.Type(),
 			Context:       ctx,
 			SimAccount:    supervisor,
 			AccountKeeper: ak,
