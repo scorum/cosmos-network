@@ -36,12 +36,14 @@ func AddPruneCmd(defaultNodeHome string) *cobra.Command {
 
 			logger.Info(fmt.Sprintf("Home dir is %s", ctx.HomeDir))
 
-			if err := prune(ctx, logger); err != nil {
-				return fmt.Errorf("failed to prune: %w", err)
-			}
+			for _, dbName := range []string{"application", "blockstore"} {
+				if err := prune(ctx, dbName, logger); err != nil {
+					return fmt.Errorf("failed to prune: %w", err)
+				}
 
-			if err := compact(ctx, logger); err != nil {
-				return fmt.Errorf("failed to compact: %w", err)
+				if err := compact(ctx, dbName, logger); err != nil {
+					return fmt.Errorf("failed to compact: %w", err)
+				}
 			}
 
 			return nil
@@ -53,8 +55,8 @@ func AddPruneCmd(defaultNodeHome string) *cobra.Command {
 	return cmd
 }
 
-func prune(ctx client.Context, logger log.Logger) error {
-	db, err := db.NewDB("application", db.GoLevelDBBackend, path.Join(ctx.HomeDir, "data"))
+func prune(ctx client.Context, dbName string, logger log.Logger) error {
+	db, err := db.NewDB(dbName, db.GoLevelDBBackend, path.Join(ctx.HomeDir, "data"))
 	if err != nil {
 		panic(err)
 	}
@@ -101,10 +103,10 @@ func prune(ctx client.Context, logger log.Logger) error {
 	return nil
 }
 
-func compact(ctx client.Context, logger log.Logger) error {
+func compact(ctx client.Context, dbName string, logger log.Logger) error {
 	logger.Info("Starting compaction")
 
-	db, err := leveldb.OpenFile(path.Join(ctx.HomeDir, "data", "application.db"), nil)
+	db, err := leveldb.OpenFile(path.Join(ctx.HomeDir, "data", fmt.Sprintf("%s.db", dbName)), nil)
 	if err != nil {
 		return fmt.Errorf("failed to open database: %w", err)
 	}
