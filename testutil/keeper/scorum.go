@@ -35,6 +35,7 @@ func ScorumKeeper(
 		BankKeeper(t, ctx),
 		StakingKeeper(t, ctx),
 		authtypes.FeeCollectorName,
+		"gov",
 	)
 
 	// Initialize params

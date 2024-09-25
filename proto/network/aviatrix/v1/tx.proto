@@ -2,12 +2,16 @@ syntax = "proto3";
 
 package network.aviatrix.v1;
 
+import "cosmos_proto/cosmos.proto";
+import "amino/amino.proto";
 import "cosmos/msg/v1/msg.proto";
 
 option go_package = "github.com/scorum/cosmos-network/x/aviatrix/types";
 
 // Msg defines the Msg service.
 service Msg {
+  option (cosmos.msg.v1.service) = true;
+
   rpc CreatePlane(MsgCreatePlane) returns (MsgCreatePlaneResponse);
   rpc UpdatePlaneExperience(MsgUpdatePlaneExperience) returns (MsgUpdatePlaneExperienceResponse);
   rpc AdjustPlaneExperience(MsgAdjustPlaneExperience) returns (MsgAdjustPlaneExperienceResponse);
@@ -25,18 +29,20 @@ message Plane {
 
 message MsgCreatePlane {
   option (cosmos.msg.v1.signer) = "supervisor";
+  option (amino.name)           = "aviatrix/MsgCreatePlane";
 
   string    id        = 1;
-  string    supervisor = 2;
-  string    owner     = 3;
+  string    supervisor = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string    owner     = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   PlaneMeta meta      = 4;
 }
 message MsgCreatePlaneResponse {}
 
 message MsgUpdatePlaneExperience {
   option (cosmos.msg.v1.signer) = "supervisor";
+  option (amino.name)           = "aviatrix/MsgUpdatePlaneExperience";
 
-  string supervisor = 1;
+  string supervisor = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string id = 2;
   uint64 amount = 3;
 }
@@ -44,8 +50,9 @@ message MsgUpdatePlaneExperienceResponse {}
 
 message MsgAdjustPlaneExperience {
   option (cosmos.msg.v1.signer) = "supervisor";
+  option (amino.name)           = "aviatrix/MsgAdjustPlaneExperience";
 
-  string supervisor = 1;
+  string supervisor = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string id = 2;
   int64 amount = 3;
 }

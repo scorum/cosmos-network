@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"testing"
 
+	"cosmossdk.io/math"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	accountkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
@@ -32,9 +34,9 @@ func setupKeeper(t testing.TB) (keeperSet, testutil.TestContext) {
 
 	set.keeper.SetParams(ctx.Context, types.Params{
 		Supervisors:            []string{set.supervisor.String()},
-		GasLimit:               sdk.IntProto{Int: sdk.NewInt(1000)},
-		GasUnconditionedAmount: sdk.IntProto{Int: sdk.NewInt(500)},
-		GasAdjustCoefficient:   sdk.DecProto{Dec: sdk.NewDec(1)},
+		GasLimit:               math.NewInt(1000),
+		GasUnconditionedAmount: math.NewInt(500),
+		GasAdjustCoefficient:   math.LegacyNewDec(1),
 	})
 
 	return set, ctx

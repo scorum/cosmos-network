@@ -3,10 +3,14 @@ package ante
 import (
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
+	txsigning "cosmossdk.io/x/tx/signing"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // SigVerificationDecorator is a copy of cosmos original SigVerificationDecorator
@@ -16,10 +20,10 @@ type SigVerificationDecorator struct {
 	ak AccountKeeper
 	sk ScorumKeeper
 
-	signModeHandler authsigning.SignModeHandler
+	signModeHandler *txsigning.HandlerMap
 }
 
-func NewSigVerificationDecorator(ak AccountKeeper, sk ScorumKeeper, signModeHandler authsigning.SignModeHandler) SigVerificationDecorator {
+func NewSigVerificationDecorator(ak AccountKeeper, sk ScorumKeeper, signModeHandler *txsigning.HandlerMap) SigVerificationDecorator {
 	return SigVerificationDecorator{
 		ak:              ak,
 		sk:              sk,
@@ -27,9 +31,9 @@ func NewSigVerificationDecorator(ak AccountKeeper, sk ScorumKeeper, signModeHand
 	}
 }
 func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
-	sigTx, ok := tx.(authsigning.SigVerifiableTx)
+	sigTx, ok := tx.(authsigning.Tx)
 	if !ok {
-		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 
 	// stdSigs contains the sequence number, account number, and signatures.
@@ -39,15 +43,18 @@ func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		return ctx, err
 	}
 
-	signerAddrs := sigTx.GetSigners()
+	signers, err := sigTx.GetSigners()
+	if err != nil {
+		return ctx, err
+	}
 
 	// check that signer length and signature length are the same
-	if len(sigs) != len(signerAddrs) {
-		return ctx, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "invalid number of signer;  expected: %d, got %d", len(signerAddrs), len(sigs))
+	if len(sigs) != len(signers) {
+		return ctx, errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "invalid number of signer;  expected: %d, got %d", len(signers), len(sigs))
 	}
 
 	for i, sig := range sigs {
-		acc, err := ante.GetSignerAcc(ctx, svd.ak, signerAddrs[i])
+		acc, err := ante.GetSignerAcc(ctx, svd.ak, signers[i])
 		if err != nil {
 			return ctx, err
 		}
@@ -55,16 +62,19 @@ func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		// retrieve pubkey
 		pubKey := acc.GetPubKey()
 		if !simulate && pubKey == nil {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
 		}
 
 		// Check account sequence number.
-		// Applicable only for not supervisors
-		if !svd.sk.IsSupervisor(ctx, acc.GetAddress().String()) && sig.Sequence != acc.GetSequence() {
-			return ctx, sdkerrors.Wrapf(
-				sdkerrors.ErrWrongSequence,
-				"account sequence mismatch, expected %d, got %d", acc.GetSequence(), sig.Sequence,
-			)
+		if sig.Sequence != acc.GetSequence() {
+			// Check account sequence number.
+			// Applicable only for not supervisors
+			if !svd.sk.IsSupervisor(ctx, acc.GetAddress().String()) && sig.Sequence != acc.GetSequence() {
+				return ctx, errorsmod.Wrapf(
+					sdkerrors.ErrWrongSequence,
+					"account sequence mismatch, expected %d, got %d", acc.GetSequence(), sig.Sequence,
+				)
+			}
 		}
 
 		// retrieve signer data
@@ -74,17 +84,27 @@ func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		if !genesis {
 			accNum = acc.GetAccountNumber()
 		}
-		signerData := authsigning.SignerData{
-			Address:       acc.GetAddress().String(),
-			ChainID:       chainID,
-			AccountNumber: accNum,
-			Sequence:      sig.Sequence, // acc.GetSequence() was originally here, but supervisors allowed to put any value
-			PubKey:        pubKey,
-		}
 
 		// no need to verify signatures on recheck tx
 		if !simulate && !ctx.IsReCheckTx() {
-			err := authsigning.VerifySignature(pubKey, signerData, sig.Data, svd.signModeHandler, tx)
+			anyPk, _ := codectypes.NewAnyWithValue(pubKey)
+
+			signerData := txsigning.SignerData{
+				Address:       acc.GetAddress().String(),
+				ChainID:       chainID,
+				AccountNumber: accNum,
+				Sequence:      acc.GetSequence(),
+				PubKey: &anypb.Any{
+					TypeUrl: anyPk.TypeUrl,
+					Value:   anyPk.Value,
+				},
+			}
+			adaptableTx, ok := tx.(authsigning.V2AdaptableTx)
+			if !ok {
+				return ctx, fmt.Errorf("expected tx to implement V2AdaptableTx, got %T", tx)
+			}
+			txData := adaptableTx.GetSigningTxData()
+			err = authsigning.VerifySignature(ctx, pubKey, signerData, sig.Data, svd.signModeHandler, txData)
 			if err != nil {
 				var errMsg string
 				if ante.OnlyLegacyAminoSigners(sig.Data) {
@@ -92,9 +112,9 @@ func (svd SigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 					// and therefore communicate sequence number as a potential cause of error.
 					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d), sequence (%d) and chain-id (%s)", accNum, acc.GetSequence(), chainID)
 				} else {
-					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d) and chain-id (%s)", accNum, chainID)
+					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d) and chain-id (%s): (%s)", accNum, chainID, err.Error())
 				}
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
+				return ctx, errorsmod.Wrap(sdkerrors.ErrUnauthorized, errMsg)
 
 			}
 		}

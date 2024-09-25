@@ -21,7 +21,7 @@ func (m msgServer) MintGas(goCtx context.Context, msg *types.MsgMintGas) (*types
 		return nil, errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid account address: %s", err)
 	}
 
-	if err := m.Keeper.Mint(ctx, address, sdk.NewCoin(types.GasDenom, msg.Amount.Int)); err != nil {
+	if err := m.Keeper.Mint(ctx, address, sdk.NewCoin(types.GasDenom, msg.Amount)); err != nil {
 		return nil, err
 	}
 

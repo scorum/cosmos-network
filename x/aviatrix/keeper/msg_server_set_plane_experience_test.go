@@ -3,7 +3,8 @@ package keeper_test
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
@@ -67,9 +68,9 @@ func TestMsgServer_UpdatePlaneExperience(t *testing.T) {
 			set, ctx := setupKeeper(t)
 			set.scorumKeeper.SetParams(ctx.Context, scorumtypes.Params{
 				Supervisors:            []string{supervisorAddr.String()},
-				GasLimit:               sdk.IntProto{Int: sdk.NewInt(1000)},
-				GasUnconditionedAmount: sdk.IntProto{Int: sdk.NewInt(500)},
-				GasAdjustCoefficient:   sdk.DecProto{Dec: sdk.NewDec(1)},
+				GasLimit:               math.NewInt(1000),
+				GasUnconditionedAmount: math.NewInt(500),
+				GasAdjustCoefficient:   math.LegacyNewDec(1),
 			})
 
 			s := keeper.NewMsgServerImpl(set.keeper)

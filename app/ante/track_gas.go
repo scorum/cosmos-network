@@ -4,6 +4,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 )
 
 type TrackGasConsumedDecorator struct {
@@ -26,14 +28,27 @@ func (d TrackGasConsumedDecorator) AnteHandle(
 	simulate bool,
 	next sdk.AnteHandler,
 ) (newCtx sdk.Context, err error) {
-	for _, v := range tx.GetMsgs() {
-		for _, addr := range v.GetSigners() {
-			if !d.ak.HasAccount(ctx, addr) {
-				return sdk.Context{}, errorsmod.Wrap(sdkerrors.ErrUnknownAddress, "address is not registered")
-			}
+	sigTx, ok := tx.(authsigning.Tx)
+	if !ok {
+		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+	}
 
-			d.sk.SetAddressToRestoreGas(ctx, addr)
+	signers, err := sigTx.GetSigners()
+	if !ok {
+		return ctx, err
+	}
+
+	for _, signer := range signers {
+		addr, err := ante.GetSignerAcc(ctx, d.ak, signer)
+		if err != nil {
+			return ctx, err
 		}
+
+		if !d.ak.HasAccount(ctx, addr.GetAddress()) {
+			return sdk.Context{}, errorsmod.Wrap(sdkerrors.ErrUnknownAddress, "address is not registered")
+		}
+
+		d.sk.SetAddressToRestoreGas(ctx, addr.GetAddress())
 	}
 
 	return next(ctx, tx, simulate)

@@ -3,6 +3,11 @@ package keeper
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
+	"cosmossdk.io/log"
+	"github.com/cosmos/cosmos-sdk/runtime"
+
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
@@ -22,19 +27,18 @@ func BankKeeper(t testing.TB, ctx TestContext) keeper.Keeper {
 
 	k := keeper.NewBaseKeeper(
 		cdc,
-		ctx.KVKeys[types.StoreKey],
+		runtime.NewKVStoreService(ctx.KVKeys[types.StoreKey]),
 		AccountKeeper(t, ctx),
 		(&app.App{}).BlockedModuleAccountAddrs(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		log.NewNopLogger(),
 	)
 
 	// Initialize params
-	k.SetParams(ctx.Context, types.Params{
-		SendEnabled: []*types.SendEnabled{
-			{Denom: scorumtypes.GasDenom, Enabled: false},
-		},
+	require.NoError(t, k.SetParams(ctx.Context, types.Params{
 		DefaultSendEnabled: true,
-	})
+	}))
+	k.SetSendEnabled(ctx, scorumtypes.GasDenom, false)
 
 	return k
 }

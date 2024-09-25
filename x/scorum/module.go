@@ -6,6 +6,10 @@ import (
 	"fmt"
 	"math/rand"
 
+	"cosmossdk.io/core/address"
+
+	"github.com/cosmos/cosmos-sdk/types/module"
+
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	accountkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
@@ -14,11 +18,11 @@ import (
 
 	abci "github.com/cometbft/cometbft/abci/types"
 
+	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/scorum/cosmos-network/x/scorum/client/cli"
 	"github.com/scorum/cosmos-network/x/scorum/keeper"
 	"github.com/scorum/cosmos-network/x/scorum/simulation"
@@ -26,7 +30,7 @@ import (
 )
 
 var (
-	_ module.AppModule      = AppModule{}
+	_ appmodule.AppModule   = AppModule{}
 	_ module.AppModuleBasic = AppModuleBasic{}
 )
 
@@ -37,10 +41,11 @@ var (
 // AppModuleBasic implements the AppModuleBasic interface that defines the independent methods a Cosmos SDK module needs to implement.
 type AppModuleBasic struct {
 	cdc codec.BinaryCodec
+	ac  address.Codec
 }
 
-func NewAppModuleBasic(cdc codec.BinaryCodec) AppModuleBasic {
-	return AppModuleBasic{cdc: cdc}
+func NewAppModuleBasic(cdc codec.BinaryCodec, ac address.Codec) AppModuleBasic {
+	return AppModuleBasic{cdc: cdc, ac: ac}
 }
 
 // Name returns the name of the module as a string
@@ -81,7 +86,7 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 
 // GetTxCmd returns the root Tx command for the module. The subcommands of this root command are used by end-users to generate new transactions containing messages defined in the module
 func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
+	return cli.GetTxCmd(a.ac)
 }
 
 // GetQueryCmd returns the root query command for the module. The subcommands of this root command are used by end-users to generate new queries to the subset of the state defined by the module
@@ -104,12 +109,13 @@ type AppModule struct {
 
 func NewAppModule(
 	cdc codec.Codec,
+	ac address.Codec,
 	keeper keeper.Keeper,
 	accountKeeper accountkeeper.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
 ) AppModule {
 	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
+		AppModuleBasic: NewAppModuleBasic(cdc, ac),
 		keeper:         keeper,
 		accountKeeper:  accountKeeper,
 		bankKeeper:     bankKeeper,
@@ -146,14 +152,14 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block
-func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {
+func (am AppModule) BeginBlock(ctx sdk.Context) {
 	am.keeper.RestoreGas(ctx)
 	am.keeper.PrepareValidatorsReward(ctx)
 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block
-func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	return []abci.ValidatorUpdate{}
+func (am AppModule) EndBlock(ctx context.Context) ([]abci.ValidatorUpdate, error) {
+	return []abci.ValidatorUpdate{}, nil
 }
 
 // AppModuleSimulation functions
@@ -163,10 +169,9 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	simulation.GenerateGenesisState(simState)
 }
 
-// ProposalContents returns all the distribution content functions used to
-// simulate governance proposals.
-func (am AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
-	return simulation.ProposalContents(simState)
+// ProposalMsgs returns msgs used for governance proposals for simulations.
+func (AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
+	return simulation.ProposalMsgs()
 }
 
 // RandomizedParams creates randomized distribution param changes for the simulator.
@@ -175,7 +180,7 @@ func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.LegacyParamChange {
 }
 
 // RegisterStoreDecoder registers a decoder for distribution module's types
-func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
+func (am AppModule) RegisterStoreDecoder(sdr simtypes.StoreDecoderRegistry) {
 	// sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc)
 }
 
@@ -185,3 +190,9 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		simState, am.accountKeeper, am.bankKeeper, am.keeper,
 	)
 }
+
+// IsOnePerModuleType implements the depinject.OnePerModuleType interface.
+func (am AppModule) IsOnePerModuleType() {}
+
+// IsAppModule implements the appmodule.AppModule interface.
+func (am AppModule) IsAppModule() {}

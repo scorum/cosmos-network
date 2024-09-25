@@ -1,6 +1,7 @@
 package types
 
 import (
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -19,7 +20,7 @@ const (
 	RouterKey = ModuleName
 )
 
-var GasPrice = sdk.NewCoins(sdk.NewCoin(GasDenom, sdk.NewInt(1)))
+var GasPrice = sdk.NewCoins(sdk.NewCoin(GasDenom, math.NewInt(1)))
 
 func KeyPrefix(p string) []byte {
 	return []byte(p)
