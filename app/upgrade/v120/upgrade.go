@@ -59,7 +59,6 @@ func Handler(
 			}
 		}
 
-		ps.GetParamSetIfExists(sdkCtx, &old)
 		ps.SetParamSet(sdkCtx, &scorumtypes.Params{
 			Supervisors:            old.Supervisors,
 			GasLimit:               old.GasLimit.Int,
