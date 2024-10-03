@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"slices"
 
 	"cosmossdk.io/math"
@@ -17,7 +18,7 @@ func (k Keeper) SetAddressToRestoreGas(ctx sdk.Context, addr sdk.AccAddress) {
 	s.Set(addr.Bytes(), []byte{})
 }
 
-func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgStakedBalance math.LegacyDec, params types.Params) {
+func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgStakedBalance math.LegacyDec, params types.Params) error {
 	s := prefix.NewStore(ctx.KVStore(k.storeKey), gasConsumedAddressesPrefix)
 
 	gasBalance := k.bankKeeper.GetBalance(ctx, addr, types.GasDenom).Amount
@@ -56,20 +57,26 @@ func (k Keeper) RestoreGasForAddress(ctx sdk.Context, addr sdk.AccAddress, avgSt
 
 	if gasAdjust.IsPositive() {
 		if err := k.Mint(ctx, addr, sdk.NewCoin(types.GasDenom, gasAdjust)); err != nil {
-			panic(err)
+			return fmt.Errorf("failed to mint: %w", err)
 		}
 	}
+
+	return nil
 }
 
-func (k Keeper) RestoreGas(ctx sdk.Context) {
+func (k Keeper) RestoreGas(ctx sdk.Context) error {
 	s := prefix.NewStore(ctx.KVStore(k.storeKey), gasConsumedAddressesPrefix)
 	it := s.Iterator(nil, nil)
 	defer it.Close()
 
 	avgStakedBalance, params := k.GetAverageStakedBalance(ctx), k.GetParams(ctx)
 	for ; it.Valid(); it.Next() {
-		k.RestoreGasForAddress(ctx, it.Key(), avgStakedBalance, params)
+		if err := k.RestoreGasForAddress(ctx, it.Key(), avgStakedBalance, params); err != nil {
+			return fmt.Errorf("failed to restore gas for address %s: %w", sdk.AccAddress(it.Key()), err)
+		}
 	}
+
+	return nil
 }
 
 func calculateGasAdjustAmount(stakedBalance, gasLimit, gasUnconditionedAmount, avgStakedBalance, gasAdjustCoefficient math.LegacyDec) math.LegacyDec {
