@@ -7,9 +7,10 @@ make local-image
 
 Change {index} to 0 or 1, depending it is 1st or 2nd node installation
 
-0. Add chain-id param to init step in make file
+0. Add chain-id param to init and gentx steps in make file
 ```
 $(V)$(SCORUMD) init --default-denom nscr local-network --chain-id scorum-{index}
+$(V)$(SCORUMD) gentx --keyring-backend test test 1000000nscr --chain-id scorum-{index}
 ```
 
 1. Prepare fresh network genesis and config
