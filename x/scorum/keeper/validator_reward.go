@@ -7,14 +7,14 @@ import (
 	"github.com/scorum/cosmos-network/x/scorum/types"
 )
 
-func (k Keeper) PrepareValidatorsReward(ctx sdk.Context) {
+func (k Keeper) PrepareValidatorsReward(ctx sdk.Context) error {
 	feeCollectorAddr := k.accountKeeper.GetModuleAddress(k.feeCollectorName)
 
 	ctx.Logger().Debug("burn collected gas from fee_collector")
 	b := k.bankKeeper.GetBalance(ctx, feeCollectorAddr, types.GasDenom)
 	if b.IsPositive() {
 		if err := k.Burn(ctx, feeCollectorAddr, b); err != nil {
-			panic(fmt.Errorf("failed to burn gas coins: %w", err))
+			return fmt.Errorf("failed to burn gas coins: %w", err)
 		}
 	}
 
@@ -23,7 +23,7 @@ func (k Keeper) PrepareValidatorsReward(ctx sdk.Context) {
 		ctx.Logger().Info("validator rewards pool address is empty")
 		ctx.Logger().Debug("skip pouring rewards to fee_collector")
 
-		return
+		return nil
 	}
 
 	blockReward := validatorRewardsParams.BlockReward
@@ -31,7 +31,7 @@ func (k Keeper) PrepareValidatorsReward(ctx sdk.Context) {
 		ctx.Logger().Info("validators reward amount is invalid or not positive")
 		ctx.Logger().Debug("skip pouring rewards to fee_collector")
 
-		return
+		return nil
 	}
 
 	poolAddress := sdk.MustAccAddressFromBech32(validatorRewardsParams.PoolAddress)
@@ -43,12 +43,14 @@ func (k Keeper) PrepareValidatorsReward(ctx sdk.Context) {
 	if blockReward.IsZero() {
 		ctx.Logger().Error("validators reward pool is fully drained")
 
-		return
+		return nil
 	}
 
 	if err := k.bankKeeper.SendCoins(ctx, poolAddress, feeCollectorAddr, sdk.NewCoins(blockReward)); err != nil {
-		panic(fmt.Errorf("failed to send coins from validators reward pool to fee_collector: %w", err))
+		return fmt.Errorf("failed to send coins from validators reward pool to fee_collector: %w", err)
 	}
 
 	ctx.Logger().Debug("validators reward pool is successfully poured")
+
+	return nil
 }

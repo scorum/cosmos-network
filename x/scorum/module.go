@@ -152,9 +152,18 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock contains the logic that is automatically triggered at the beginning of each block
-func (am AppModule) BeginBlock(ctx sdk.Context) {
-	am.keeper.RestoreGas(ctx)
-	am.keeper.PrepareValidatorsReward(ctx)
+func (am AppModule) BeginBlock(ctx context.Context) error {
+	sdkContext := sdk.UnwrapSDKContext(ctx)
+
+	if err := am.keeper.RestoreGas(sdkContext); err != nil {
+		return fmt.Errorf("failed to restore gas: %w", err)
+	}
+
+	if err := am.keeper.PrepareValidatorsReward(sdkContext); err != nil {
+		return fmt.Errorf("failed to prepare validators reward: %w", err)
+	}
+
+	return nil
 }
 
 // EndBlock contains the logic that is automatically triggered at the end of each block
