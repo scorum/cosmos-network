@@ -3,10 +3,7 @@ package ante
 import (
 	"math"
 
-	errorsmod "cosmossdk.io/errors"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -25,12 +22,7 @@ func NewDeductFeeDecorator(ak ante.AccountKeeper, bk types.BankKeeper, fk ante.F
 }
 
 func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
-	feeTx, ok := tx.(sdk.FeeTx)
-	if !ok {
-		return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a FeeTx")
-	}
-
-	if feeTx.GetGas() == 0 {
+	if _, ok := ctx.GasMeter().(*zeroGasMeter); ok {
 		// allow gas-free and fee-free transactions
 		return next(ctx.WithPriority(math.MaxInt64), tx, simulate)
 	}

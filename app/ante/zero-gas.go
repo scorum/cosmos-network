@@ -1,7 +1,6 @@
 package ante
 
 import (
-	"fmt"
 	"math"
 
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
@@ -43,16 +42,18 @@ func (d ZeroGasTxDecorator) AnteHandle(
 		return ctx, err
 	}
 
+	zeroGasCtx := ctx.WithGasMeter(NewZeroGasMeter())
+
 	for _, signer := range signers {
-		v, err := ante.GetSignerAcc(ctx, d.ak, signer)
+		v, err := ante.GetSignerAcc(zeroGasCtx, d.ak, signer)
 		if err != nil {
 			return ctx, err
 		}
 
-		if d.sk.IsSupervisor(ctx.WithGasMeter(NewFixedGasMeter(0, ctx.GasMeter().Limit())), v.GetAddress().String()) {
+		if d.sk.IsSupervisor(zeroGasCtx, v.GetAddress().String()) {
 			return next(
 				ctx.
-					WithGasMeter(NewFixedGasMeter(0, ctx.GasMeter().Limit())).
+					WithGasMeter(NewZeroGasMeter()).
 					WithMinGasPrices(sdk.NewDecCoins()),
 				tx,
 				simulate,
@@ -63,52 +64,43 @@ func (d ZeroGasTxDecorator) AnteHandle(
 	return next(ctx, tx, simulate)
 }
 
-type fixedGasMeter struct {
-	limit    storetypes.Gas
-	consumed storetypes.Gas
+type zeroGasMeter struct{}
+
+// NewZeroGasMeter returns a reference to a new basicGasMeter.
+func NewZeroGasMeter() storetypes.GasMeter {
+	return &zeroGasMeter{}
 }
 
-// NewFixedGasMeter returns a reference to a new basicGasMeter.
-func NewFixedGasMeter(consumed, limit storetypes.Gas) storetypes.GasMeter {
-	return &fixedGasMeter{
-		limit:    limit,
-		consumed: consumed,
-	}
+func (g *zeroGasMeter) GasConsumed() storetypes.Gas {
+	return 0
 }
 
-func (g *fixedGasMeter) GasConsumed() storetypes.Gas {
-	return g.consumed
+func (g *zeroGasMeter) Limit() storetypes.Gas {
+	return 0
 }
 
-func (g *fixedGasMeter) Limit() storetypes.Gas {
-	return g.limit
-}
-
-func (g *fixedGasMeter) GasRemaining() storetypes.Gas {
+func (g *zeroGasMeter) GasRemaining() storetypes.Gas {
 	return math.MaxUint64
 }
 
-func (g *fixedGasMeter) GasConsumedToLimit() storetypes.Gas {
-	if g.IsPastLimit() {
-		return g.limit
-	}
-	return g.consumed
+func (g *zeroGasMeter) GasConsumedToLimit() storetypes.Gas {
+	return 0
 }
 
-func (g *fixedGasMeter) ConsumeGas(_ storetypes.Gas, _ string) {
+func (g *zeroGasMeter) ConsumeGas(_ storetypes.Gas, _ string) {
 }
 
-func (g *fixedGasMeter) RefundGas(_ storetypes.Gas, _ string) {
+func (g *zeroGasMeter) RefundGas(_ storetypes.Gas, _ string) {
 }
 
-func (g *fixedGasMeter) IsPastLimit() bool {
-	return g.consumed > g.limit
+func (g *zeroGasMeter) IsPastLimit() bool {
+	return false
 }
 
-func (g *fixedGasMeter) IsOutOfGas() bool {
-	return g.consumed >= g.limit
+func (g *zeroGasMeter) IsOutOfGas() bool {
+	return false
 }
 
-func (g *fixedGasMeter) String() string {
-	return fmt.Sprintf("FixedGasMeter:\n  consumed: %d", g.consumed)
+func (g *zeroGasMeter) String() string {
+	return "ZerGasMeter:\n  consumed: 0"
 }
