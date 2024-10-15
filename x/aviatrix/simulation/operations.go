@@ -3,6 +3,8 @@ package simulation
 import (
 	"math/rand"
 
+	"cosmossdk.io/x/nft"
+
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 
 	"cosmossdk.io/math"
@@ -151,14 +153,9 @@ func SimulateMsgUpdatePlaneExperience(
 			panic("account not found")
 		}
 
-		nfts := nk.GetNFTsOfClass(ctx, types.NftClassID)
-		if len(nfts) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgUpdatePlaneExperience, "empty nfts"), nil, nil
-		}
-
-		nft := nfts[0]
-		if len(nfts) > 1 {
-			nft = nfts[simtypes.RandIntBetween(r, 0, len(nfts)-1)]
+		nft, ok := getRandomNFT(ctx, nk, r)
+		if !ok {
+			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgAdjustPlaneExperience, "empty nfts"), nil, nil
 		}
 
 		amount, err := simtypes.RandPositiveInt(r, math.NewInt(1000))
@@ -208,14 +205,9 @@ func SimulateMsgAdjustPlaneExperience(
 			panic("account not found")
 		}
 
-		nfts := nk.GetNFTsOfClass(ctx, types.NftClassID)
-		if len(nfts) == 0 {
+		nft, ok := getRandomNFT(ctx, nk, r)
+		if !ok {
 			return simtypes.NoOpMsg(types.ModuleName, types.TypeMsgAdjustPlaneExperience, "empty nfts"), nil, nil
-		}
-
-		nft := nfts[0]
-		if len(nfts) > 1 {
-			nft = nfts[simtypes.RandIntBetween(r, 0, len(nfts)-1)]
 		}
 
 		amount := simtypes.RandIntBetween(r, -1000, 1000)
@@ -244,4 +236,27 @@ func SimulateMsgAdjustPlaneExperience(
 
 		return simulation.GenAndDeliverTxWithRandFees(txCtx)
 	}
+}
+
+func getRandomNFT(ctx sdk.Context, nk nftkeeper.Keeper, r *rand.Rand) (nft.NFT, bool) {
+	nfts := nk.GetNFTsOfClass(ctx, types.NftClassID)
+	if len(nfts) == 0 {
+		return nft.NFT{}, false
+	}
+
+	// MsgSend of nft module randomly creates NFTs with random name. So we must filter it.
+	for i := 0; i < len(nfts); {
+		if _, err := uuid.Parse(nfts[i].Id); err != nil {
+			nfts = append(nfts[:i], nfts[i+1:]...)
+			continue
+		}
+		i++
+	}
+
+	nft := nfts[0]
+	if len(nfts) > 1 {
+		nft = nfts[simtypes.RandIntBetween(r, 0, len(nfts)-1)]
+	}
+
+	return nft, true
 }
