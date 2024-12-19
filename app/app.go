@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	v120 "github.com/scorum/cosmos-network/app/upgrade/v120"
+	v121 "github.com/scorum/cosmos-network/app/upgrade/v121"
 
 	"cosmossdk.io/client/v2/autocli"
 	"cosmossdk.io/core/appmodule"
@@ -1075,6 +1076,7 @@ func (app *App) SimulationManager() *module.SimulationManager {
 
 func (app *App) setupUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(v120.Name, v120.Handler(app.configurator, app.mm, app.cdc, app.GetSubspace(scorumtypes.ModuleName)))
+	app.UpgradeKeeper.SetUpgradeHandler(v121.Name, v121.Handler(app.configurator, app.mm))
 
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
