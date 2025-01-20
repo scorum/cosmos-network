@@ -41,8 +41,6 @@ echo "gentx dir is set to ${gentx}"
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
-scorumd config output json --home=${homed}
-
 function addKeys() {
   for account in ${VALIDATORS} ${SUPERVISORS}
   do
@@ -55,11 +53,11 @@ function gentx() {
   do
     addr=$(echo $PASSWORD | scorumd keys show ${account} -a --home=${homed} --keyring-backend=file --keyring-dir ${keyring}/${account})
     rm -rf ${homed}
-    scorumd init ${account} --staking-bond-denom nsp --chain-id=${CHAIN_ID} --home=${homed}
-    scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
+    scorumd init ${account} --chain-id=${CHAIN_ID} --home=${homed}
+    scorumd add-genesis-account ${addr} 1000000000000nscr --home=${homed}
     scorumd add-genesis-supervisor ${addr} --home=${homed}
 
-    echo $PASSWORD | scorumd gentx ${account} 100000000000nsp \
+    echo $PASSWORD | scorumd gentx ${account} 100000000000nscr \
       --website "https://scorum.com" --home=${homed} \
       --chain-id=${CHAIN_ID} --keyring-backend=file \
       --keyring-dir ${keyring}/${account} \
@@ -77,13 +75,13 @@ function genesis() {
    moniker=`echo $VALIDATORS | awk '{print $1}'`
 
    # add genesis accounts
-   scorumd init "${moniker}" --staking-bond-denom nsp --chain-id=${CHAIN_ID} --home=${homed}
+   scorumd init "${moniker}" --chain-id=${CHAIN_ID} --home=${homed}
 
    for account in ${VALIDATORS} ${SUPERVISORS}
    do
      addr=$(echo $PASSWORD | scorumd keys show ${account} -a --keyring-backend=file --home=${homed} --keyring-dir ${keyring}/${account})
 
-     scorumd add-genesis-account ${addr} 1000000000000nscr,1000000000000nsp --home=${homed}
+     scorumd add-genesis-account ${addr} 1000000000000nscr --home=${homed}
      scorumd add-genesis-supervisor ${addr} --home=${homed}
    done
 
@@ -100,14 +98,15 @@ addKeys
 gentx
 genesis
 
-# extra update genesis
-sed -i -e 's/"stake"/"nsp"/g' ${homed}/config/genesis.json
 # set inflation fields to 0, because there will be another reward mechanism
 sed -i 's/"\(inflation[^"]*\)": "[0-9.]\+",/"\1": "0",/g' ${homed}/config/genesis.json
 # set min_commission_rate to 1
 sed -i 's/"min_commission_rate": "[0-9.]\+"/"min_commission_rate": "1"/' ${homed}/config/genesis.json
 # set voting_period to 1 hour
 sed -i 's/"voting_period": "[0-9.]\+s"/"voting_period": "3600s"/' ${homed}/config/genesis.json
+# set expedited_voting_period to 15 minutes
+sed -i 's/"expedited_voting_period": "[0-9.]\+s"/"expedited_voting_period": "900s"/' ${homed}/config/genesis.json
+# there could be any customizations for your environment
 
 cp ${homed}/config/genesis.json genesis.json
 
